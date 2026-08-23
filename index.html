@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Educación Financiera — I.E. Merceditas Gómez Martínez</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F8F6F0;--text:#1B2A4A;--card:#FFFFFF;
+  --g6:#059669;--g7:#2563EB;--g8:#D97706;--g9:#7C3AED;--g10:#DC2626;--g11:#1B2A4A;
+  --shadow:0 4px 24px rgba(27,42,74,.08);
+}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,#1B2A4A 0%,#2D4A7A 50%,#1B2A4A 100%);
+  color:#fff;padding:3rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.03) 39px,rgba(255,255,255,.03) 40px),
+              repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.03) 39px,rgba(255,255,255,.03) 40px);
+}
+.hero>*{position:relative;z-index:1}
+.hero-icon{font-size:3rem;margin-bottom:.5rem}
+.hero h1{font-size:clamp(1.6rem,4vw,2.4rem);font-weight:800;letter-spacing:-.02em;line-height:1.2}
+.hero h1 span{color:#F59E0B}
+.hero p{margin-top:.75rem;font-size:clamp(.85rem,2vw,1.05rem);opacity:.85;max-width:600px;margin-left:auto;margin-right:auto;font-weight:400}
+.hero .badge{
+  display:inline-block;margin-top:1rem;padding:.35rem 1rem;border-radius:100px;
+  background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);
+  font-size:.75rem;font-weight:600;color:#F59E0B;letter-spacing:.03em;
+}
+
+/* GRID */
+.grid-section{max-width:1100px;margin:0 auto;padding:2rem 1.5rem 3rem}
+.grid-section>h2{text-align:center;font-size:1.1rem;font-weight:600;margin-bottom:1.5rem;color:#64748B}
+.grades-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.25rem}
+
+/* CARDS */
+.grade-card{
+  background:var(--card);border-radius:16px;box-shadow:var(--shadow);
+  overflow:hidden;transition:transform .2s,box-shadow .2s;cursor:default;
+}
+.grade-card:hover{transform:translateY(-4px);box-shadow:0 8px 32px rgba(27,42,74,.12)}
+.card-header{padding:1.25rem 1.5rem;color:#fff;display:flex;align-items:center;gap:1rem}
+.card-header .number{font-size:2.2rem;font-weight:800;line-height:1;opacity:.9}
+.card-header .info h3{font-size:1rem;font-weight:700}
+.card-header .info p{font-size:.75rem;opacity:.8;font-weight:400;margin-top:2px}
+
+.card-body{padding:1rem 1.5rem 1.5rem}
+.period{
+  display:flex;align-items:flex-start;gap:.75rem;padding:.6rem 0;
+  border-bottom:1px solid #F1F0EC;
+}
+.period:last-child{border-bottom:none}
+.period-badge{
+  flex-shrink:0;width:32px;height:32px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.7rem;font-weight:700;color:#fff;
+}
+.period-info h4{font-size:.85rem;font-weight:600;line-height:1.3}
+.period-info p{font-size:.72rem;color:#64748B;margin-top:2px;line-height:1.4}
+.period-link{
+  display:inline-block;margin-top:4px;font-size:.7rem;font-weight:600;
+  text-decoration:none;padding:3px 10px;border-radius:6px;
+  transition:opacity .2s;
+}
+.period-link:hover{opacity:.8}
+.period-link.disabled{opacity:.35;pointer-events:none;cursor:default}
+
+/* Grade-specific colors */
+.g6 .card-header{background:linear-gradient(135deg,#059669,#10B981)}
+.g6 .period-badge{background:#059669}
+.g6 .period-link{background:#ECFDF5;color:#059669}
+
+.g7 .card-header{background:linear-gradient(135deg,#2563EB,#3B82F6)}
+.g7 .period-badge{background:#2563EB}
+.g7 .period-link{background:#EFF6FF;color:#2563EB}
+
+.g8 .card-header{background:linear-gradient(135deg,#D97706,#F59E0B)}
+.g8 .period-badge{background:#D97706}
+.g8 .period-link{background:#FFFBEB;color:#D97706}
+
+.g9 .card-header{background:linear-gradient(135deg,#7C3AED,#8B5CF6)}
+.g9 .period-badge{background:#7C3AED}
+.g9 .period-link{background:#F5F3FF;color:#7C3AED}
+
+.g10 .card-header{background:linear-gradient(135deg,#DC2626,#EF4444)}
+.g10 .period-badge{background:#DC2626}
+.g10 .period-link{background:#FEF2F2;color:#DC2626}
+
+.g11 .card-header{background:linear-gradient(135deg,#1B2A4A,#334155)}
+.g11 .period-badge{background:#1B2A4A}
+.g11 .period-link{background:#F1F5F9;color:#1B2A4A}
+
+/* FOOTER */
+footer{text-align:center;padding:2rem 1.5rem;font-size:.72rem;color:#94A3B8;border-top:1px solid #E8E5DD}
+footer strong{color:var(--text)}
+
+/* CONTEXT BANNER */
+.context{
+  max-width:1100px;margin:0 auto;padding:1.5rem;
+}
+.context-inner{
+  background:linear-gradient(135deg,#FFFBEB,#FEF3C7);
+  border:1px solid #FDE68A;border-radius:12px;padding:1rem 1.25rem;
+  display:flex;align-items:flex-start;gap:.75rem;
+}
+.context-inner .icon{font-size:1.2rem;flex-shrink:0;margin-top:2px}
+.context-inner p{font-size:.78rem;line-height:1.6;color:#92400E}
+.context-inner a{color:#D97706;font-weight:600}
+
+@media(max-width:700px){
+  .grades-grid{grid-template-columns:1fr}
+  .hero{padding:2rem 1.25rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-icon">📊</div>
+  <h1>Educación <span>Financiera</span></h1>
+  <p>Proyecto transversal obligatorio — Secuencias didácticas interactivas de 6° a 11°</p>
+  <div class="badge">I.E. MERCEDITAS GÓMEZ MARTÍNEZ · ITAGÜÍ</div>
+</div>
+
+<div class="context">
+  <div class="context-inner">
+    <span class="icon">📋</span>
+    <p>
+      Alineado con el <strong>CONPES 4005 de 2020</strong> (Política Nacional de Inclusión y Educación Económica y Financiera) 
+      y el <strong>PL 067/2026</strong> Cámara. Tres intervenciones por año (una por período), cada una con activación, 
+      exploración guiada, juego interactivo y evaluación formativa con registro en hoja de cálculo.
+    </p>
+  </div>
+</div>
+
+<section class="grid-section">
+  <h2>Selecciona un grado para acceder a sus secuencias</h2>
+  <div class="grades-grid">
+
+    <!-- GRADO 6° -->
+    <div class="grade-card g6">
+      <div class="card-header">
+        <div class="number">6°</div>
+        <div class="info">
+          <h3>Mis Primeros Pesos</h3>
+          <p>Finanzas personales básicas</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="period">
+          <div class="period-badge">P1</div>
+          <div class="period-info">
+            <h4>El dinero: historia y funciones</h4>
+            <p>Necesidades vs. deseos · Funciones del dinero · Trueque</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P2</div>
+          <div class="period-info">
+            <h4>Mi primer presupuesto</h4>
+            <p>Ingresos · Gastos fijos y variables · Balance semanal</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P3</div>
+          <div class="period-info">
+            <h4>El poder del ahorro</h4>
+            <p>Metas de ahorro · Interés simple · Alcancía digital</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRADO 7° -->
+    <div class="grade-card g7">
+      <div class="card-header">
+        <div class="number">7°</div>
+        <div class="info">
+          <h3>Consumidor Inteligente</h3>
+          <p>Consumo responsable y presupuesto familiar</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="period">
+          <div class="period-badge">P1</div>
+          <div class="period-info">
+            <h4>Presupuesto familiar</h4>
+            <p>Ingresos y gastos del hogar · Categorías · Balance mensual</p>
+            <a class="period-link" href="7-p1-presupuesto-familiar.html">▶ Iniciar secuencia</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P2</div>
+          <div class="period-info">
+            <h4>Consumo responsable</h4>
+            <p>Publicidad · Decisiones de compra · Costo-beneficio</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P3</div>
+          <div class="period-info">
+            <h4>Instituciones financieras</h4>
+            <p>Bancos · Cuentas de ahorro · CDTs · Seguridad</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRADO 8° -->
+    <div class="grade-card g8">
+      <div class="card-header">
+        <div class="number">8°</div>
+        <div class="info">
+          <h3>El Sistema Financiero</h3>
+          <p>Crédito, deuda y emprendimiento</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="period">
+          <div class="period-badge">P1</div>
+          <div class="period-info">
+            <h4>Crédito y endeudamiento</h4>
+            <p>Préstamos · Interés · Deuda buena vs. deuda mala</p>
+            <a class="period-link" href="8-p1-credito-endeudamiento.html">▶ Iniciar secuencia</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P2</div>
+          <div class="period-info">
+            <h4>Riesgos financieros</h4>
+            <p>Fraude · Gota a gota · Pirámides · Derechos</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P3</div>
+          <div class="period-info">
+            <h4>Mi primer emprendimiento</h4>
+            <p>Idea de negocio · Costos · Precio de venta · Utilidad</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRADO 9° -->
+    <div class="grade-card g9">
+      <div class="card-header">
+        <div class="number">9°</div>
+        <div class="info">
+          <h3>Finanzas Aplicadas</h3>
+          <p>Tributación, inversión y plan de negocio</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="period">
+          <div class="period-badge">P1</div>
+          <div class="period-info">
+            <h4>Impuestos y ciudadanía fiscal</h4>
+            <p>IVA · Renta · Presupuesto público · Servicios</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P2</div>
+          <div class="period-info">
+            <h4>Inversión básica</h4>
+            <p>Riesgo vs. rendimiento · CDTs · Fondos de inversión</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P3</div>
+          <div class="period-info">
+            <h4>Plan de negocio simplificado</h4>
+            <p>Modelo Canvas · Punto de equilibrio · Pitch</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRADO 10° -->
+    <div class="grade-card g10">
+      <div class="card-header">
+        <div class="number">10°</div>
+        <div class="info">
+          <h3>Economía y Mercados</h3>
+          <p>Macroeconomía y productos financieros</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="period">
+          <div class="period-badge">P1</div>
+          <div class="period-info">
+            <h4>Macroeconomía colombiana</h4>
+            <p>PIB · Inflación · Desempleo · SMMLV</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P2</div>
+          <div class="period-info">
+            <h4>Productos financieros avanzados</h4>
+            <p>Tarjetas de crédito · Seguros · Pensiones · Cesantías</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P3</div>
+          <div class="period-info">
+            <h4>Simulación de inversión</h4>
+            <p>Portafolio · Acciones BVC · Fondos · Rentabilidad</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GRADO 11° -->
+    <div class="grade-card g11">
+      <div class="card-header">
+        <div class="number">11°</div>
+        <div class="info">
+          <h3>Mi Futuro Financiero</h3>
+          <p>Proyecto de vida financiero</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="period">
+          <div class="period-badge">P1</div>
+          <div class="period-info">
+            <h4>Finanzas para la vida adulta</h4>
+            <p>Nómina · Seguridad social · Presupuesto adulto</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P2</div>
+          <div class="period-info">
+            <h4>Emprendimiento digital y fintech</h4>
+            <p>Nequi · Daviplata · Economía naranja · Criptomonedas</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+        <div class="period">
+          <div class="period-badge">P3</div>
+          <div class="period-info">
+            <h4>Plan financiero de vida</h4>
+            <p>Metas a 5, 10 y 20 años · Integración 6°–11°</p>
+            <a class="period-link disabled" href="#">Próximamente</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>Proyecto de Educación Financiera · <strong>I.E. Merceditas Gómez Martínez</strong> · Itagüí, Antioquia<br>
+  Alineado con CONPES 4005/2020 y PL 067/2026 · Área de Matemáticas · 2026</p>
+</footer>
+
+</body>
+</html>
