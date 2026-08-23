@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7° P1 — Presupuesto Familiar | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#2563EB;--pri-light:#EFF6FF;--pri-dark:#1D4ED8;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--amber:#D97706;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+/* NAV */
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;opacity:.7;transition:opacity .2s}
+.topbar a:hover{opacity:1}
+.topbar .title{font-weight:700;flex:1}
+
+/* PHASE TABS */
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}
+.tab.completed{color:var(--green)}
+.tab.completed::before{content:'✓ '}
+.tab:hover{background:#F1F5F9}
+
+/* PHASES */
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}
+.phase.active{display:block}
+.phase-header{margin-bottom:1.5rem}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}
+.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+
+/* CARDS */
+.content-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.content-card h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.content-card p,.content-card li{font-size:.82rem;line-height:1.6;color:#475569}
+.content-card ul{padding-left:1.25rem;margin-top:.5rem}
+.content-card li{margin-bottom:.25rem}
+
+/* FAMILY PROFILE */
+.family-profile{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.member{background:#F8FAFC;border-radius:10px;padding:.75rem;text-align:center}
+.member .emoji{font-size:1.5rem}
+.member .name{font-size:.78rem;font-weight:700;margin-top:.25rem}
+.member .role{font-size:.68rem;color:var(--gray)}
+.member .income{font-size:.72rem;font-weight:600;color:var(--green);margin-top:.25rem}
+
+/* GAME */
+.game-area{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.round-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.round-num{font-size:.75rem;font-weight:700;color:var(--pri);background:var(--pri-light);padding:.25rem .75rem;border-radius:100px}
+.budget-remaining{font-size:.85rem;font-weight:700}
+.budget-remaining.negative{color:var(--red)}
+.budget-remaining.positive{color:var(--green)}
+
+.event-banner{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #FDE68A;border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.8rem;display:flex;align-items:flex-start;gap:.5rem}
+.event-banner .ev-icon{font-size:1.1rem;flex-shrink:0}
+.event-banner strong{color:#92400E}
+
+.category-row{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;border-bottom:1px solid #F1F0EC}
+.category-row:last-child{border-bottom:none}
+.cat-icon{font-size:1.1rem;width:28px;text-align:center;flex-shrink:0}
+.cat-name{font-size:.78rem;font-weight:600;flex:1;min-width:0}
+.cat-input{width:110px;padding:.4rem .5rem;border:2px solid #E2E8F0;border-radius:8px;font-size:.8rem;font-family:inherit;text-align:right;transition:border-color .2s}
+.cat-input:focus{outline:none;border-color:var(--pri)}
+.cat-input.over{border-color:var(--red);background:#FEF2F2}
+.cat-bar-wrap{width:60px;height:8px;background:#E2E8F0;border-radius:4px;overflow:hidden;flex-shrink:0}
+.cat-bar{height:100%;background:var(--pri);border-radius:4px;transition:width .3s}
+.cat-pct{font-size:.65rem;color:var(--gray);width:32px;text-align:right;flex-shrink:0}
+
+.game-chart{margin:1rem 0}
+.chart-bar-h{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.chart-label{font-size:.68rem;width:80px;text-align:right;flex-shrink:0}
+.chart-track{flex:1;height:18px;background:#F1F5F9;border-radius:4px;overflow:hidden;position:relative}
+.chart-fill{height:100%;border-radius:4px;transition:width .4s;display:flex;align-items:center;justify-content:flex-end;padding-right:4px;font-size:.6rem;color:#fff;font-weight:600;min-width:0}
+
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}
+.btn-primary:hover{background:var(--pri-dark)}
+.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{background:#F1F5F9;color:var(--text)}
+.btn-secondary:hover{background:#E2E8F0}
+.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+
+/* SCORE */
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+.score-big{font-size:3rem;font-weight:800}
+.score-label{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.score-stars{font-size:1.5rem;margin:.75rem 0}
+.feedback-item{text-align:left;padding:.5rem .75rem;margin:.25rem 0;border-radius:8px;font-size:.78rem}
+.fb-good{background:#ECFDF5;color:#065F46}
+.fb-warn{background:#FFFBEB;color:#92400E}
+.fb-bad{background:#FEF2F2;color:#991B1B}
+
+/* QUIZ */
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}
+.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}
+.quiz-dot.current{background:var(--pri)}
+.quiz-dot.correct{background:var(--green)}
+.quiz-dot.wrong{background:var(--red)}
+
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}
+.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}
+.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}
+.option:hover{border-color:var(--pri);background:var(--pri-light)}
+.option.selected{border-color:var(--pri);background:var(--pri-light);font-weight:600}
+.option.correct-answer{border-color:var(--green);background:#ECFDF5}
+.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;font-size:.78rem;line-height:1.5;display:none}
+.explanation.show{display:block}
+
+/* RESULTS */
+.results-section{text-align:center;padding:1.5rem}
+.results-section .big{font-size:2.5rem;font-weight:800}
+.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.results-section .nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}
+.nivel-superior{background:var(--green)}
+.nivel-alto{background:#2563EB}
+.nivel-basico{background:var(--amber)}
+.nivel-bajo{background:var(--red)}
+
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}
+.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--pri)}
+
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}
+.send-status.success{display:block;background:#ECFDF5;color:#065F46}
+.send-status.error{display:block;background:#FEF2F2;color:#991B1B}
+.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+
+@media(max-width:600px){
+  .family-profile{grid-template-columns:1fr 1fr}
+  .cat-bar-wrap{display:none}
+  .cat-pct{width:28px}
+  .cat-input{width:90px}
+  .phase{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Inicio</a>
+  <span class="title">7° · Período 1 — Presupuesto Familiar</span>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="goPhase(0)">① Activación</div>
+  <div class="tab" onclick="goPhase(1)">② Exploración</div>
+  <div class="tab" onclick="goPhase(2)">③ Juego</div>
+  <div class="tab" onclick="goPhase(3)">④ Evaluación</div>
+</div>
+
+<!-- ===== FASE 1: ACTIVACIÓN ===== -->
+<div class="phase active" id="phase0">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 1 · YO HAGO</div>
+    <h2>¿Para qué alcanza un salario mínimo?</h2>
+    <p>Conoce a la familia García y descubre cómo administran su dinero cada mes.</p>
+  </div>
+
+  <div class="content-card">
+    <h3>📊 Dato impactante</h3>
+    <p>El SMMLV en Colombia para 2026 es <strong>$1.750.905</strong>. Con el auxilio de transporte ($249.095), 
+    el ingreso total es <strong>$2.000.000</strong>. Sin embargo, la canasta vital para un hogar de 4 personas 
+    se estima en <strong>$2.982.589</strong>. ¿Cómo logra sobrevivir una familia con estos números?</p>
+  </div>
+
+  <div class="content-card">
+    <h3>👨‍👩‍👧‍👦 Conoce a la familia García</h3>
+    <p>Viven en un barrio popular de Itagüí. Así se compone su hogar:</p>
+    <div class="family-profile">
+      <div class="member"><div class="emoji">👷</div><div class="name">Don Carlos</div><div class="role">Obrero de construcción</div><div class="income">$1.750.905 + Aux. $249.095</div></div>
+      <div class="member"><div class="emoji">👩‍🍳</div><div class="name">Doña Martha</div><div class="role">Vende empanadas</div><div class="income">~$450.000/mes</div></div>
+      <div class="member"><div class="emoji">👧</div><div class="name">Valentina (14)</div><div class="role">Estudiante 8°</div><div class="income">—</div></div>
+      <div class="member"><div class="emoji">👦</div><div class="name">Santiago (11)</div><div class="role">Estudiante 6°</div><div class="income">—</div></div>
+    </div>
+    <p style="margin-top:.75rem"><strong>Ingreso total mensual: $2.450.000</strong></p>
+  </div>
+
+  <div class="content-card">
+    <h3>🎯 Objetivo de aprendizaje</h3>
+    <p>Al finalizar esta secuencia podrás <strong>categorizar ingresos y gastos de un hogar colombiano</strong>, 
+    calcular el balance mensual, identificar fugas de dinero y proponer ajustes para que la familia pueda ahorrar.</p>
+  </div>
+
+  <div class="content-card">
+    <h3>📐 Conexión matemática</h3>
+    <p>Usarás <strong>porcentajes, operaciones con números enteros y decimales, y gráficos de barras</strong> 
+    para analizar cómo se distribuye el dinero de una familia.</p>
+    <p style="margin-top:.5rem">Ejemplo: Si la familia gasta $650.000 en alimentación de $2.450.000 totales, 
+    ¿qué porcentaje del ingreso es? → <strong>$650.000 ÷ $2.450.000 × 100 = 26,5%</strong></p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goPhase(1)">Continuar a Exploración →</button>
+  </div>
+</div>
+
+<!-- ===== FASE 2: EXPLORACIÓN GUIADA ===== -->
+<div class="phase" id="phase1">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 2 · HACEMOS</div>
+    <h2>Exploremos el presupuesto juntos</h2>
+    <p>Actividad grupal: analicemos las categorías de gasto de una familia colombiana.</p>
+  </div>
+
+  <div class="content-card">
+    <h3>📋 Actividad en equipos (15 min)</h3>
+    <p>Formen equipos de 3-4 personas y discutan:</p>
+    <ul>
+      <li>¿Cuáles son los <strong>gastos fijos</strong> de una familia? (se pagan todos los meses, mismo valor)</li>
+      <li>¿Cuáles son los <strong>gastos variables</strong>? (cambian cada mes)</li>
+      <li>¿Qué gastos son <strong>necesidades</strong> y cuáles son <strong>deseos</strong>?</li>
+      <li>¿Es posible ahorrar ganando un salario mínimo? ¿Cómo?</li>
+    </ul>
+  </div>
+
+  <div class="content-card">
+    <h3>💰 Categorías de un presupuesto familiar</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:.5rem">
+      <div style="background:#F0FDF4;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>🏠 Arriendo:</strong> Pago mensual de vivienda</div>
+      <div style="background:#F0FDF4;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>⚡ Servicios:</strong> Agua, luz, gas, internet</div>
+      <div style="background:#F0FDF4;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>🍽️ Alimentación:</strong> Mercado y comidas</div>
+      <div style="background:#F0FDF4;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>🚌 Transporte:</strong> Buses, gasolina</div>
+      <div style="background:#FFFBEB;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>📚 Educación:</strong> Útiles, uniformes</div>
+      <div style="background:#FFFBEB;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>💊 Salud:</strong> Medicinas, citas</div>
+      <div style="background:#EFF6FF;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>🎮 Entretenimiento:</strong> Diversión, ocio</div>
+      <div style="background:#EFF6FF;padding:.5rem;border-radius:8px;font-size:.75rem"><strong>🐷 Ahorro:</strong> Para el futuro</div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <h3>📊 Regla 50/30/20</h3>
+    <p>Una guía popular para distribuir el ingreso es:</p>
+    <ul>
+      <li><strong>50% Necesidades:</strong> Arriendo, servicios, alimentación, transporte</li>
+      <li><strong>30% Deseos:</strong> Entretenimiento, ropa no esencial, salidas</li>
+      <li><strong>20% Ahorro y deudas:</strong> Fondo de emergencia, metas futuras</li>
+    </ul>
+    <p style="margin-top:.5rem">Para la familia García con $2.450.000: Necesidades ≤ $1.225.000 · Deseos ≤ $735.000 · Ahorro ≥ $490.000</p>
+    <p style="margin-top:.25rem;font-size:.75rem;color:var(--amber)"><strong>⚠️ Nota:</strong> En la realidad colombiana, muchas familias destinan más del 70% solo a necesidades básicas.</p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button>
+    <button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button>
+  </div>
+</div>
+
+<!-- ===== FASE 3: JUEGO INTERACTIVO ===== -->
+<div class="phase" id="phase2">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 3 · TÚ HACES</div>
+    <h2>🎮 Familia Financiera</h2>
+    <p>Administra el presupuesto de la familia García durante 4 meses. ¡Cada mes trae una sorpresa!</p>
+  </div>
+  <div id="gameContainer"></div>
+</div>
+
+<!-- ===== FASE 4: EVALUACIÓN ===== -->
+<div class="phase" id="phase3">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div>
+    <h2>📝 Demuestra lo que aprendiste</h2>
+    <p>10 preguntas tipo Saber sobre presupuesto familiar. Tu resultado se registra automáticamente.</p>
+  </div>
+
+  <div class="content-card" id="studentInfoCard">
+    <h3>📋 Datos del estudiante</h3>
+    <div class="form-row">
+      <input type="text" id="studentName" placeholder="Tu nombre completo">
+      <select id="studentGroup"><option value="">Grupo…</option><option>7.1</option><option>7.2</option><option>7.3</option><option>7.4</option></select>
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()" id="btnStartQuiz">Comenzar evaluación</button>
+  </div>
+
+  <div id="quizContainer" style="display:none"></div>
+  <div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const SHEETS_URL = ''; // ← Pegar aquí la URL del Apps Script desplegado
+const INCOME = 2450000;
+const FMT = n => '$' + n.toLocaleString('es-CO');
+
+/* ===== NAVIGATION ===== */
+let currentPhase = 0;
+const completedPhases = new Set();
+
+function goPhase(n) {
+  if (currentPhase >= 0) completedPhases.add(currentPhase);
+  currentPhase = n;
+  document.querySelectorAll('.phase').forEach((p, i) => p.classList.toggle('active', i === n));
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === n);
+    t.classList.toggle('completed', completedPhases.has(i) && i !== n);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 2 && !gameStarted) initGame();
+}
+
+/* ===== GAME ===== */
+let gameStarted = false;
+let currentRound = 0;
+const totalRounds = 4;
+
+const categories = [
+  { id: 'arriendo', icon: '🏠', name: 'Arriendo', min: 400000, suggested: 650000 },
+  { id: 'servicios', icon: '⚡', name: 'Servicios públicos', min: 100000, suggested: 200000 },
+  { id: 'alimentacion', icon: '🍽️', name: 'Alimentación', min: 350000, suggested: 600000 },
+  { id: 'transporte', icon: '🚌', name: 'Transporte', min: 100000, suggested: 250000 },
+  { id: 'educacion', icon: '📚', name: 'Educación', min: 30000, suggested: 100000 },
+  { id: 'salud', icon: '💊', name: 'Salud', min: 0, suggested: 80000 },
+  { id: 'entretenimiento', icon: '🎮', name: 'Entretenimiento', min: 0, suggested: 100000 },
+  { id: 'ahorro', icon: '🐷', name: 'Ahorro', min: 0, suggested: 200000 }
+];
+
+const events = [
+  { month: 'Enero', text: 'Mes normal — inicio de año escolar. Hay que comprar útiles y uniformes para Valentina y Santiago.', extra: 'educacion', amount: 150000, icon: '📓' },
+  { month: 'Febrero', text: '¡Se dañó la nevera! Hay que pagar la reparación urgente.', extra: 'salud', amount: 180000, icon: '🔧', category: 'imprevisto' },
+  { month: 'Marzo', text: 'Santiago se enfermó y necesita medicamentos que el EPS no cubre.', extra: 'salud', amount: 120000, icon: '🏥' },
+  { month: 'Abril', text: 'Doña Martha tuvo un buen mes vendiendo empanadas: ingreso extra de $150.000.', bonus: 150000, icon: '🎉' }
+];
+
+let roundScores = [];
+let roundAllocations = [];
+
+function initGame() {
+  gameStarted = true;
+  currentRound = 0;
+  roundScores = [];
+  roundAllocations = [];
+  renderRound();
+}
+
+function renderRound() {
+  const ev = events[currentRound];
+  const roundIncome = INCOME + (ev.bonus || 0);
+  const extraCost = ev.amount || 0;
+
+  const c = document.getElementById('gameContainer');
+  let html = `
+    <div class="game-area">
+      <div class="round-header">
+        <span class="round-num">MES ${currentRound + 1} DE ${totalRounds}: ${ev.month}</span>
+        <span class="budget-remaining positive" id="remaining">Disponible: ${FMT(roundIncome)}</span>
+      </div>
+      <div class="event-banner">
+        <span class="ev-icon">${ev.icon}</span>
+        <div><strong>${ev.month}:</strong> ${ev.text}${extraCost ? ` <strong>(+${FMT(extraCost)} en gastos)</strong>` : ''}${ev.bonus ? ` <strong>(+${FMT(ev.bonus)} de ingreso)</strong>` : ''}</div>
+      </div>
+      <p style="font-size:.78rem;color:var(--gray);margin-bottom:.75rem">Asigna dinero a cada categoría. El total no puede superar <strong>${FMT(roundIncome)}</strong>.</p>`;
+
+  categories.forEach(cat => {
+    html += `
+      <div class="category-row">
+        <span class="cat-icon">${cat.icon}</span>
+        <span class="cat-name">${cat.name}</span>
+        <input type="number" class="cat-input" id="input_${cat.id}" min="0" step="10000" value="0"
+               data-cat="${cat.id}" onchange="updateBudget(${roundIncome})" oninput="updateBudget(${roundIncome})" placeholder="0">
+        <div class="cat-bar-wrap"><div class="cat-bar" id="bar_${cat.id}"></div></div>
+        <span class="cat-pct" id="pct_${cat.id}">0%</span>
+      </div>`;
+  });
+
+  html += `
+      <div id="chartArea" class="game-chart"></div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="btnSubmitRound" onclick="submitRound(${roundIncome}, ${extraCost})" disabled>
+          ${currentRound < totalRounds - 1 ? 'Enviar mes y continuar →' : 'Finalizar juego →'}
+        </button>
+      </div>
+    </div>`;
+
+  c.innerHTML = html;
+  updateBudget(roundIncome);
+}
+
+function updateBudget(income) {
+  let total = 0;
+  categories.forEach(cat => {
+    const v = parseInt(document.getElementById('input_' + cat.id).value) || 0;
+    total += v;
+    const pct = income > 0 ? (v / income * 100) : 0;
+    document.getElementById('pct_' + cat.id).textContent = pct.toFixed(0) + '%';
+    document.getElementById('bar_' + cat.id).style.width = Math.min(pct, 100) + '%';
+  });
+
+  const rem = income - total;
+  const el = document.getElementById('remaining');
+  el.textContent = (rem >= 0 ? 'Disponible: ' : 'Excedido: ') + FMT(Math.abs(rem));
+  el.className = 'budget-remaining ' + (rem >= 0 ? 'positive' : 'negative');
+
+  document.getElementById('btnSubmitRound').disabled = (total === 0 || rem < 0);
+  renderChart(income);
+}
+
+function renderChart(income) {
+  const colors = ['#059669','#2563EB','#D97706','#7C3AED','#DC2626','#0891B2','#E11D48','#F59E0B'];
+  let html = '';
+  categories.forEach((cat, i) => {
+    const v = parseInt(document.getElementById('input_' + cat.id).value) || 0;
+    const pct = income > 0 ? (v / income * 100) : 0;
+    html += `<div class="chart-bar-h">
+      <span class="chart-label">${cat.icon} ${cat.name.split(' ')[0]}</span>
+      <div class="chart-track"><div class="chart-fill" style="width:${pct}%;background:${colors[i]}">${pct >= 5 ? pct.toFixed(0) + '%' : ''}</div></div>
+    </div>`;
+  });
+  document.getElementById('chartArea').innerHTML = html;
+}
+
+function submitRound(income, extraCost) {
+  const alloc = {};
+  let total = 0;
+  categories.forEach(cat => {
+    alloc[cat.id] = parseInt(document.getElementById('input_' + cat.id).value) || 0;
+    total += alloc[cat.id];
+  });
+
+  // Score this round
+  let score = 0;
+  let feedback = [];
+
+  // Essential needs covered?
+  const essentials = alloc.arriendo + alloc.servicios + alloc.alimentacion + alloc.transporte;
+  const minEssentials = 400000 + 100000 + 350000 + 100000;
+  if (essentials >= minEssentials) { score += 30; feedback.push({ type: 'good', text: '✅ Cubriste las necesidades básicas del hogar.' }); }
+  else { feedback.push({ type: 'bad', text: '❌ No asignaste suficiente a necesidades básicas. La familia pasaría dificultades.' }); }
+
+  // Savings?
+  if (alloc.ahorro >= income * 0.1) { score += 25; feedback.push({ type: 'good', text: '✅ ¡Excelente! Ahorraste al menos el 10% del ingreso.' }); }
+  else if (alloc.ahorro > 0) { score += 10; feedback.push({ type: 'warn', text: '⚠️ Ahorraste algo, pero intenta llegar al 10% del ingreso.' }); }
+  else { feedback.push({ type: 'bad', text: '❌ No ahorraste nada. Sin ahorro no hay fondo de emergencia.' }); }
+
+  // Balance?
+  if (total <= income) { score += 20; feedback.push({ type: 'good', text: '✅ No gastaste más de lo que la familia gana.' }); }
+
+  // Education covered?
+  if (alloc.educacion >= 50000) { score += 10; feedback.push({ type: 'good', text: '✅ Invertiste en la educación de los hijos.' }); }
+
+  // Entertainment reasonable?
+  if (alloc.entretenimiento <= income * 0.1) { score += 15; feedback.push({ type: 'good', text: '✅ Mantuviste el entretenimiento en un nivel razonable.' }); }
+  else { feedback.push({ type: 'warn', text: '⚠️ El entretenimiento supera el 10% del ingreso. Considera reducirlo.' }); }
+
+  roundScores.push({ score, feedback, month: events[currentRound].month });
+  roundAllocations.push({ ...alloc, income, month: events[currentRound].month });
+
+  currentRound++;
+  if (currentRound < totalRounds) {
+    renderRound();
+  } else {
+    showGameResults();
+  }
+}
+
+function showGameResults() {
+  const avgScore = roundScores.reduce((s, r) => s + r.score, 0) / totalRounds;
+  const stars = avgScore >= 80 ? '⭐⭐⭐' : avgScore >= 50 ? '⭐⭐' : '⭐';
+
+  let html = `<div class="score-card">
+    <div class="score-big">${Math.round(avgScore)}</div>
+    <div class="score-label">Puntaje promedio de gestión financiera</div>
+    <div class="score-stars">${stars}</div>`;
+
+  roundScores.forEach(r => {
+    html += `<div style="text-align:left;margin-top:.75rem"><strong style="font-size:.8rem">${r.month} (${r.score}/100):</strong>`;
+    r.feedback.forEach(f => {
+      const cls = f.type === 'good' ? 'fb-good' : f.type === 'warn' ? 'fb-warn' : 'fb-bad';
+      html += `<div class="feedback-item ${cls}">${f.text}</div>`;
+    });
+    html += '</div>';
+  });
+
+  html += `<div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+    <button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button>
+    <button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button>
+  </div></div>`;
+
+  document.getElementById('gameContainer').innerHTML = html;
+}
+
+/* ===== QUIZ ===== */
+const questions = [
+  { q: 'La familia García gana $2.450.000 al mes y gasta $650.000 en alimentación. ¿Qué porcentaje del ingreso representa?',
+    opts: ['A. 20%', 'B. 26,5%', 'C. 30%', 'D. 35%'], ans: 1,
+    exp: '$650.000 ÷ $2.450.000 × 100 = 26,53%. Aproximadamente el 26,5% del ingreso se destina a alimentación.' },
+  { q: '¿Cuál de los siguientes es un gasto FIJO en un presupuesto familiar?',
+    opts: ['A. Reparación de la nevera', 'B. Salida al cine', 'C. Arriendo mensual', 'D. Compra de ropa nueva'], ans: 2,
+    exp: 'El arriendo es un gasto fijo porque se paga todos los meses por el mismo valor. Los demás son variables o imprevistos.' },
+  { q: 'Según la regla 50/30/20, si una familia gana $2.000.000, ¿cuánto debería destinar a ahorro?',
+    opts: ['A. $200.000', 'B. $300.000', 'C. $400.000', 'D. $600.000'], ans: 2,
+    exp: 'El 20% de $2.000.000 = $400.000. La regla sugiere destinar el 20% del ingreso a ahorro y pago de deudas.' },
+  { q: '¿Qué es el auxilio de transporte en Colombia?',
+    opts: ['A. Un descuento en el bus', 'B. Un pago adicional al salario para trabajadores que ganan hasta 2 SMMLV', 'C. Un impuesto que paga el trabajador', 'D. Una bonificación por puntualidad'], ans: 1,
+    exp: 'El auxilio de transporte ($249.095 en 2026) es un pago adicional al salario para trabajadores que ganan hasta 2 SMMLV. No es parte del salario sino un beneficio legal.' },
+  { q: 'Si la familia García ahorra $200.000 cada mes, ¿cuánto tendrá ahorrado al cabo de un año?',
+    opts: ['A. $1.200.000', 'B. $2.000.000', 'C. $2.400.000', 'D. $3.000.000'], ans: 2,
+    exp: '$200.000 × 12 meses = $2.400.000 al año. El ahorro constante, aunque parezca poco, se acumula.' },
+  { q: '¿Cuál es la diferencia principal entre un gasto y una inversión?',
+    opts: ['A. El gasto siempre es mayor', 'B. La inversión genera retorno o beneficio futuro', 'C. No hay diferencia', 'D. La inversión solo se hace con bancos'], ans: 1,
+    exp: 'Una inversión genera un retorno o beneficio futuro (educación, ahorro, negocio), mientras un gasto es consumo inmediato.' },
+  { q: 'La familia García gastó $180.000 en reparar la nevera. Este gasto se clasifica como:',
+    opts: ['A. Gasto fijo', 'B. Ingreso extra', 'C. Gasto variable o imprevisto', 'D. Ahorro negativo'], ans: 2,
+    exp: 'Las reparaciones son gastos imprevistos o variables: no se esperaban y no ocurren todos los meses. Por eso es importante tener un fondo de emergencia.' },
+  { q: 'Si el SMMLV 2026 es $1.750.905 y la inflación fue del 5,3%, ¿cuánto debería ser el aumento mínimo para no perder poder adquisitivo?',
+    opts: ['A. $50.000', 'B. $92.798', 'C. $175.090', 'D. $327.405'], ans: 1,
+    exp: 'El 5,3% de $1.750.905 = $92.797,97 ≈ $92.798. Este es el aumento mínimo para mantener el mismo poder de compra frente a la inflación.' },
+  { q: '¿Qué sucede cuando una familia gasta más de lo que gana?',
+    opts: ['A. Se enriquece más rápido', 'B. Genera un déficit y probablemente se endeuda', 'C. El banco le regala dinero', 'D. No pasa nada importante'], ans: 1,
+    exp: 'Cuando los gastos superan los ingresos hay un déficit. La familia debe recurrir a préstamos o deudas, lo que puede generar un ciclo peligroso de endeudamiento.' },
+  { q: '¿Cuál es la mejor estrategia si la familia recibe un ingreso extra de $150.000?',
+    opts: ['A. Gastarlo todo en entretenimiento', 'B. Distribuirlo: parte a ahorro y parte a necesidades pendientes', 'C. Prestarlo a un vecino', 'D. Esconderlo debajo del colchón'], ans: 1,
+    exp: 'Lo más inteligente es distribuir el ingreso extra: una parte a ahorro (fondo de emergencia) y otra a necesidades pendientes o deudas. Ni gastarlo todo ni guardarlo sin rendimiento.' }
+];
+
+let currentQ = 0;
+let answers = [];
+let quizDone = false;
+
+function startQuiz() {
+  const name = document.getElementById('studentName').value.trim();
+  const group = document.getElementById('studentGroup').value;
+  if (!name || !group) { alert('Por favor escribe tu nombre y selecciona tu grupo.'); return; }
+  document.getElementById('studentInfoCard').style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'block';
+  currentQ = 0;
+  answers = [];
+  quizDone = false;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  let dots = '<div class="quiz-progress">';
+  questions.forEach((_, i) => {
+    let cls = 'quiz-dot';
+    if (i === currentQ) cls += ' current';
+    else if (i < answers.length) cls += (answers[i].correct ? ' correct' : ' wrong');
+    dots += `<div class="${cls}"></div>`;
+  });
+  dots += '</div>';
+
+  let html = dots + `<div class="question-card">
+    <div class="q-num">Pregunta ${currentQ + 1} de ${questions.length}</div>
+    <div class="q-text">${q.q}</div>`;
+  q.opts.forEach((o, i) => {
+    html += `<button class="option" onclick="selectAnswer(${i})" id="opt_${i}">${o}</button>`;
+  });
+  html += `<div class="explanation" id="explanation">💡 ${q.exp}</div>
+    <div class="btn-row" id="nextBtnRow" style="display:none">
+      <button class="btn btn-primary" onclick="${currentQ < questions.length - 1 ? 'nextQuestion()' : 'finishQuiz()'}">${currentQ < questions.length - 1 ? 'Siguiente →' : 'Ver resultados'}</button>
+    </div>
+  </div>`;
+
+  document.getElementById('quizContainer').innerHTML = html;
+}
+
+function selectAnswer(idx) {
+  if (answers.length > currentQ) return;
+  const q = questions[currentQ];
+  const correct = idx === q.ans;
+  answers.push({ selected: idx, correct, question: currentQ + 1 });
+
+  document.querySelectorAll('.option').forEach((btn, i) => {
+    btn.style.pointerEvents = 'none';
+    if (i === q.ans) btn.classList.add('correct-answer');
+    if (i === idx && !correct) btn.classList.add('wrong-answer');
+  });
+
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtnRow').style.display = 'flex';
+}
+
+function nextQuestion() { currentQ++; renderQuestion(); }
+
+function finishQuiz() {
+  const correct = answers.filter(a => a.correct).length;
+  const nota = (correct / questions.length * 4 + 1).toFixed(1);
+  const nivel = nota >= 4.6 ? 'Superior' : nota >= 3.8 ? 'Alto' : nota >= 3.0 ? 'Básico' : 'Bajo';
+  const nivelCls = nota >= 4.6 ? 'nivel-superior' : nota >= 3.8 ? 'nivel-alto' : nota >= 3.0 ? 'nivel-basico' : 'nivel-bajo';
+
+  document.getElementById('quizContainer').style.display = 'none';
+  const r = document.getElementById('quizResults');
+  r.style.display = 'block';
+
+  r.innerHTML = `<div class="results-section">
+    <div class="big">${correct}/${questions.length}</div>
+    <div class="nota">Nota: ${nota}</div>
+    <div class="nivel ${nivelCls}">${nivel}</div>
+    <p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">
+      ${correct >= 8 ? '¡Excelente trabajo! Dominas los conceptos de presupuesto familiar.' :
+        correct >= 6 ? 'Buen trabajo. Repasa los conceptos donde tuviste dificultad.' :
+        correct >= 4 ? 'Vas por buen camino, pero necesitas reforzar varios conceptos.' :
+        'Necesitas repasar los conceptos básicos. Vuelve a revisar las fases 1 y 2.'}
+    </p>
+    <div id="sendStatus" class="send-status"></div>
+    <div class="btn-row" style="justify-content:center;margin-top:1rem">
+      <button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar resultados</button>
+      <button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir secuencia</button>
+    </div>
+  </div>`;
+
+  // Auto-send if URL configured
+  if (SHEETS_URL) sendResults();
+}
+
+async function sendResults() {
+  const name = document.getElementById('studentName').value.trim();
+  const group = document.getElementById('studentGroup').value;
+  const correct = answers.filter(a => a.correct).length;
+  const nota = (correct / questions.length * 4 + 1).toFixed(1);
+  const nivel = nota >= 4.6 ? 'Superior' : nota >= 3.8 ? 'Alto' : nota >= 3.0 ? 'Básico' : 'Bajo';
+
+  const status = document.getElementById('sendStatus');
+
+  if (!SHEETS_URL) {
+    status.className = 'send-status error';
+    status.textContent = '⚠️ URL de Google Sheets no configurada. Contacta al docente.';
+    return;
+  }
+
+  status.className = 'send-status loading';
+  status.textContent = '⏳ Enviando resultados…';
+  document.getElementById('btnSend').disabled = true;
+
+  const payload = {
+    timestamp: new Date().toISOString(),
+    nombre: name,
+    grupo: group,
+    grado: '7°',
+    periodo: 'P1',
+    tema: 'Presupuesto Familiar',
+    respuestas: answers.map(a => questions[a.question - 1].opts[a.selected].charAt(0)).join(','),
+    aciertos: correct,
+    total: questions.length,
+    nota: parseFloat(nota),
+    nivel: nivel
+  };
+
+  try {
+    const res = await fetch(SHEETS_URL, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    status.className = 'send-status success';
+    status.textContent = '✅ Resultados enviados correctamente.';
+  } catch (e) {
+    status.className = 'send-status error';
+    status.textContent = '❌ Error al enviar. Intenta de nuevo o contacta al docente.';
+    document.getElementById('btnSend').disabled = false;
+  }
+}
+</script>
+
+</body>
+</html>
