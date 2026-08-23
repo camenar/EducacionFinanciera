@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8° P1 — Crédito y Endeudamiento | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#D97706;--pri-light:#FFFBEB;--pri-dark:#B45309;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--blue:#2563EB;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;opacity:.7;transition:opacity .2s}
+.topbar a:hover{opacity:1}
+.topbar .title{font-weight:700;flex:1}
+
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}
+.tab.completed{color:var(--green)}
+.tab.completed::before{content:'✓ '}
+
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}
+.phase.active{display:block}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}
+.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.phase-header{margin-bottom:1.5rem}
+
+.content-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.content-card h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.content-card p,.content-card li{font-size:.82rem;line-height:1.6;color:#475569}
+.content-card ul{padding-left:1.25rem;margin-top:.5rem}
+.content-card li{margin-bottom:.25rem}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin:1rem 0}
+.stat-box{background:#F8FAFC;border-radius:10px;padding:.75rem;text-align:center;border-left:4px solid var(--pri)}
+.stat-box .val{font-size:1.2rem;font-weight:800;color:var(--pri)}
+.stat-box .label{font-size:.68rem;color:var(--gray);margin-top:.15rem}
+
+/* SCENARIO GAME */
+.scenario{background:var(--card);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:1.5rem}
+.scenario-header{padding:1rem 1.25rem;background:linear-gradient(135deg,#1B2A4A,#334155);color:#fff}
+.scenario-header .round{font-size:.65rem;font-weight:700;opacity:.7;text-transform:uppercase;letter-spacing:.05em}
+.scenario-header h3{font-size:1rem;font-weight:700;margin-top:.25rem}
+.scenario-header p{font-size:.78rem;opacity:.8;margin-top:.25rem}
+.scenario-body{padding:1.25rem}
+
+.credit-option{border:2px solid #E2E8F0;border-radius:10px;padding:1rem;margin-bottom:.75rem;cursor:pointer;transition:all .2s;position:relative}
+.credit-option:hover{border-color:var(--pri);background:var(--pri-light)}
+.credit-option.selected{border-color:var(--pri);background:var(--pri-light)}
+.credit-option.best{border-color:var(--green);background:#F0FDF4}
+.credit-option.worst{border-color:var(--red);background:#FEF2F2}
+.credit-option .opt-label{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.35rem}
+.credit-option h4{font-size:.88rem;font-weight:700}
+.credit-option .details{display:grid;grid-template-columns:1fr 1fr;gap:.35rem;margin-top:.5rem}
+.credit-option .detail{font-size:.72rem;color:var(--gray)}
+.credit-option .detail strong{color:var(--text)}
+.credit-option .total-cost{font-size:.82rem;font-weight:700;margin-top:.5rem;padding-top:.5rem;border-top:1px solid #E8E5DD}
+.opt-tag{position:absolute;top:8px;right:8px;font-size:.6rem;font-weight:700;padding:2px 8px;border-radius:100px;color:#fff}
+.tag-best{background:var(--green)}
+.tag-worst{background:var(--red)}
+.tag-ok{background:var(--blue)}
+
+.calc-box{background:#F1F5F9;border-radius:10px;padding:1rem;margin:1rem 0;font-size:.8rem}
+.calc-box h4{font-size:.82rem;font-weight:700;margin-bottom:.5rem;color:var(--pri)}
+.calc-row{display:flex;justify-content:space-between;padding:.2rem 0;border-bottom:1px dashed #CBD5E1}
+.calc-row:last-child{border:none;font-weight:700;color:var(--text);padding-top:.4rem;margin-top:.25rem;border-top:2px solid #94A3B8}
+
+.feedback-box{padding:.75rem 1rem;border-radius:10px;margin-top:.75rem;font-size:.78rem;line-height:1.5}
+.fb-correct{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
+.fb-wrong{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+
+.health-bar{margin:1rem 0}
+.health-label{font-size:.72rem;font-weight:600;display:flex;justify-content:space-between;margin-bottom:.25rem}
+.health-track{height:12px;background:#E2E8F0;border-radius:6px;overflow:hidden}
+.health-fill{height:100%;border-radius:6px;transition:width .5s}
+
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}
+.btn-primary:hover{background:var(--pri-dark)}
+.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{background:#F1F5F9;color:var(--text)}
+.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+
+/* Score card */
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+.score-big{font-size:3rem;font-weight:800}
+.score-stars{font-size:1.5rem;margin:.5rem 0}
+.score-label{font-size:.85rem;color:var(--gray)}
+
+/* QUIZ */
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}
+.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}
+.quiz-dot.current{background:var(--pri)}
+.quiz-dot.correct{background:var(--green)}
+.quiz-dot.wrong{background:var(--red)}
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}
+.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}
+.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}
+.option:hover{border-color:var(--pri);background:var(--pri-light)}
+.option.correct-answer{border-color:var(--green);background:#ECFDF5}
+.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;font-size:.78rem;line-height:1.5;display:none}
+.explanation.show{display:block}
+
+.results-section{text-align:center;padding:1.5rem}
+.results-section .big{font-size:2.5rem;font-weight:800}
+.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}
+.nivel-superior{background:var(--green)}
+.nivel-alto{background:var(--blue)}
+.nivel-basico{background:var(--pri)}
+.nivel-bajo{background:var(--red)}
+
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}
+.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--pri)}
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}
+.send-status.success{display:block;background:#ECFDF5;color:#065F46}
+.send-status.error{display:block;background:#FEF2F2;color:#991B1B}
+.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+
+@media(max-width:600px){
+  .phase{padding:1rem}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .credit-option .details{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html">← Inicio</a>
+  <span class="title">8° · Período 1 — Crédito y Endeudamiento</span>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" onclick="goPhase(0)">① Activación</div>
+  <div class="tab" onclick="goPhase(1)">② Exploración</div>
+  <div class="tab" onclick="goPhase(2)">③ Juego</div>
+  <div class="tab" onclick="goPhase(3)">④ Evaluación</div>
+</div>
+
+<!-- FASE 1 -->
+<div class="phase active" id="phase0">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 1 · YO HAGO</div>
+    <h2>¿Pedir prestado es bueno o malo?</h2>
+    <p>Descubre cómo funciona el crédito y por qué puede ser tu mejor aliado o tu peor enemigo.</p>
+  </div>
+
+  <div class="content-card">
+    <h3>📊 La realidad del endeudamiento en Colombia</h3>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="val">40,5%</div><div class="label">No sabe calcular interés compuesto</div></div>
+      <div class="stat-box"><div class="val">80%</div><div class="label">Gasta más de lo que gana</div></div>
+      <div class="stat-box"><div class="val">60,3%</div><div class="label">No entiende la inflación</div></div>
+      <div class="stat-box"><div class="val">$2M+</div><div class="label">Personas usan gota a gota</div></div>
+    </div>
+    <p>Estas cifras del DANE muestran que millones de colombianos toman decisiones financieras sin las herramientas para entender sus consecuencias.</p>
+  </div>
+
+  <div class="content-card">
+    <h3>💡 ¿Qué es el crédito?</h3>
+    <p>El crédito es un acuerdo donde alguien te presta dinero hoy y tú te comprometes a devolverlo en el futuro, 
+    junto con un <strong>costo adicional llamado interés</strong>. Es como alquilar dinero: pagas por usarlo.</p>
+    <p style="margin-top:.5rem"><strong>Deuda buena:</strong> Te ayuda a generar ingresos o valor futuro (educación, vivienda, negocio).</p>
+    <p><strong>Deuda mala:</strong> Financia consumo que pierde valor inmediatamente (ropa de marca, celular último modelo, vacaciones a crédito).</p>
+  </div>
+
+  <div class="content-card">
+    <h3>🔢 Interés simple: la fórmula clave</h3>
+    <p>Cuando pides un préstamo, el interés se calcula así:</p>
+    <div class="calc-box">
+      <h4>I = C × r × t</h4>
+      <div class="calc-row"><span>I = Interés (lo que pagas extra)</span></div>
+      <div class="calc-row"><span>C = Capital (lo que te prestaron)</span></div>
+      <div class="calc-row"><span>r = Tasa de interés (mensual o anual)</span></div>
+      <div class="calc-row"><span>t = Tiempo (meses o años)</span></div>
+    </div>
+    <p style="margin-top:.5rem"><strong>Ejemplo:</strong> Pides $1.000.000 al 2% mensual por 12 meses:</p>
+    <p>I = $1.000.000 × 0,02 × 12 = <strong>$240.000 de interés</strong></p>
+    <p>Total a pagar: $1.000.000 + $240.000 = <strong>$1.240.000</strong></p>
+  </div>
+
+  <div class="content-card">
+    <h3>🎯 Objetivo de aprendizaje</h3>
+    <p>Comprenderás cómo funciona un préstamo, calcularás cuotas con interés simple, y aprenderás a distinguir cuándo endeudarse es una buena decisión y cuándo es una trampa.</p>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="goPhase(1)">Continuar a Exploración →</button>
+  </div>
+</div>
+
+<!-- FASE 2 -->
+<div class="phase" id="phase1">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 2 · HACEMOS</div>
+    <h2>Comparemos opciones de crédito</h2>
+    <p>Actividad grupal: analicemos el verdadero costo de pedir prestado.</p>
+  </div>
+
+  <div class="content-card">
+    <h3>📋 Actividad en equipos (15 min)</h3>
+    <p>Juan necesita $3.000.000 para comprar herramientas de trabajo. Tiene tres opciones:</p>
+    <div class="calc-box">
+      <h4>Opción A: Banco</h4>
+      <div class="calc-row"><span>Tasa mensual</span><span>1,5%</span></div>
+      <div class="calc-row"><span>Plazo</span><span>12 meses</span></div>
+      <div class="calc-row"><span>I = 3.000.000 × 0,015 × 12</span><span>$540.000</span></div>
+      <div class="calc-row"><span>Total a pagar</span><span>$3.540.000</span></div>
+    </div>
+    <div class="calc-box">
+      <h4>Opción B: Almacén (crédito directo)</h4>
+      <div class="calc-row"><span>Tasa mensual</span><span>2,5%</span></div>
+      <div class="calc-row"><span>Plazo</span><span>6 meses</span></div>
+      <div class="calc-row"><span>I = 3.000.000 × 0,025 × 6</span><span>$450.000</span></div>
+      <div class="calc-row"><span>Total a pagar</span><span>$3.450.000</span></div>
+    </div>
+    <div class="calc-box" style="border-left:3px solid var(--red)">
+      <h4 style="color:var(--red)">Opción C: Gota a gota ⚠️</h4>
+      <div class="calc-row"><span>Tasa mensual</span><span>10%</span></div>
+      <div class="calc-row"><span>Plazo</span><span>3 meses</span></div>
+      <div class="calc-row"><span>I = 3.000.000 × 0,10 × 3</span><span>$900.000</span></div>
+      <div class="calc-row"><span>Total a pagar</span><span>$3.900.000</span></div>
+    </div>
+    <p style="margin-top:.75rem"><strong>Discusión:</strong> ¿Cuál opción es más barata en total? ¿Cuál tiene la cuota mensual más baja? ¿Por qué alguien escogería el gota a gota si es la más cara?</p>
+  </div>
+
+  <div class="content-card">
+    <h3>⚖️ Deuda buena vs. deuda mala</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.5rem">
+      <div style="background:#F0FDF4;padding:.75rem;border-radius:8px">
+        <strong style="color:#059669;font-size:.8rem">✅ DEUDA BUENA</strong>
+        <ul style="font-size:.72rem;margin-top:.35rem;color:#065F46">
+          <li>Estudiar una carrera</li>
+          <li>Comprar vivienda</li>
+          <li>Herramientas de trabajo</li>
+          <li>Iniciar un negocio viable</li>
+        </ul>
+      </div>
+      <div style="background:#FEF2F2;padding:.75rem;border-radius:8px">
+        <strong style="color:#DC2626;font-size:.8rem">❌ DEUDA MALA</strong>
+        <ul style="font-size:.72rem;margin-top:.35rem;color:#991B1B">
+          <li>Celular de última gama</li>
+          <li>Ropa de marca innecesaria</li>
+          <li>Vacaciones a crédito</li>
+          <li>Pagar deuda con otra deuda</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="content-card">
+    <h3>🚨 El peligro del gota a gota</h3>
+    <p>El "gota a gota" o préstamo informal es un sistema donde prestamistas ilegales cobran tasas de hasta 
+    <strong>10-20% mensual</strong> (120-240% anual). Además de ser ilegal, genera:</p>
+    <ul>
+      <li>Amenazas y violencia si no se paga</li>
+      <li>Deuda que crece más rápido de lo que se puede pagar</li>
+      <li>Pérdida de bienes y tranquilidad familiar</li>
+    </ul>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button>
+    <button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button>
+  </div>
+</div>
+
+<!-- FASE 3 -->
+<div class="phase" id="phase2">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 3 · TÚ HACES</div>
+    <h2>🎮 El Laberinto del Crédito</h2>
+    <p>Enfrenta 4 escenarios financieros. Cada decisión afecta tu salud financiera. ¡Elige sabiamente!</p>
+  </div>
+  <div id="gameContainer"></div>
+</div>
+
+<!-- FASE 4 -->
+<div class="phase" id="phase3">
+  <div class="phase-header">
+    <div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div>
+    <h2>📝 Demuestra lo que aprendiste</h2>
+    <p>10 preguntas tipo Saber sobre crédito y endeudamiento.</p>
+  </div>
+  <div class="content-card" id="studentInfoCard">
+    <h3>📋 Datos del estudiante</h3>
+    <div class="form-row">
+      <input type="text" id="studentName" placeholder="Tu nombre completo">
+      <select id="studentGroup"><option value="">Grupo…</option><option>8.1</option><option>8.2</option><option>8.3</option><option>8.4</option></select>
+    </div>
+    <button class="btn btn-primary" onclick="startQuiz()">Comenzar evaluación</button>
+  </div>
+  <div id="quizContainer" style="display:none"></div>
+  <div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+const SHEETS_URL = '';
+const FMT = n => '$' + Math.round(n).toLocaleString('es-CO');
+
+/* NAV */
+let currentPhase = 0;
+const done = new Set();
+function goPhase(n) {
+  done.add(currentPhase);
+  currentPhase = n;
+  document.querySelectorAll('.phase').forEach((p, i) => p.classList.toggle('active', i === n));
+  document.querySelectorAll('.tab').forEach((t, i) => {
+    t.classList.toggle('active', i === n);
+    t.classList.toggle('completed', done.has(i) && i !== n);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (n === 2 && !gameOn) initGame();
+}
+
+/* ===== GAME ===== */
+let gameOn = false, scIdx = 0, health = 100;
+const scenarios = [
+  {
+    title: 'La moto para trabajar',
+    desc: 'Andrés consiguió un empleo en una fábrica a 15 km de su casa. Necesita transporte. Una moto cuesta $6.000.000. ¿Cómo la financia?',
+    icon: '🏍️',
+    options: [
+      { label: 'A', name: 'Banco: préstamo personal', rate: 1.5, months: 24, capital: 6000000, type: 'buena',
+        feedback: 'Buena decisión. El banco ofrece la tasa más baja. La moto le genera ingresos al ahorrarle transporte y tiempo.' },
+      { label: 'B', name: 'Almacén: crédito directo', rate: 2.2, months: 18, capital: 6000000, type: 'ok',
+        feedback: 'Opción aceptable, pero la tasa es mayor que la del banco. Siempre compara antes de decidir.' },
+      { label: 'C', name: 'Gota a gota: préstamo informal', rate: 10, months: 6, capital: 6000000, type: 'mala',
+        feedback: '¡Peligro! El gota a gota cobra tasas abusivas. En 6 meses pagaría $3.600.000 solo en intereses. Además, es ilegal y riesgoso.' },
+      { label: 'D', name: 'Ahorrar y comprar de contado', rate: 0, months: 0, capital: 6000000, type: 'mejor',
+        feedback: '¡Excelente! Comprar de contado es ideal. Pero necesitaría ahorrar ~$500.000/mes durante un año. ¿Puede esperar tanto para el empleo?' }
+    ],
+    bestIdx: 0
+  },
+  {
+    title: 'El celular de moda',
+    desc: 'Camila quiere el último iPhone que cuesta $5.200.000. Sus amigas ya lo tienen. Gana $1.750.905 al mes (salario mínimo).',
+    icon: '📱',
+    options: [
+      { label: 'A', name: 'Tarjeta de crédito (pago mínimo)', rate: 2.8, months: 36, capital: 5200000, type: 'mala',
+        feedback: 'Trampa del pago mínimo: ¡pagaría durante 3 años! Los intereses serían enormes. El celular vale $5.2M pero terminaría pagando más del doble.' },
+      { label: 'B', name: 'Crédito bancario a 12 meses', rate: 1.8, months: 12, capital: 5200000, type: 'ok',
+        feedback: 'Mejor que la tarjeta, pero ¿realmente necesita un celular de $5.2M ganando un mínimo? La cuota mensual sería muy alta respecto a su ingreso.' },
+      { label: 'C', name: 'Comprar uno más económico de contado', rate: 0, months: 0, capital: 800000, type: 'mejor',
+        feedback: '¡La mejor decisión! Un celular de $800.000 cumple las mismas funciones básicas. Ahorró $4.400.000 y no se endeudó. Consumo inteligente.' },
+      { label: 'D', name: 'No comprar nada', rate: 0, months: 0, capital: 0, type: 'buena',
+        feedback: 'Válido si su celular actual funciona. No necesita el último modelo para vivir bien.' }
+    ],
+    bestIdx: 2
+  },
+  {
+    title: 'La emergencia médica',
+    desc: 'El hijo de Rosa necesita un tratamiento que la EPS no cubre. Costo: $2.500.000. Es urgente. Rosa tiene $800.000 ahorrados.',
+    icon: '🏥',
+    options: [
+      { label: 'A', name: 'Pagar con ahorros + préstamo bancario', rate: 1.5, months: 12, capital: 1700000, type: 'mejor',
+        feedback: '¡Decisión inteligente! Usa los ahorros para reducir la deuda necesaria. El préstamo bancario tiene la tasa más baja para el monto restante.' },
+      { label: 'B', name: 'Tarjeta de crédito por el total', rate: 2.5, months: 12, capital: 2500000, type: 'ok',
+        feedback: 'Funciona para la emergencia, pero la tasa es alta y no usó sus ahorros. Habría pagado menos intereses combinando ahorros + crédito.' },
+      { label: 'C', name: 'Gota a gota por todo el monto', rate: 10, months: 4, capital: 2500000, type: 'mala',
+        feedback: 'Entendible por la urgencia, pero el costo es devastador. Pagaría $1.000.000 solo en intereses en 4 meses. Siempre hay alternativas mejores.' },
+      { label: 'D', name: 'Esperar y no tratar al hijo', rate: 0, months: 0, capital: 0, type: 'mala',
+        feedback: 'La salud no puede esperar. A veces endeudarse es necesario — la clave es hacerlo al menor costo posible.' }
+    ],
+    bestIdx: 0
+  },
+  {
+    title: 'La oportunidad de negocio',
+    desc: 'Luis quiere montar un puesto de comidas rápidas en una zona comercial. Necesita $4.000.000 para equipos y materia prima. Tiene $1.500.000 ahorrados.',
+    icon: '🍔',
+    options: [
+      { label: 'A', name: 'Microcrédito (Bancamía/banco)', rate: 2.0, months: 18, capital: 2500000, type: 'mejor',
+        feedback: '¡Excelente! Usar ahorros + microcrédito es la mejor combinación. El negocio genera ingresos para pagar las cuotas. Es deuda BUENA.' },
+      { label: 'B', name: 'Pedir todo prestado al banco', rate: 1.8, months: 24, capital: 4000000, type: 'ok',
+        feedback: 'Funciona, pero endeudarse por el total es más riesgoso. Si el negocio tarda en generar ingresos, las cuotas serían difíciles de pagar.' },
+      { label: 'C', name: 'Usar solo los ahorros (negocio pequeño)', rate: 0, months: 0, capital: 1500000, type: 'buena',
+        feedback: 'Conservador pero válido. Empezar pequeño con lo que tiene y crecer gradualmente. Cero riesgo de deuda.' },
+      { label: 'D', name: 'No emprender y quedarse como está', rate: 0, months: 0, capital: 0, type: 'ok',
+        feedback: 'No siempre hay que arriesgar. Pero si el análisis muestra que el negocio es viable, no emprender también tiene un costo de oportunidad.' }
+    ],
+    bestIdx: 0
+  }
+];
+
+function initGame() {
+  gameOn = true; scIdx = 0; health = 100;
+  renderScenario();
+}
+
+function renderScenario() {
+  const sc = scenarios[scIdx];
+  const c = document.getElementById('gameContainer');
+
+  let healthColor = health > 60 ? '#059669' : health > 30 ? '#D97706' : '#DC2626';
+
+  let html = `
+    <div class="health-bar">
+      <div class="health-label"><span>💰 Salud financiera</span><span>${health}/100</span></div>
+      <div class="health-track"><div class="health-fill" style="width:${health}%;background:${healthColor}"></div></div>
+    </div>
+    <div class="scenario">
+      <div class="scenario-header">
+        <div class="round">ESCENARIO ${scIdx + 1} DE ${scenarios.length}</div>
+        <h3>${sc.icon} ${sc.title}</h3>
+        <p>${sc.desc}</p>
+      </div>
+      <div class="scenario-body">
+        <p style="font-size:.8rem;font-weight:600;margin-bottom:.75rem">¿Qué debería hacer? Selecciona la mejor opción:</p>`;
+
+  sc.options.forEach((opt, i) => {
+    const interest = opt.capital * (opt.rate / 100) * opt.months;
+    const total = opt.capital + interest;
+    const cuota = opt.months > 0 ? total / opt.months : 0;
+
+    html += `
+      <div class="credit-option" id="opt${i}" onclick="selectOption(${i})">
+        <div class="opt-label">OPCIÓN ${opt.label}</div>
+        <h4>${opt.name}</h4>
+        ${opt.rate > 0 ? `<div class="details">
+          <div class="detail">Tasa: <strong>${opt.rate}% mensual</strong></div>
+          <div class="detail">Plazo: <strong>${opt.months} meses</strong></div>
+          <div class="detail">Interés total: <strong>${FMT(interest)}</strong></div>
+          <div class="detail">Cuota mensual: <strong>${FMT(cuota)}</strong></div>
+        </div>
+        <div class="total-cost">💰 Total a pagar: ${FMT(total)}</div>` :
+        `<div class="total-cost">💰 Costo: ${opt.capital > 0 ? FMT(opt.capital) + ' (contado)' : 'Sin costo financiero'}</div>`}
+      </div>`;
+  });
+
+  html += `
+        <div id="scenarioFeedback"></div>
+        <div class="btn-row" id="scenarioBtn" style="display:none">
+          <button class="btn btn-primary" onclick="nextScenario()">
+            ${scIdx < scenarios.length - 1 ? 'Siguiente escenario →' : 'Ver resultados →'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+
+  c.innerHTML = html;
+}
+
+function selectOption(idx) {
+  if (document.querySelector('.credit-option.best') || document.querySelector('.credit-option.worst')) return;
+
+  const sc = scenarios[scIdx];
+  const opt = sc.options[idx];
+
+  // Score
+  let delta = 0;
+  if (opt.type === 'mejor') delta = 10;
+  else if (opt.type === 'buena') delta = 5;
+  else if (opt.type === 'ok') delta = 0;
+  else delta = -15;
+  health = Math.max(0, Math.min(100, health + delta));
+
+  // Mark options
+  sc.options.forEach((o, i) => {
+    const el = document.getElementById('opt' + i);
+    if (o.type === 'mejor') { el.classList.add('best'); el.innerHTML += '<span class="opt-tag tag-best">MEJOR</span>'; }
+    else if (o.type === 'mala') { el.classList.add('worst'); el.innerHTML += '<span class="opt-tag tag-worst">RIESGO</span>'; }
+    if (i === idx) el.classList.add('selected');
+    el.style.pointerEvents = 'none';
+  });
+
+  // Feedback
+  const fbCls = (opt.type === 'mejor' || opt.type === 'buena') ? 'fb-correct' : 'fb-wrong';
+  document.getElementById('scenarioFeedback').innerHTML = `
+    <div class="feedback-box ${fbCls}">
+      <strong>Tu elección: ${opt.name}</strong><br>${opt.feedback}
+    </div>`;
+
+  // Update health bar
+  let healthColor = health > 60 ? '#059669' : health > 30 ? '#D97706' : '#DC2626';
+  document.querySelector('.health-fill').style.width = health + '%';
+  document.querySelector('.health-fill').style.background = healthColor;
+  document.querySelector('.health-label span:last-child').textContent = health + '/100';
+
+  document.getElementById('scenarioBtn').style.display = 'flex';
+}
+
+function nextScenario() {
+  scIdx++;
+  if (scIdx < scenarios.length) renderScenario();
+  else showGameResults();
+}
+
+function showGameResults() {
+  const stars = health >= 80 ? '⭐⭐⭐' : health >= 50 ? '⭐⭐' : '⭐';
+  const msg = health >= 80 ? '¡Eres un experto en crédito! Tomas decisiones financieras inteligentes.' :
+              health >= 50 ? 'Buen manejo, pero hay decisiones que podrían mejorar. Repasa los conceptos.' :
+              'Necesitas reforzar tus conocimientos sobre crédito. Las decisiones de deuda tienen consecuencias graves.';
+
+  document.getElementById('gameContainer').innerHTML = `
+    <div class="score-card">
+      <div class="score-big">${health}/100</div>
+      <div class="score-label">Salud Financiera Final</div>
+      <div class="score-stars">${stars}</div>
+      <p style="font-size:.82rem;color:var(--gray);margin-top:.5rem;max-width:500px;margin-left:auto;margin-right:auto">${msg}</p>
+      <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+        <button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button>
+        <button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button>
+      </div>
+    </div>`;
+}
+
+/* ===== QUIZ ===== */
+const questions = [
+  { q: 'Si pides prestados $2.000.000 al 1,5% mensual durante 10 meses, ¿cuánto pagas en intereses?',
+    opts: ['A. $200.000','B. $300.000','C. $150.000','D. $30.000'], ans: 1,
+    exp: 'I = C × r × t = $2.000.000 × 0,015 × 10 = $300.000. El interés es el precio que pagas por usar el dinero de otro.' },
+  { q: '¿Cuál es la principal diferencia entre deuda buena y deuda mala?',
+    opts: ['A. La deuda buena es con bancos, la mala con personas','B. La deuda buena genera valor o ingresos futuros, la mala solo financia consumo','C. No hay diferencia, toda deuda es mala','D. La deuda buena es menor a $1 millón'], ans: 1,
+    exp: 'La deuda buena se usa para adquirir algo que genera retorno (educación, negocio, vivienda). La mala financia consumo que pierde valor rápidamente.' },
+  { q: 'El gota a gota cobra 10% mensual. Si pides $1.000.000 por 3 meses, ¿cuánto pagas en total?',
+    opts: ['A. $1.100.000','B. $1.200.000','C. $1.300.000','D. $1.030.000'], ans: 2,
+    exp: 'I = $1.000.000 × 0,10 × 3 = $300.000. Total = $1.000.000 + $300.000 = $1.300.000. ¡Un 30% más en solo 3 meses!' },
+  { q: '¿Cuál de estas NO es una razón por la que el gota a gota es peligroso?',
+    opts: ['A. Cobran tasas de interés abusivas','B. Usan amenazas y violencia','C. Están regulados por la Superfinanciera','D. La deuda crece más rápido de lo que se puede pagar'], ans: 2,
+    exp: 'El gota a gota NO está regulado por ninguna entidad. Es completamente informal e ilegal. Las otras tres opciones sí son peligros reales.' },
+  { q: 'Ana tiene $500.000 ahorrados y necesita $2.000.000 para un curso técnico. ¿Qué debería hacer?',
+    opts: ['A. Pedir $2.000.000 al gota a gota','B. No estudiar','C. Usar sus ahorros + un préstamo bancario por $1.500.000','D. Pedir los $2.000.000 prestados a una tarjeta de crédito con pago mínimo'], ans: 2,
+    exp: 'Usar ahorros reduce el monto a pedir prestado. Un préstamo bancario tiene mejor tasa. Y la educación es una inversión = deuda BUENA.' },
+  { q: 'Si un banco cobra 1,8% mensual y un almacén cobra 2,5% mensual por el mismo monto, ¿cuál tiene menor costo financiero?',
+    opts: ['A. El almacén, porque da más plazo','B. El banco, porque la tasa es menor','C. Son iguales','D. Depende del día de pago'], ans: 1,
+    exp: 'A menor tasa de interés, menor costo financiero. 1,8% < 2,5%, así que el banco es la opción más barata (para el mismo plazo y monto).' },
+  { q: '¿Qué es la tasa de interés?',
+    opts: ['A. El porcentaje de descuento en una compra','B. El costo que se cobra por prestar dinero','C. Un impuesto del gobierno','D. La ganancia del trabajador'], ans: 1,
+    exp: 'La tasa de interés es el porcentaje que se cobra por el uso del dinero prestado. Es el "precio" del crédito.' },
+  { q: 'Pedro pide $5.000.000 y después de 12 meses paga $6.200.000 en total. ¿Cuánto pagó de interés?',
+    opts: ['A. $5.000.000','B. $1.200.000','C. $6.200.000','D. $200.000'], ans: 1,
+    exp: 'Interés = Total pagado − Capital = $6.200.000 − $5.000.000 = $1.200.000. Eso es un 24% del capital en 12 meses (2% mensual).' },
+  { q: '¿Cuál de estas situaciones justifica MEJOR endeudarse?',
+    opts: ['A. Comprar el último modelo de zapatillas','B. Pagar las vacaciones en familia','C. Financiar una carrera técnica que mejorará tu salario','D. Comprar un televisor nuevo de 65 pulgadas'], ans: 2,
+    exp: 'Estudiar una carrera aumenta tu capacidad de generar ingresos futuros. Es la clásica deuda buena: inviertes hoy para ganar más mañana.' },
+  { q: 'Si la cuota mensual de un crédito es $350.000 y tu ingreso mensual es $1.750.905 (SMMLV), ¿qué porcentaje de tu ingreso se va en la cuota?',
+    opts: ['A. 10%','B. 15%','C. 20%','D. 25%'], ans: 2,
+    exp: '$350.000 ÷ $1.750.905 × 100 = 20%. Los expertos recomiendan que las cuotas de crédito no superen el 30% del ingreso.' }
+];
+
+let cQ = 0, ans = [];
+
+function startQuiz() {
+  const n = document.getElementById('studentName').value.trim();
+  const g = document.getElementById('studentGroup').value;
+  if (!n || !g) { alert('Escribe tu nombre y selecciona tu grupo.'); return; }
+  document.getElementById('studentInfoCard').style.display = 'none';
+  document.getElementById('quizContainer').style.display = 'block';
+  cQ = 0; ans = [];
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[cQ];
+  let dots = '<div class="quiz-progress">';
+  questions.forEach((_, i) => {
+    let cl = 'quiz-dot';
+    if (i === cQ) cl += ' current';
+    else if (i < ans.length) cl += (ans[i].correct ? ' correct' : ' wrong');
+    dots += `<div class="${cl}"></div>`;
+  });
+  dots += '</div>';
+
+  let h = dots + `<div class="question-card"><div class="q-num">Pregunta ${cQ + 1} de ${questions.length}</div><div class="q-text">${q.q}</div>`;
+  q.opts.forEach((o, i) => h += `<button class="option" onclick="selAns(${i})" id="qo${i}">${o}</button>`);
+  h += `<div class="explanation" id="qexp">💡 ${q.exp}</div>
+    <div class="btn-row" id="qnext" style="display:none">
+      <button class="btn btn-primary" onclick="${cQ < questions.length - 1 ? 'nextQ()' : 'finishQ()'}">
+        ${cQ < questions.length - 1 ? 'Siguiente →' : 'Ver resultados'}</button>
+    </div></div>`;
+  document.getElementById('quizContainer').innerHTML = h;
+}
+
+function selAns(i) {
+  if (ans.length > cQ) return;
+  const q = questions[cQ];
+  ans.push({ selected: i, correct: i === q.ans, question: cQ + 1 });
+  document.querySelectorAll('.option').forEach((b, j) => {
+    b.style.pointerEvents = 'none';
+    if (j === q.ans) b.classList.add('correct-answer');
+    if (j === i && i !== q.ans) b.classList.add('wrong-answer');
+  });
+  document.getElementById('qexp').classList.add('show');
+  document.getElementById('qnext').style.display = 'flex';
+}
+
+function nextQ() { cQ++; renderQ(); }
+
+function finishQ() {
+  const correct = ans.filter(a => a.correct).length;
+  const nota = (correct / questions.length * 4 + 1).toFixed(1);
+  const nivel = nota >= 4.6 ? 'Superior' : nota >= 3.8 ? 'Alto' : nota >= 3.0 ? 'Básico' : 'Bajo';
+  const nivelCls = 'nivel-' + nivel.toLowerCase();
+
+  document.getElementById('quizContainer').style.display = 'none';
+  const r = document.getElementById('quizResults');
+  r.style.display = 'block';
+  r.innerHTML = `<div class="results-section">
+    <div class="big">${correct}/${questions.length}</div>
+    <div class="nota">Nota: ${nota}</div>
+    <div class="nivel ${nivelCls}">${nivel}</div>
+    <p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">
+      ${correct >= 8 ? '¡Excelente! Dominas los conceptos de crédito y endeudamiento.' :
+        correct >= 6 ? 'Buen trabajo. Repasa los cálculos de interés simple.' :
+        correct >= 4 ? 'Vas avanzando, pero necesitas reforzar. Revisa las fases 1 y 2.' :
+        'Necesitas repasar los conceptos básicos de crédito. Vuelve a las fases anteriores.'}
+    </p>
+    <div id="sendStatus" class="send-status"></div>
+    <div class="btn-row" style="justify-content:center;margin-top:1rem">
+      <button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar resultados</button>
+      <button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir secuencia</button>
+    </div>
+  </div>`;
+  if (SHEETS_URL) sendResults();
+}
+
+async function sendResults() {
+  const name = document.getElementById('studentName').value.trim();
+  const group = document.getElementById('studentGroup').value;
+  const correct = ans.filter(a => a.correct).length;
+  const nota = (correct / questions.length * 4 + 1).toFixed(1);
+  const nivel = nota >= 4.6 ? 'Superior' : nota >= 3.8 ? 'Alto' : nota >= 3.0 ? 'Básico' : 'Bajo';
+  const st = document.getElementById('sendStatus');
+
+  if (!SHEETS_URL) { st.className = 'send-status error'; st.textContent = '⚠️ URL de Google Sheets no configurada.'; return; }
+
+  st.className = 'send-status loading'; st.textContent = '⏳ Enviando…';
+  document.getElementById('btnSend').disabled = true;
+
+  try {
+    await fetch(SHEETS_URL, { method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        timestamp: new Date().toISOString(), nombre: name, grupo: group,
+        grado: '8°', periodo: 'P1', tema: 'Crédito y Endeudamiento',
+        respuestas: ans.map(a => questions[a.question - 1].opts[a.selected].charAt(0)).join(','),
+        aciertos: correct, total: questions.length,
+        nota: parseFloat(nota), nivel
+      })
+    });
+    st.className = 'send-status success'; st.textContent = '✅ Resultados enviados.';
+  } catch (e) {
+    st.className = 'send-status error'; st.textContent = '❌ Error. Intenta de nuevo.';
+    document.getElementById('btnSend').disabled = false;
+  }
+}
+</script>
+</body>
+</html>
