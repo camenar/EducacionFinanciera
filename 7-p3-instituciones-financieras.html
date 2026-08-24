@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7° P3 — Instituciones Financieras | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#2563EB;--pri-light:#EFF6FF;--pri-dark:#1D4ED8;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--amber:#D97706;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;opacity:.7}.topbar a:hover{opacity:1}.topbar .title{font-weight:700;flex:1}
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}
+.tab.completed{color:var(--green)}.tab.completed::before{content:'✓ '}
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}.phase.active{display:block}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header{margin-bottom:1.5rem}.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.cc{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.cc h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.cc p,.cc li{font-size:.82rem;line-height:1.6;color:#475569}.cc ul{padding-left:1.25rem;margin-top:.5rem}.cc li{margin-bottom:.25rem}
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}.btn-primary:hover{background:var(--pri-dark)}.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{background:#F1F5F9;color:var(--text)}.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+.prod-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+.prod-card{padding:.75rem;border-radius:10px;background:#F8FAFC;border:1px solid #E2E8F0}
+.prod-card h4{font-size:.8rem;font-weight:700;margin-bottom:.25rem;display:flex;align-items:center;gap:.35rem}
+.prod-card p{font-size:.7rem;color:var(--gray);line-height:1.4}
+.prod-card .feat{font-size:.68rem;color:var(--pri);font-weight:600;margin-top:.25rem}
+
+/* GAME */
+.game-area{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.progress-bar{display:flex;gap:4px;margin-bottom:1rem}
+.prog-dot{flex:1;height:6px;border-radius:3px;background:#E2E8F0}
+.prog-dot.done{background:var(--green)}.prog-dot.wrong{background:var(--red)}.prog-dot.current{background:var(--pri)}
+.client-card{background:linear-gradient(135deg,#1E293B,#334155);color:#fff;border-radius:12px;padding:1.25rem;margin-bottom:1rem;display:flex;align-items:flex-start;gap:1rem}
+.client-avatar{font-size:2.5rem;flex-shrink:0}
+.client-info h4{font-size:.95rem;font-weight:700}.client-info .age{font-size:.7rem;opacity:.6;margin-bottom:.35rem}
+.client-info p{font-size:.78rem;opacity:.85;line-height:1.5}
+.client-info .need{margin-top:.5rem;padding:.35rem .75rem;background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);border-radius:8px;font-size:.72rem;font-weight:600;color:#FCD34D;display:inline-block}
+.product-options{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-top:1rem}
+.po-btn{padding:.65rem .75rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .15s;text-align:left}
+.po-btn:hover{border-color:var(--pri);background:var(--pri-light)}
+.po-btn.correct{border-color:var(--green);background:#ECFDF5;color:#065F46}
+.po-btn.wrong{border-color:var(--red);background:#FEF2F2;color:#991B1B}
+.po-btn .po-icon{font-size:1.1rem}
+.po-btn .po-name{display:block;margin-top:.15rem}
+.feedback-box{padding:.75rem 1rem;border-radius:10px;margin-top:.75rem;font-size:.78rem;line-height:1.5}
+.fb-ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
+.fb-no{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.advisor-rank{display:flex;align-items:center;gap:1rem;padding:.75rem;background:#F8FAFC;border-radius:10px;margin-bottom:1rem}
+.advisor-rank .ar-icon{font-size:2rem}.advisor-rank .ar-info{flex:1}.advisor-rank .ar-title{font-size:.82rem;font-weight:700}.advisor-rank .ar-sub{font-size:.7rem;color:var(--gray)}
+.advisor-rank .ar-score{font-size:1.2rem;font-weight:800;color:var(--pri)}
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+.score-big{font-size:3rem;font-weight:800}.score-stars{font-size:1.5rem;margin:.5rem 0}.score-label{font-size:.85rem;color:var(--gray)}
+
+/* QUIZ */
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}.quiz-dot.current{background:var(--pri)}.quiz-dot.correct{background:var(--green)}.quiz-dot.wrong{background:var(--red)}
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}
+.option:hover{border-color:var(--pri);background:var(--pri-light)}.option.correct-answer{border-color:var(--green);background:#ECFDF5}.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;font-size:.78rem;line-height:1.5;display:none}.explanation.show{display:block}
+.results-section{text-align:center;padding:1.5rem}.results-section .big{font-size:2.5rem;font-weight:800}.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}.nivel-superior{background:var(--green)}.nivel-alto{background:var(--pri)}.nivel-basico{background:var(--amber)}.nivel-bajo{background:var(--red)}
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}.send-status.success{display:block;background:#ECFDF5;color:#065F46}.send-status.error{display:block;background:#FEF2F2;color:#991B1B}.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+@media(max-width:600px){.phase{padding:1rem}.prod-grid,.product-options{grid-template-columns:1fr}.client-card{flex-direction:column;align-items:center;text-align:center}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Inicio</a><span class="title">7° · Período 3 — Instituciones Financieras</span></div>
+<div class="tabs"><div class="tab active" onclick="goPhase(0)">① Activación</div><div class="tab" onclick="goPhase(1)">② Exploración</div><div class="tab" onclick="goPhase(2)">③ Juego</div><div class="tab" onclick="goPhase(3)">④ Evaluación</div></div>
+
+<div class="phase active" id="phase0">
+  <div class="phase-header"><div class="phase-badge">FASE 1 · YO HAGO</div><h2>¿Dónde guarda su dinero tu familia?</h2><p>Conoce las entidades que protegen y hacen crecer tu dinero.</p></div>
+  <div class="cc"><h3>🧠 Dato impactante</h3><p>En Colombia, cerca del <strong>33% de los adultos no tiene ningún producto financiero</strong>. Eso significa que millones de personas guardan su dinero debajo del colchón, en alcancías o se lo entregan a prestamistas informales. El dinero guardado en casa <strong>pierde valor cada año por la inflación</strong>.</p></div>
+  <div class="cc"><h3>🏦 ¿Qué es una institución financiera?</h3><p>Es una empresa <strong>autorizada y vigilada por el Estado</strong> (a través de la Superintendencia Financiera) para manejar dinero de las personas. Incluye bancos, cooperativas, compañías de financiamiento y aseguradoras.</p>
+    <p style="margin-top:.5rem"><strong>¿Por qué son importantes?</strong></p>
+    <ul><li><strong>Seguridad:</strong> Tu dinero está protegido por Fogafín (hasta $50 millones)</li><li><strong>Crecimiento:</strong> Generan intereses sobre tus ahorros</li><li><strong>Acceso a crédito:</strong> Pueden prestarte para metas importantes</li><li><strong>Trazabilidad:</strong> Puedes demostrar tus ingresos legalmente</li></ul>
+  </div>
+  <div class="cc"><h3>📐 Conexión matemática</h3><p>Usarás <strong>interés simple, porcentajes y lectura de tablas</strong> para comparar productos financieros y recomendar el mejor para cada persona.</p></div>
+  <div class="cc"><h3>🎯 Objetivo de aprendizaje</h3><p>Reconocerás las principales entidades del sistema financiero colombiano, comprenderás los productos básicos (cuenta de ahorro, CDT, crédito) y serás capaz de recomendar el producto adecuado según el perfil de cada persona.</p></div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="goPhase(1)">Continuar →</button></div>
+</div>
+
+<div class="phase" id="phase1">
+  <div class="phase-header"><div class="phase-badge">FASE 2 · HACEMOS</div><h2>El menú del sistema financiero</h2><p>Conoce los productos que ofrecen los bancos y cooperativas.</p></div>
+  <div class="cc"><h3>🏛️ Tipos de entidades en Colombia</h3>
+    <div class="prod-grid">
+      <div class="prod-card"><h4>🏦 Bancos</h4><p>Bancolombia, Davivienda, BBVA, Banco de Bogotá. Ofrecen todos los productos.</p><div class="feat">Vigilados por Superfinanciera · Fogafín</div></div>
+      <div class="prod-card"><h4>🤝 Cooperativas</h4><p>Confiar, CFA, JFK. Enfocadas en ahorro y crédito para asociados.</p><div class="feat">Vigiladas por Superfinanciera · Fogacoop</div></div>
+      <div class="prod-card"><h4>📱 Fintech / Neobancos</h4><p>Nequi, Daviplata, Nu. Operan desde el celular con menos trámites.</p><div class="feat">Respaldadas por bancos tradicionales</div></div>
+      <div class="prod-card"><h4>🛡️ Aseguradoras</h4><p>Sura, Bolívar, Mapfre. Protegen contra riesgos (salud, vida, vehículo).</p><div class="feat">Vigiladas por Superfinanciera</div></div>
+    </div>
+  </div>
+  <div class="cc"><h3>📦 Productos financieros básicos</h3>
+    <div class="prod-grid">
+      <div class="prod-card" style="border-left:4px solid #059669"><h4>🐷 Cuenta de ahorro</h4><p>Guardas dinero y ganas un pequeño interés. Puedes retirar cuando quieras.</p><div class="feat">Ideal para: ahorro del día a día</div></div>
+      <div class="prod-card" style="border-left:4px solid #2563EB"><h4>📊 CDT</h4><p>Depositas dinero por un tiempo fijo (3, 6, 12 meses). Ganas más interés que la cuenta de ahorro, pero no puedes retirar antes.</p><div class="feat">Ideal para: ahorros a mediano plazo</div></div>
+      <div class="prod-card" style="border-left:4px solid #D97706"><h4>💳 Tarjeta de crédito</h4><p>El banco te presta dinero para compras. Debes pagar cada mes. Si pagas solo el mínimo, los intereses crecen mucho.</p><div class="feat">Ideal para: emergencias y compras planeadas</div></div>
+      <div class="prod-card" style="border-left:4px solid #7C3AED"><h4>💰 Crédito / Préstamo</h4><p>El banco te presta una cantidad grande que devuelves en cuotas mensuales con interés.</p><div class="feat">Ideal para: vivienda, educación, negocio</div></div>
+      <div class="prod-card" style="border-left:4px solid #DC2626"><h4>🛡️ Seguro</h4><p>Pagas una cuota mensual y si ocurre un evento (accidente, enfermedad), la aseguradora cubre los gastos.</p><div class="feat">Ideal para: protección contra imprevistos</div></div>
+      <div class="prod-card" style="border-left:4px solid #0891B2"><h4>📱 Billetera digital</h4><p>Nequi, Daviplata. Cuentas desde el celular para pagos, transferencias y ahorro.</p><div class="feat">Ideal para: pagos rápidos, sin sucursal</div></div>
+    </div>
+  </div>
+  <div class="cc"><h3>📋 Actividad en equipos (15 min)</h3><p>Cada equipo recibe 2 perfiles de clientes ficticios y debe recomendar qué producto financiero les conviene. Deben justificar su elección con las características del producto.</p></div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button><button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button></div>
+</div>
+
+<div class="phase" id="phase2">
+  <div class="phase-header"><div class="phase-badge">FASE 3 · TÚ HACES</div><h2>🎮 Banquero por un Día</h2><p>Eres asesor en el Banco del Futuro. Atiende a 8 clientes y recomiéndales el producto financiero ideal.</p></div>
+  <div id="gameContainer"></div>
+</div>
+
+<div class="phase" id="phase3">
+  <div class="phase-header"><div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div><h2>📝 Demuestra lo que aprendiste</h2><p>10 preguntas tipo Saber sobre instituciones financieras.</p></div>
+  <div class="cc" id="studentInfoCard"><h3>📋 Datos del estudiante</h3><div class="form-row"><input type="text" id="studentName" placeholder="Tu nombre completo"><select id="studentGroup"><option value="">Grupo…</option><option>7.1</option><option>7.2</option><option>7.3</option><option>7.4</option></select></div><button class="btn btn-primary" onclick="startQuiz()">Comenzar evaluación</button></div>
+  <div id="quizContainer" style="display:none"></div><div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+const SHEETS_URL='';
+let currentPhase=0;const done=new Set();
+function goPhase(n){done.add(currentPhase);currentPhase=n;document.querySelectorAll('.phase').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);t.classList.toggle('completed',done.has(i)&&i!==n)});window.scrollTo({top:0,behavior:'smooth'});if(n===2&&!gameOn)initGame()}
+
+let gameOn=false,clIdx=0,score=0,results=[];
+const clients=[
+  {avatar:'👩‍🎓',name:'Sofía',age:'17 años, estudiante de 11°',need:'Quiere ahorrar $50.000 mensuales de lo que le dan sus papás para comprar un portátil cuando entre a la universidad.',
+   products:['🐷 Cuenta de ahorro','📊 CDT a 12 meses','💳 Tarjeta de crédito','💰 Crédito de consumo'],correct:0,
+   exp:'Una cuenta de ahorro es perfecta: permite depositar y retirar libremente, gana un pequeño interés, y es el primer paso para construir un historial financiero. No necesita CDT porque el monto es pequeño y necesita flexibilidad.'},
+  {avatar:'👨‍🔧',name:'Don Hernando',age:'52 años, mecánico independiente',need:'Tiene $8.000.000 ahorrados en la casa y quiere que ganen intereses. No los necesitará por al menos 6 meses.',
+   products:['📱 Billetera digital','📊 CDT a 6 meses','🛡️ Seguro de vida','💳 Tarjeta de crédito'],correct:1,
+   exp:'Un CDT a 6 meses es ideal: genera más intereses que una cuenta de ahorro y el plazo coincide con el tiempo que no necesita el dinero. Es seguro y está respaldado por Fogafín.'},
+  {avatar:'👩‍💼',name:'Camila',age:'28 años, vendedora en almacén',need:'Necesita enviar dinero a su mamá en el pueblo cada quincena y pagar servicios desde el celular. No quiere ir al banco.',
+   products:['📊 CDT a 12 meses','📱 Billetera digital (Nequi/Daviplata)','💰 Crédito hipotecario','🛡️ Seguro de hogar'],correct:1,
+   exp:'Una billetera digital como Nequi o Daviplata permite transferencias inmediatas, pagos de servicios y todo desde el celular, sin filas ni sucursales. Perfecta para sus necesidades.'},
+  {avatar:'👨‍👩‍👧',name:'Familia Pérez',age:'Pareja con una hija de 3 años',need:'Quieren proteger a su familia en caso de que algo le pase al papá, que es el principal proveedor del hogar.',
+   products:['🐷 Cuenta de ahorro','💳 Tarjeta de crédito','🛡️ Seguro de vida','📊 CDT a 3 meses'],correct:2,
+   exp:'Un seguro de vida protege a la familia económicamente si algo le pasa al padre. Garantiza que la mamá y la hija tengan recursos para sobrevivir. Es una inversión en tranquilidad.'},
+  {avatar:'👩‍🍳',name:'Doña Rosa',age:'45 años, vende almuerzos',need:'Necesita $3.000.000 para comprar una estufa industrial y ampliar su negocio. Tiene buen historial de ventas pero no tiene ahorros suficientes.',
+   products:['🐷 Cuenta de ahorro','📱 Billetera digital','💰 Microcrédito','🛡️ Seguro de hogar'],correct:2,
+   exp:'Un microcrédito es la solución: está diseñado para pequeños emprendedores, no requiere grandes garantías y la estufa generará más ingresos para pagar las cuotas. Es deuda buena.'},
+  {avatar:'👦',name:'Mateo',age:'14 años, estudiante de 8°',need:'Ganó $200.000 en un concurso y quiere guardarlos de forma segura para no gastarlos. Sus papás le dijeron que los guarde bien.',
+   products:['📊 CDT a 12 meses','💳 Tarjeta de crédito','💰 Crédito educativo','🐷 Cuenta de ahorro para menores'],correct:3,
+   exp:'Una cuenta de ahorro para menores de edad es perfecta: está a nombre del menor con el papá como titular, es segura, gana intereses y le enseña hábitos financieros desde joven.'},
+  {avatar:'👨‍💻',name:'Andrés',age:'35 años, ingeniero',need:'Tiene un viaje planeado en 2 semanas y necesita pagar el hotel ($2.800.000). Tiene el dinero en su cuenta pero el hotel solo acepta pago con tarjeta.',
+   products:['💳 Tarjeta de débito/crédito','📊 CDT a 1 mes','🛡️ Seguro de viaje','💰 Crédito de consumo'],correct:0,
+   exp:'Una tarjeta (débito si tiene el dinero, o crédito pagando el total al mes siguiente) es la solución directa. El CDT no sirve porque necesita el dinero ya. El seguro de viaje es complementario, no resuelve el pago.'},
+  {avatar:'👵',name:'Doña Carmen',age:'63 años, pensionada',need:'Recibe $1.800.000 de pensión y quiere que sus ahorros de toda la vida ($25.000.000) estén seguros y generen ingresos adicionales mensuales.',
+   products:['💳 Tarjeta de crédito','📱 Billetera digital','📊 CDT escalonado (varios plazos)','💰 Crédito de libre inversión'],correct:2,
+   exp:'Un CDT escalonado divide el dinero en varios CDTs con diferentes vencimientos (3, 6, 12 meses). Así tiene liquidez periódica y genera intereses constantes. Es seguro para una pensionada.'}
+];
+
+function initGame(){gameOn=true;clIdx=0;score=0;results=[];renderClient()}
+function renderClient(){
+  if(clIdx>=clients.length){showGameResults();return}
+  const cl=clients[clIdx];
+  let dots='<div class="progress-bar">';clients.forEach((_,i)=>{let c='prog-dot';if(i===clIdx)c+=' current';else if(i<results.length)c+=results[i]?' done':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';
+  document.getElementById('gameContainer').innerHTML=dots+`
+    <div class="advisor-rank"><span class="ar-icon">🏦</span><div class="ar-info"><div class="ar-title">Asesor del Banco del Futuro</div><div class="ar-sub">Cliente ${clIdx+1} de ${clients.length}</div></div><div class="ar-score">${score} pts</div></div>
+    <div class="client-card"><div class="client-avatar">${cl.avatar}</div><div class="client-info"><h4>${cl.name}</h4><div class="age">${cl.age}</div><p>${cl.need}</p><div class="need">💬 ¿Qué producto le recomiendas?</div></div></div>
+    <div class="product-options">${cl.products.map((p,i)=>`<button class="po-btn" id="po${i}" onclick="pickProduct(${i})"><span class="po-icon">${p.split(' ')[0]}</span><span class="po-name">${p.substring(p.indexOf(' ')+1)}</span></button>`).join('')}</div>
+    <div id="clFeedback"></div>
+    <div class="btn-row" id="clNext" style="display:none"><button class="btn btn-primary" onclick="clIdx++;renderClient()">${clIdx<clients.length-1?'Siguiente cliente →':'Ver resultados →'}</button></div>`;
+}
+function pickProduct(i){
+  if(document.querySelector('.po-btn.correct'))return;
+  const cl=clients[clIdx];const ok=i===cl.correct;if(ok)score+=10;results.push(ok);
+  cl.products.forEach((_,j)=>{const el=document.getElementById('po'+j);el.style.pointerEvents='none';if(j===cl.correct)el.classList.add('correct');if(j===i&&!ok)el.classList.add('wrong')});
+  document.getElementById('clFeedback').innerHTML=`<div class="feedback-box ${ok?'fb-ok':'fb-no'}">${ok?'✅ ¡Excelente recomendación!':'❌ No es el mejor producto.'} ${cl.exp}</div>`;
+  document.getElementById('clNext').style.display='flex';
+}
+function showGameResults(){
+  const pct=Math.round(score/(clients.length*10)*100);
+  const rank=pct>=80?'Asesor Estrella ⭐⭐⭐':pct>=50?'Asesor en Formación ⭐⭐':'Practicante ⭐';
+  document.getElementById('gameContainer').innerHTML=`<div class="score-card"><div class="score-big">${score}/${clients.length*10}</div><div class="score-label">Puntos como asesor</div><div class="score-stars" style="font-size:1rem;margin:.75rem 0;font-weight:700;color:var(--pri)">${rank}</div>
+    <p style="font-size:.82rem;color:var(--gray);max-width:500px;margin:0 auto">${pct>=80?'¡Felicitaciones! Recomiendas productos financieros como un profesional.':pct>=50?'Buen trabajo, pero algunos clientes no recibieron el mejor consejo. Repasa los productos.':'Necesitas estudiar más los productos financieros. Revisa la fase 2.'}</p>
+    <div class="btn-row" style="justify-content:center;margin-top:1.5rem"><button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button><button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button></div></div>`;
+}
+
+const questions=[
+  {q:'¿Qué entidad vigila a los bancos y cooperativas financieras en Colombia?',opts:['A. El DANE','B. La Superintendencia Financiera','C. El Ministerio de Hacienda','D. La DIAN'],ans:1,exp:'La Superintendencia Financiera de Colombia (SFC) es la entidad que vigila, inspecciona y controla a todas las entidades del sistema financiero.'},
+  {q:'¿Qué es Fogafín?',opts:['A. Un banco del gobierno','B. Un fondo que protege los ahorros de los colombianos hasta $50 millones si un banco quiebra','C. Un impuesto financiero','D. Una cooperativa de ahorro'],ans:1,exp:'Fogafín (Fondo de Garantías de Instituciones Financieras) protege los depósitos de los ahorradores hasta $50 millones por entidad, en caso de que un banco quiebre.'},
+  {q:'¿Cuál es la principal ventaja de un CDT frente a una cuenta de ahorro?',opts:['A. Puedes retirar el dinero cuando quieras','B. No requiere documentos','C. Paga una tasa de interés más alta','D. Es gratis'],ans:2,exp:'El CDT paga mejor interés porque tu dinero queda "bloqueado" por un tiempo fijo. A cambio de no poder retirarlo, el banco te paga más.'},
+  {q:'Sofía tiene 16 años y quiere abrir una cuenta bancaria. ¿Qué necesita?',opts:['A. Solo su tarjeta de identidad','B. Su tarjeta de identidad y un padre/tutor como titular','C. Tener 18 años, no puede abrir cuenta','D. Solo su carné estudiantil'],ans:1,exp:'Los menores de edad pueden tener cuentas de ahorro, pero necesitan un padre o tutor legal como titular de la cuenta. Es un excelente hábito financiero desde joven.'},
+  {q:'¿Qué diferencia hay entre Nequi y un banco tradicional?',opts:['A. Nequi no es seguro','B. Nequi no tiene respaldo bancario','C. Nequi opera 100% desde el celular, sin sucursales físicas, y está respaldado por Bancolombia','D. Los bancos no ofrecen servicios digitales'],ans:2,exp:'Nequi es un neobanco digital respaldado por Bancolombia. Opera sin sucursales pero ofrece servicios similares: cuenta de ahorro, transferencias, pagos. Es seguro y vigilado.'},
+  {q:'Si Don Hernando tiene $10.000.000 y los deja en un CDT al 11% E.A. por un año, ¿cuánto gana en intereses?',opts:['A. $110.000','B. $550.000','C. $1.100.000','D. $11.000.000'],ans:2,exp:'Interés = $10.000.000 × 11% = $10.000.000 × 0,11 = $1.100.000 al año. Al final tendría $11.100.000. Mucho mejor que debajo del colchón.'},
+  {q:'¿Por qué es peligroso guardar el dinero en la casa en vez de un banco?',opts:['A. Porque es ilegal','B. Porque pierde valor por la inflación, puede ser robado y no genera intereses','C. Porque los bancos lo necesitan','D. No es peligroso, es la mejor opción'],ans:1,exp:'El dinero en casa pierde valor por la inflación (~5-7% anual), puede ser robado, perdido en un incendio, y no genera ni un peso de interés. En el banco está protegido por Fogafín.'},
+  {q:'¿Cuál de estos NO es un producto financiero?',opts:['A. Cuenta de ahorro','B. CDT','C. Gota a gota','D. Seguro de vida'],ans:2,exp:'El gota a gota NO es un producto financiero. Es un préstamo informal e ilegal. Los productos financieros son ofrecidos por entidades vigiladas por la Superfinanciera.'},
+  {q:'Una familia quiere comprar casa. ¿Qué producto financiero necesitan?',opts:['A. CDT a 12 meses','B. Tarjeta de crédito','C. Crédito hipotecario','D. Cuenta de ahorro'],ans:2,exp:'El crédito hipotecario está diseñado para compra de vivienda. Ofrece plazos largos (15-30 años), tasas reguladas y la vivienda misma sirve como garantía.'},
+  {q:'¿Qué debe verificar una persona ANTES de abrir un producto financiero?',opts:['A. Que el banco tenga muchas sucursales','B. Que la entidad esté vigilada por la Superfinanciera y las condiciones del producto (tasas, costos, plazos)','C. Que el asesor sea simpático','D. Que el banco tenga buena publicidad'],ans:1,exp:'Antes de abrir cualquier producto, verifica que la entidad esté registrada en superfinanciera.gov.co y lee todas las condiciones: tasas, costos de manejo, comisiones y plazos.'}
+];
+let cQ=0,qAns=[];
+function startQuiz(){const n=document.getElementById('studentName').value.trim();const g=document.getElementById('studentGroup').value;if(!n||!g){alert('Escribe tu nombre y selecciona tu grupo.');return}document.getElementById('studentInfoCard').style.display='none';document.getElementById('quizContainer').style.display='block';cQ=0;qAns=[];renderQQ()}
+function renderQQ(){const q=questions[cQ];let dots='<div class="quiz-progress">';questions.forEach((_,i)=>{let c='quiz-dot';if(i===cQ)c+=' current';else if(i<qAns.length)c+=qAns[i].correct?' correct':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';let h=dots+`<div class="question-card"><div class="q-num">Pregunta ${cQ+1} de ${questions.length}</div><div class="q-text">${q.q}</div>`;q.opts.forEach((o,i)=>h+=`<button class="option" onclick="selQ(${i})" id="qq${i}">${o}</button>`);h+=`<div class="explanation" id="qexp">💡 ${q.exp}</div><div class="btn-row" id="qnext" style="display:none"><button class="btn btn-primary" onclick="${cQ<questions.length-1?'cQ++;renderQQ()':'finishQ()'}"> ${cQ<questions.length-1?'Siguiente →':'Ver resultados'}</button></div></div>`;document.getElementById('quizContainer').innerHTML=h}
+function selQ(i){if(qAns.length>cQ)return;const q=questions[cQ];qAns.push({selected:i,correct:i===q.ans,question:cQ+1});document.querySelectorAll('.option').forEach((b,j)=>{b.style.pointerEvents='none';if(j===q.ans)b.classList.add('correct-answer');if(j===i&&i!==q.ans)b.classList.add('wrong-answer')});document.getElementById('qexp').classList.add('show');document.getElementById('qnext').style.display='flex'}
+function finishQ(){const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';document.getElementById('quizContainer').style.display='none';const r=document.getElementById('quizResults');r.style.display='block';r.innerHTML=`<div class="results-section"><div class="big">${correct}/${questions.length}</div><div class="nota">Nota: ${nota}</div><div class="nivel nivel-${nivel.toLowerCase()}">${nivel}</div><p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">${correct>=8?'¡Excelente! Conoces el sistema financiero como un profesional.':correct>=6?'Buen trabajo. Repasa los productos financieros.':correct>=4?'Vas avanzando. Refuerza Fogafín y CDTs.':'Necesitas repasar. Vuelve a las fases anteriores.'}</p><div id="sendStatus" class="send-status"></div><div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar</button><button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir</button></div></div>`;if(SHEETS_URL)sendResults()}
+async function sendResults(){const name=document.getElementById('studentName').value.trim();const group=document.getElementById('studentGroup').value;const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';const st=document.getElementById('sendStatus');if(!SHEETS_URL){st.className='send-status error';st.textContent='⚠️ URL no configurada.';return}st.className='send-status loading';st.textContent='⏳ Enviando…';document.getElementById('btnSend').disabled=true;try{await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({timestamp:new Date().toISOString(),nombre:name,grupo:group,grado:'7°',periodo:'P3',tema:'Instituciones Financieras',respuestas:qAns.map(a=>questions[a.question-1].opts[a.selected].charAt(0)).join(','),aciertos:correct,total:questions.length,nota:parseFloat(nota),nivel})});st.className='send-status success';st.textContent='✅ Enviado.'}catch(e){st.className='send-status error';st.textContent='❌ Error.';document.getElementById('btnSend').disabled=false}}
+</script>
+</body>
+</html>
