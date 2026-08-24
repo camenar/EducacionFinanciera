@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8° P2 — Riesgos Financieros | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#D97706;--pri-light:#FFFBEB;--pri-dark:#B45309;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--blue:#2563EB;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;opacity:.7}.topbar a:hover{opacity:1}.topbar .title{font-weight:700;flex:1}
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}
+.tab.completed{color:var(--green)}.tab.completed::before{content:'✓ '}
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}.phase.active{display:block}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header{margin-bottom:1.5rem}.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.cc{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.cc h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.cc p,.cc li{font-size:.82rem;line-height:1.6;color:#475569}.cc ul{padding-left:1.25rem;margin-top:.5rem}.cc li{margin-bottom:.25rem}
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}.btn-primary:hover{background:var(--pri-dark)}.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{background:#F1F5F9;color:var(--text)}.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin:1rem 0}
+.stat-box{background:#F8FAFC;border-radius:10px;padding:.75rem;text-align:center;border-left:4px solid var(--red)}
+.stat-box .val{font-size:1.2rem;font-weight:800;color:var(--red)}.stat-box .label{font-size:.68rem;color:var(--gray);margin-top:.15rem}
+
+.risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+.risk-card{padding:.75rem;border-radius:10px;border:1px solid #E8E5DD}
+.risk-card h4{font-size:.8rem;font-weight:700;margin-bottom:.2rem;display:flex;align-items:center;gap:.4rem}
+.risk-card p{font-size:.7rem;color:var(--gray);line-height:1.4}
+.risk-card.danger{background:#FEF2F2;border-color:#FECACA}
+.risk-card.warning{background:#FFFBEB;border-color:#FDE68A}
+.risk-card.info{background:#EFF6FF;border-color:#BFDBFE}
+
+/* GAME */
+.game-area{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.progress-bar{display:flex;gap:4px;margin-bottom:1rem}
+.prog-dot{flex:1;height:6px;border-radius:3px;background:#E2E8F0}
+.prog-dot.done-g{background:var(--green)}.prog-dot.done-r{background:var(--red)}.prog-dot.current{background:var(--pri)}
+
+.offer-card{border-radius:12px;padding:1.25rem;margin-bottom:1rem;position:relative}
+.offer-card.msg{background:linear-gradient(135deg,#1E293B,#334155);color:#fff}
+.offer-card.email{background:linear-gradient(135deg,#1E40AF,#3B82F6);color:#fff}
+.offer-card.app{background:linear-gradient(135deg,#7C3AED,#A78BFA);color:#fff}
+.offer-card.bank{background:linear-gradient(135deg,#065F46,#10B981);color:#fff}
+.offer-card.street{background:linear-gradient(135deg,#92400E,#D97706);color:#fff}
+.offer-source{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;opacity:.6;margin-bottom:.5rem}
+.offer-title{font-size:1rem;font-weight:700;line-height:1.3}
+.offer-body{font-size:.78rem;opacity:.85;margin-top:.5rem;line-height:1.5}
+.offer-detail{font-size:.72rem;opacity:.7;margin-top:.5rem;font-style:italic}
+
+.red-flags{margin:1rem 0;padding:.75rem;background:#FEF2F2;border-radius:8px;border:1px solid #FECACA}
+.red-flags h4{font-size:.78rem;font-weight:700;color:#991B1B;margin-bottom:.35rem}
+.flag-item{font-size:.72rem;color:#7F1D1D;padding:.15rem 0;display:flex;align-items:center;gap:.35rem}
+
+.classify-btns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin-top:1rem}
+.cls-btn{padding:.7rem .5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
+.cls-btn:hover{transform:translateY(-2px)}
+.cls-btn.legit{border-color:#A7F3D0;color:#065F46}.cls-btn.legit:hover,.cls-btn.legit.selected{background:#ECFDF5;border-color:var(--green)}
+.cls-btn.suspect{border-color:#FDE68A;color:#92400E}.cls-btn.suspect:hover,.cls-btn.suspect.selected{background:#FFFBEB;border-color:var(--pri)}
+.cls-btn.fraud{border-color:#FECACA;color:#991B1B}.cls-btn.fraud:hover,.cls-btn.fraud.selected{background:#FEF2F2;border-color:var(--red)}
+.cls-btn.correct-cls{box-shadow:0 0 0 3px var(--green);font-weight:800}
+.cls-btn.wrong-cls{box-shadow:0 0 0 3px var(--red)}
+
+.feedback-box{padding:.75rem 1rem;border-radius:10px;margin-top:.75rem;font-size:.78rem;line-height:1.5}
+.fb-ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
+.fb-no{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+
+.detective-score{display:flex;align-items:center;gap:1rem;padding:.75rem;background:#F8FAFC;border-radius:10px;margin-bottom:1rem}
+.badge-icon{font-size:2rem}.det-info{flex:1}.det-info .det-title{font-size:.82rem;font-weight:700}.det-info .det-sub{font-size:.7rem;color:var(--gray)}
+.det-points{font-size:1.2rem;font-weight:800;color:var(--pri)}
+
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+.score-big{font-size:3rem;font-weight:800}.score-stars{font-size:1.5rem;margin:.5rem 0}.score-label{font-size:.85rem;color:var(--gray)}
+
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}
+.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}
+.quiz-dot.current{background:var(--pri)}.quiz-dot.correct{background:var(--green)}.quiz-dot.wrong{background:var(--red)}
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}
+.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}
+.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}
+.option:hover{border-color:var(--pri);background:var(--pri-light)}
+.option.correct-answer{border-color:var(--green);background:#ECFDF5}
+.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;font-size:.78rem;line-height:1.5;display:none}.explanation.show{display:block}
+.results-section{text-align:center;padding:1.5rem}
+.results-section .big{font-size:2.5rem;font-weight:800}.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}
+.nivel-superior{background:var(--green)}.nivel-alto{background:var(--blue)}.nivel-basico{background:var(--pri)}.nivel-bajo{background:var(--red)}
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}
+.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.form-row input:focus,.form-row select:focus{outline:none;border-color:var(--pri)}
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}
+.send-status.success{display:block;background:#ECFDF5;color:#065F46}
+.send-status.error{display:block;background:#FEF2F2;color:#991B1B}
+.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+@media(max-width:600px){.phase{padding:1rem}.risk-grid,.classify-btns{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Inicio</a><span class="title">8° · Período 2 — Riesgos Financieros</span></div>
+<div class="tabs"><div class="tab active" onclick="goPhase(0)">① Activación</div><div class="tab" onclick="goPhase(1)">② Exploración</div><div class="tab" onclick="goPhase(2)">③ Juego</div><div class="tab" onclick="goPhase(3)">④ Evaluación</div></div>
+
+<!-- FASE 1 -->
+<div class="phase active" id="phase0">
+  <div class="phase-header"><div class="phase-badge">FASE 1 · YO HAGO</div><h2>¿Puedes detectar una estafa financiera?</h2><p>En Colombia, miles de personas pierden sus ahorros cada año por fraudes. Aprende a protegerte.</p></div>
+  <div class="cc"><h3>📊 La realidad del fraude en Colombia</h3>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="val">$3,2B</div><div class="label">Billones perdidos en pirámides (DMG, 2008)</div></div>
+      <div class="stat-box"><div class="val">+45%</div><div class="label">Aumento de estafas digitales en 2025</div></div>
+      <div class="stat-box"><div class="val">2M+</div><div class="label">Colombianos usan gota a gota</div></div>
+      <div class="stat-box"><div class="val">71%</div><div class="label">No verifica si una entidad es legal</div></div>
+    </div>
+  </div>
+  <div class="cc"><h3>⚠️ Caso real: Las pirámides en Colombia</h3>
+    <p>En 2008, la pirámide <strong>DMG</strong> colapsó dejando a más de 400.000 colombianos sin sus ahorros. El esquema prometía <strong>rendimientos del 150% en 3 meses</strong> — algo matemáticamente insostenible. Las personas invertían los ahorros de su vida, vendían propiedades e incluso pedían préstamos para "invertir".</p>
+    <p style="margin-top:.5rem"><strong>La lección:</strong> Si alguien promete ganancias extraordinarias sin riesgo, <strong>siempre es una estafa</strong>. El dinero fácil no existe.</p>
+  </div>
+  <div class="cc"><h3>🎯 Objetivo de aprendizaje</h3><p>Identificarás los principales riesgos financieros (fraude, pirámides, gota a gota, phishing), conocerás tus derechos como consumidor financiero y aprenderás a verificar si una entidad es legítima.</p></div>
+  <div class="cc"><h3>📐 Conexión matemática</h3><p>Usarás <strong>análisis de datos y probabilidad básica</strong> para evaluar si una oferta es realista. Si un CDT paga 12% anual y alguien promete 100% mensual, ¿cuántas veces más es? → 100×12/12 = <strong>100 veces más</strong>. Matemáticamente imposible sin fraude.</p></div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="goPhase(1)">Continuar a Exploración →</button></div>
+</div>
+
+<!-- FASE 2 -->
+<div class="phase" id="phase1">
+  <div class="phase-header"><div class="phase-badge">FASE 2 · HACEMOS</div><h2>Los 5 riesgos financieros más comunes</h2><p>Actividad grupal: aprendamos a identificar cada tipo de riesgo y cómo protegernos.</p></div>
+  <div class="cc"><h3>🚨 Tipos de riesgos financieros</h3>
+    <div class="risk-grid">
+      <div class="risk-card danger"><h4>🔴 Pirámides</h4><p>Prometen rendimientos altísimos. El dinero de nuevos "inversionistas" paga a los anteriores. Siempre colapsan.</p></div>
+      <div class="risk-card danger"><h4>🔴 Gota a gota</h4><p>Préstamos informales con tasas del 10-20% mensual. Usan amenazas y violencia para cobrar.</p></div>
+      <div class="risk-card warning"><h4>🟡 Phishing</h4><p>Correos o mensajes falsos que imitan a tu banco para robar tus datos y contraseñas.</p></div>
+      <div class="risk-card warning"><h4>🟡 Apps fraudulentas</h4><p>Aplicaciones que prometen inversiones milagrosas. Roban tu dinero y datos personales.</p></div>
+      <div class="risk-card info"><h4>🔵 Sobreendeudamiento</h4><p>Tener más deudas de las que puedes pagar. Cuotas que superan el 40% de tu ingreso.</p></div>
+      <div class="risk-card info"><h4>🔵 Robo de identidad</h4><p>Alguien usa tus datos para abrir créditos o cuentas a tu nombre sin tu autorización.</p></div>
+    </div>
+  </div>
+  <div class="cc"><h3>🛡️ ¿Cómo protegerte? Las 5 señales de alerta</h3>
+    <ul>
+      <li><strong>🚩 Rentabilidad exagerada:</strong> Si prometen más del 1-2% mensual sin riesgo, desconfía.</li>
+      <li><strong>🚩 Urgencia:</strong> "Invierte HOY o pierdes la oportunidad." Los negocios reales no presionan.</li>
+      <li><strong>🚩 Sin registro legal:</strong> Verifica en <strong>superfinanciera.gov.co</strong> si la entidad está vigilada.</li>
+      <li><strong>🚩 Piden datos sensibles:</strong> Ningún banco pide contraseñas por correo, WhatsApp o teléfono.</li>
+      <li><strong>🚩 Reclutamiento:</strong> Si te piden "invitar amigos" para ganar más, es una pirámide.</li>
+    </ul>
+  </div>
+  <div class="cc"><h3>📋 Actividad en equipos (15 min)</h3><p>Cada equipo investiga un caso real de fraude financiero en Colombia (DMG, DRFE, estafas por WhatsApp) y responde: ¿Cómo funcionaba? ¿Qué señales de alerta tenía? ¿Cómo se habría podido evitar?</p></div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button><button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button></div>
+</div>
+
+<!-- FASE 3 -->
+<div class="phase" id="phase2">
+  <div class="phase-header"><div class="phase-badge">FASE 3 · TÚ HACES</div><h2>🎮 Alerta Financiera</h2><p>Eres un detective financiero. Recibirás 8 ofertas y debes clasificar cada una como LEGÍTIMA, SOSPECHOSA o FRAUDE.</p></div>
+  <div id="gameContainer"></div>
+</div>
+
+<!-- FASE 4 -->
+<div class="phase" id="phase3">
+  <div class="phase-header"><div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div><h2>📝 Demuestra lo que aprendiste</h2><p>10 preguntas tipo Saber sobre riesgos financieros.</p></div>
+  <div class="cc" id="studentInfoCard"><h3>📋 Datos del estudiante</h3>
+    <div class="form-row"><input type="text" id="studentName" placeholder="Tu nombre completo"><select id="studentGroup"><option value="">Grupo…</option><option>8.1</option><option>8.2</option><option>8.3</option><option>8.4</option></select></div>
+    <button class="btn btn-primary" onclick="startQuiz()">Comenzar evaluación</button>
+  </div>
+  <div id="quizContainer" style="display:none"></div>
+  <div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+const SHEETS_URL='';
+let currentPhase=0;const done=new Set();
+function goPhase(n){done.add(currentPhase);currentPhase=n;document.querySelectorAll('.phase').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);t.classList.toggle('completed',done.has(i)&&i!==n)});window.scrollTo({top:0,behavior:'smooth'});if(n===2&&!gameOn)initGame()}
+
+/* ===== GAME ===== */
+let gameOn=false,ofIdx=0,score=0,results=[];
+const offers=[
+  {style:'msg',source:'WhatsApp',title:'💰 ¡Gana $5.000.000 semanales sin hacer nada!',body:'Únete a nuestro grupo VIP de inversión en criptomonedas. Solo necesitas $300.000 para empezar. Rendimiento garantizado del 200% mensual. ¡Ya somos 5.000 miembros exitosos!',detail:'Enviado por número desconocido +57 320 *** ****',answer:'fraud',flags:['Rendimiento del 200% mensual — imposible legalmente','Piden dinero por adelantado a desconocidos','Sin registro ni entidad reguladora','Presión de grupo ("5.000 miembros")'],exp:'Es una estafa piramidal clásica. Ninguna inversión legítima garantiza 200% mensual. La Superfinanciera no registra esta "empresa".'},
+  {style:'bank',source:'Sucursal Bancamía',title:'📋 Microcrédito para emprendedores',body:'Bancamía ofrece microcréditos desde $500.000 hasta $15.000.000 para pequeños negocios. Tasa del 2,1% mensual. Requiere documentos de identidad, plan de negocio básico y referencia comercial.',detail:'Entidad vigilada por la Superfinanciera de Colombia',answer:'legit',flags:[],exp:'Bancamía es una entidad financiera legítima, vigilada por la Superfinanciera. La tasa del 2,1% mensual es alta pero legal. Pide documentos formales, no dinero por adelantado.'},
+  {style:'email',source:'Correo electrónico',title:'🏦 [URGENTE] Su cuenta ha sido bloqueada',body:'Estimado cliente de Bancolombia: Hemos detectado actividad sospechosa en su cuenta. Para evitar el bloqueo permanente, ingrese AHORA a este enlace y confirme sus datos: bancolombia-seguridad.xyz/verificar',detail:'De: seguridad@banc0lombia.info (nota la "0" en vez de "o")',answer:'fraud',flags:['URL falsa: "bancolombia-seguridad.xyz" no es bancolombia.com','Email con "0" en vez de "o" (banc0lombia)','Pide datos urgentemente — los bancos nunca hacen esto','Amenaza de "bloqueo permanente" para generar pánico'],exp:'Es phishing: un correo falso que imita a Bancolombia para robar tus datos. Los bancos NUNCA piden contraseñas por email. Siempre verifica la URL y el remitente.'},
+  {style:'street',source:'Volante en la calle',title:'💸 Préstamos rápidos sin papeles',body:'¿Necesitas plata urgente? Te prestamos desde $200.000 hasta $5.000.000 en 30 minutos. Sin codeudor, sin papeleo. Solo con tu cédula. Cuotas diarias cómodas. Llama ya.',detail:'Sin nombre de empresa. Solo un número de celular.',answer:'fraud',flags:['Sin nombre de empresa ni registro legal','Cuotas "diarias" = gota a gota','Sin codeudor ni documentos = informal','Promesa de dinero en "30 minutos"'],exp:'Es gota a gota. Las "cuotas diarias cómodas" esconden tasas del 10-20% mensual. Sin registro legal ni nombre de empresa. Si no pagas, usan amenazas.'},
+  {style:'app',source:'App "CriptoGold Pro"',title:'🚀 Invierte desde $50.000 — Duplica tu dinero en 7 días',body:'Nuestra inteligencia artificial invierte por ti en Bitcoin. Rendimiento garantizado del 100% semanal. Más de 50.000 usuarios satisfechos. Descarga gratis y empieza hoy.',detail:'App sin reseñas verificadas. Creadores anónimos.',answer:'fraud',flags:['100% semanal es matemáticamente imposible (5.200% anual)','Creadores anónimos — sin responsables','No está registrada en Superfinanciera','Las inversiones legítimas nunca "garantizan" rendimientos'],exp:'Estafa digital. Ningún algoritmo garantiza 100% semanal. La app probablemente roba tu dinero y datos. Si fuera real, los creadores serían billonarios y no necesitarían tu $50.000.'},
+  {style:'bank',source:'Cooperativa Confiar',title:'📊 CDT a 360 días — 11,5% E.A.',body:'Confiar Cooperativa ofrece CDTs desde $500.000 con tasa del 11,5% efectivo anual. Respaldada por Fogacoop. Consulta condiciones en cualquiera de nuestras oficinas o en confiar.coop.',detail:'Entidad vigilada por la Superfinanciera. Respaldada por Fogacoop.',answer:'legit',flags:[],exp:'Confiar es una cooperativa financiera legítima, vigilada por la Superfinanciera y respaldada por Fogacoop (seguro de depósitos). El 11,5% E.A. es una tasa realista para el mercado colombiano.'},
+  {style:'msg',source:'Instagram',title:'👟 Zapatillas Nike originales al 90% de descuento',body:'Gran liquidación de bodega. Nike Air Max 2026 originales a $45.000 (precio normal $450.000). Envío contra entrega. Paga por Nequi al número 312 *** ****. Solo quedan 15 pares.',detail:'Cuenta con 200 seguidores, creada hace 2 semanas.',answer:'suspect',flags:['90% de descuento es extremo para productos originales','Cuenta nueva con pocos seguidores','Pago por Nequi a persona natural, no a empresa','Escasez falsa ("solo 15 pares")'],exp:'Altamente sospechoso. El descuento del 90% en Nike originales es irrealista. Cuenta nueva, pago a persona natural y presión de escasez son señales claras de estafa.'},
+  {style:'bank',source:'Nequi',title:'💳 Ahorra con Cajitas en Nequi',body:'Crea "cajitas" de ahorro con metas personalizadas. Tu dinero está seguro, respaldado por Bancolombia. Sin costos de manejo. Rendimiento actual: 0% (es ahorro, no inversión). Descarga desde App Store o Play Store.',detail:'Nequi es un producto de Bancolombia, vigilado por la Superfinanciera.',answer:'legit',flags:[],exp:'Nequi es legítimo, respaldado por Bancolombia y vigilado por la Superfinanciera. Las "cajitas" son una herramienta de ahorro real. Nota que dice honestamente que el rendimiento es 0% — la transparencia es buena señal.'}
+];
+
+function initGame(){gameOn=true;ofIdx=0;score=0;results=[];renderOffer()}
+function renderOffer(){
+  if(ofIdx>=offers.length){showGameResults();return}
+  const of_=offers[ofIdx];
+  let dots='<div class="progress-bar">';offers.forEach((_,i)=>{let c='prog-dot';if(i===ofIdx)c+=' current';else if(i<results.length)c+=results[i]?' done-g':' done-r';dots+=`<div class="${c}"></div>`});dots+='</div>';
+
+  const c=document.getElementById('gameContainer');
+  c.innerHTML=dots+`
+    <div class="detective-score"><span class="badge-icon">🕵️</span><div class="det-info"><div class="det-title">Detective Financiero</div><div class="det-sub">Oferta ${ofIdx+1} de ${offers.length}</div></div><div class="det-points">${score} pts</div></div>
+    <div class="offer-card ${of_.style}">
+      <div class="offer-source">📨 ${of_.source}</div>
+      <div class="offer-title">${of_.title}</div>
+      <div class="offer-body">${of_.body}</div>
+      <div class="offer-detail">${of_.detail}</div>
+    </div>
+    <p style="font-size:.82rem;font-weight:600;margin-bottom:.5rem">¿Cómo clasificas esta oferta?</p>
+    <div class="classify-btns">
+      <button class="cls-btn legit" id="cl0" onclick="classify('legit')">✅ LEGÍTIMA</button>
+      <button class="cls-btn suspect" id="cl1" onclick="classify('suspect')">⚠️ SOSPECHOSA</button>
+      <button class="cls-btn fraud" id="cl2" onclick="classify('fraud')">🚫 FRAUDE</button>
+    </div>
+    <div id="ofFeedback"></div>
+    <div class="btn-row" id="ofNext" style="display:none">
+      <button class="btn btn-primary" onclick="ofIdx++;renderOffer()">${ofIdx<offers.length-1?'Siguiente oferta →':'Ver resultados →'}</button>
+    </div>`;
+}
+
+function classify(choice){
+  if(document.querySelector('.cls-btn.correct-cls'))return;
+  const of_=offers[ofIdx];const ok=choice===of_.answer;
+  if(ok)score+=10;
+  results.push(ok);
+  const map={legit:0,suspect:1,fraud:2};const ansMap={legit:0,suspect:1,fraud:2};
+  document.querySelectorAll('.cls-btn').forEach((b,i)=>{
+    b.style.pointerEvents='none';
+    if(i===ansMap[of_.answer])b.classList.add('correct-cls');
+    if(i===map[choice]&&!ok)b.classList.add('wrong-cls');
+  });
+  let flagsHtml='';
+  if(of_.flags.length){flagsHtml=`<div class="red-flags"><h4>🚩 Señales de alerta:</h4>${of_.flags.map(f=>`<div class="flag-item">• ${f}</div>`).join('')}</div>`}
+  document.getElementById('ofFeedback').innerHTML=`<div class="feedback-box ${ok?'fb-ok':'fb-no'}">${ok?'✅ ¡Correcto!':'❌ No era esa clasificación.'} ${of_.exp}</div>${flagsHtml}`;
+  document.getElementById('ofNext').style.display='flex';
+}
+
+function showGameResults(){
+  const pct=Math.round(score/(offers.length*10)*100);
+  const rank=pct>=80?'Detective Élite ⭐⭐⭐':pct>=50?'Detective Junior ⭐⭐':'Cadete en entrenamiento ⭐';
+  document.getElementById('gameContainer').innerHTML=`<div class="score-card">
+    <div class="score-big">${score}/${offers.length*10}</div><div class="score-label">Puntos de detective</div>
+    <div class="score-stars" style="font-size:1rem;margin:.75rem 0;font-weight:700;color:var(--pri)">${rank}</div>
+    <p style="font-size:.82rem;color:var(--gray);max-width:500px;margin:0 auto">${pct>=80?'¡Excelente ojo! Detectas fraudes como un profesional. Ningún estafador te engaña fácilmente.':pct>=50?'Buen instinto, pero algunas estafas se te escaparon. Repasa las señales de alerta.':'Necesitas más entrenamiento. Los estafadores se aprovechan de quienes no conocen las señales. Revisa las fases anteriores.'}</p>
+    <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+      <button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button>
+      <button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button>
+    </div></div>`;
+}
+
+/* ===== QUIZ ===== */
+const questions=[
+  {q:'¿Cuál es la principal característica de un esquema piramidal?',opts:['A. Está regulado por la Superfinanciera','B. Paga a los inversionistas antiguos con el dinero de los nuevos','C. Ofrece tasas de interés bajas','D. Requiere muchos documentos legales'],ans:1,exp:'Las pirámides usan el dinero de nuevos participantes para pagar a los antiguos. No generan valor real. Cuando dejan de entrar personas nuevas, colapsan.'},
+  {q:'Recibes un correo de "tu banco" pidiendo tu contraseña. ¿Qué debes hacer?',opts:['A. Responder con tus datos inmediatamente','B. Ignorarlo y reportarlo — los bancos nunca piden contraseñas por correo','C. Reenviar el correo a tus contactos','D. Llamar al número que aparece en el correo'],ans:1,exp:'Es phishing. Los bancos NUNCA piden contraseñas por correo, SMS o WhatsApp. Reporta el correo y llama al número oficial de tu banco (el que está en tu tarjeta, no el del correo).'},
+  {q:'Un CDT bancario en Colombia paga aproximadamente 11% anual. Si alguien te ofrece 50% MENSUAL, ¿qué significa?',opts:['A. Es una excelente oportunidad','B. El CDT paga muy poco','C. Es probablemente una estafa — la tasa es 55 veces mayor que la del mercado','D. Depende del banco'],ans:2,exp:'50% mensual = 600% anual vs. 11% anual del CDT. Es 55 veces más alto. Ninguna inversión legítima ofrece estos rendimientos. Es una estafa.'},
+  {q:'¿Cuál de estas entidades vigila a los bancos en Colombia?',opts:['A. La DIAN','B. La Superintendencia Financiera','C. El DANE','D. El Ministerio de Educación'],ans:1,exp:'La Superintendencia Financiera de Colombia (SFC) vigila, inspecciona y controla a las entidades del sector financiero. Puedes verificar si una entidad es legal en superfinanciera.gov.co.'},
+  {q:'¿Qué es el "gota a gota"?',opts:['A. Un sistema de ahorro cooperativo','B. Un tipo de cuenta bancaria','C. Préstamos informales ilegales con tasas abusivas y cobro mediante amenazas','D. Un plan de inversión a largo plazo'],ans:2,exp:'El gota a gota es un sistema de préstamo informal e ilegal que cobra tasas del 10-20% mensual (120-240% anual) y usa intimidación y violencia para cobrar.'},
+  {q:'¿Cuál de estas señales NO indica fraude financiero?',opts:['A. Prometen rendimientos del 100% mensual','B. La entidad está registrada en la Superfinanciera','C. Te piden "invitar amigos" para ganar más','D. Presionan para que inviertas "ya mismo"'],ans:1,exp:'Estar registrado en la Superfinanciera es señal de LEGITIMIDAD. Las otras tres son señales clásicas de fraude: rendimientos irreales, esquema de reclutamiento y presión de urgencia.'},
+  {q:'Si descubres que alguien usó tus datos para abrir un crédito a tu nombre, ¿qué debes hacer PRIMERO?',opts:['A. Pagar el crédito para evitar problemas','B. Ignorarlo, ya pasará','C. Denunciar ante la Policía y notificar al banco emisor','D. Publicarlo en redes sociales'],ans:2,exp:'Es robo de identidad. Debes denunciar ante la Policía, notificar al banco y reportar ante las centrales de riesgo (Datacrédito/TransUnion) para bloquear el crédito fraudulento.'},
+  {q:'¿Por qué muchas personas caen en el gota a gota a pesar de saber que es peligroso?',opts:['A. Porque es legal y seguro','B. Porque no tienen acceso a crédito formal por falta de historial crediticio','C. Porque la tasa de interés es baja','D. Porque los bancos no existen en Colombia'],ans:1,exp:'Muchas personas recurren al gota a gota porque no tienen historial crediticio, trabajan informalmente o necesitan dinero urgente y no cumplen requisitos bancarios. La solución es ampliar la inclusión financiera.'},
+  {q:'Una app de inversión muestra ganancias en tu pantalla pero no te deja retirar el dinero. ¿Qué está pasando?',opts:['A. Un error técnico temporal','B. Es normal, hay que esperar','C. Es una estafa — las ganancias son falsas para que inviertas más','D. Debes invertir más para desbloquear el retiro'],ans:2,exp:'Estafa clásica de apps fraudulentas: muestran "ganancias" ficticias para que inviertas más dinero. Cuando intentas retirar, ponen excusas o piden más dinero. Tu inversión original ya se perdió.'},
+  {q:'¿Cuál es un derecho del consumidor financiero en Colombia?',opts:['A. Recibir préstamos sin interés','B. Recibir información clara, transparente y oportuna sobre productos financieros','C. No pagar impuestos','D. Ganar siempre con las inversiones'],ans:1,exp:'La Ley 1328 de 2009 garantiza que el consumidor financiero tiene derecho a información clara, completa y oportuna sobre los productos y servicios que contrata.'}
+];
+let cQ=0,qAns=[];
+function startQuiz(){const n=document.getElementById('studentName').value.trim();const g=document.getElementById('studentGroup').value;if(!n||!g){alert('Escribe tu nombre y selecciona tu grupo.');return}document.getElementById('studentInfoCard').style.display='none';document.getElementById('quizContainer').style.display='block';cQ=0;qAns=[];renderQQ()}
+function renderQQ(){const q=questions[cQ];let dots='<div class="quiz-progress">';questions.forEach((_,i)=>{let c='quiz-dot';if(i===cQ)c+=' current';else if(i<qAns.length)c+=qAns[i].correct?' correct':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';
+let h=dots+`<div class="question-card"><div class="q-num">Pregunta ${cQ+1} de ${questions.length}</div><div class="q-text">${q.q}</div>`;q.opts.forEach((o,i)=>h+=`<button class="option" onclick="selQ(${i})" id="qq${i}">${o}</button>`);h+=`<div class="explanation" id="qexp">💡 ${q.exp}</div><div class="btn-row" id="qnext" style="display:none"><button class="btn btn-primary" onclick="${cQ<questions.length-1?'cQ++;renderQQ()':'finishQ()'}"> ${cQ<questions.length-1?'Siguiente →':'Ver resultados'}</button></div></div>`;document.getElementById('quizContainer').innerHTML=h}
+function selQ(i){if(qAns.length>cQ)return;const q=questions[cQ];qAns.push({selected:i,correct:i===q.ans,question:cQ+1});document.querySelectorAll('.option').forEach((b,j)=>{b.style.pointerEvents='none';if(j===q.ans)b.classList.add('correct-answer');if(j===i&&i!==q.ans)b.classList.add('wrong-answer')});document.getElementById('qexp').classList.add('show');document.getElementById('qnext').style.display='flex'}
+function finishQ(){const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';document.getElementById('quizContainer').style.display='none';const r=document.getElementById('quizResults');r.style.display='block';
+r.innerHTML=`<div class="results-section"><div class="big">${correct}/${questions.length}</div><div class="nota">Nota: ${nota}</div><div class="nivel nivel-${nivel.toLowerCase()}">${nivel}</div><p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">${correct>=8?'¡Excelente! Estás blindado contra los fraudes financieros.':correct>=6?'Buen trabajo. Repasa las señales de alerta del phishing.':correct>=4?'Vas avanzando. Necesitas reforzar la detección de fraudes.':'Cuidado: eres vulnerable a estafas. Vuelve a las fases 1 y 2.'}</p><div id="sendStatus" class="send-status"></div><div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar resultados</button><button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir</button></div></div>`;if(SHEETS_URL)sendResults()}
+async function sendResults(){const name=document.getElementById('studentName').value.trim();const group=document.getElementById('studentGroup').value;const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';const st=document.getElementById('sendStatus');if(!SHEETS_URL){st.className='send-status error';st.textContent='⚠️ URL no configurada.';return}st.className='send-status loading';st.textContent='⏳ Enviando…';document.getElementById('btnSend').disabled=true;try{await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({timestamp:new Date().toISOString(),nombre:name,grupo:group,grado:'8°',periodo:'P2',tema:'Riesgos Financieros',respuestas:qAns.map(a=>questions[a.question-1].opts[a.selected].charAt(0)).join(','),aciertos:correct,total:questions.length,nota:parseFloat(nota),nivel})});st.className='send-status success';st.textContent='✅ Resultados enviados.'}catch(e){st.className='send-status error';st.textContent='❌ Error.';document.getElementById('btnSend').disabled=false}}
+</script>
+</body>
+</html>
