@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8° P3 — Mi Primer Emprendimiento | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#D97706;--pri-light:#FFFBEB;--pri-dark:#B45309;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--blue:#2563EB;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;opacity:.7}.topbar a:hover{opacity:1}.topbar .title{font-weight:700;flex:1}
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}.tab.completed{color:var(--green)}.tab.completed::before{content:'✓ '}
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}.phase.active{display:block}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header{margin-bottom:1.5rem}.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.cc{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.cc h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.cc p,.cc li{font-size:.82rem;line-height:1.6;color:#475569}.cc ul{padding-left:1.25rem;margin-top:.5rem}.cc li{margin-bottom:.25rem}
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}.btn-primary:hover{background:var(--pri-dark)}.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{background:#F1F5F9;color:var(--text)}.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+.calc-box{background:#F1F5F9;border-radius:10px;padding:1rem;margin:.75rem 0;font-size:.8rem}
+.calc-box h4{font-size:.82rem;font-weight:700;margin-bottom:.5rem;color:var(--pri)}
+.calc-row{display:flex;justify-content:space-between;padding:.2rem 0;border-bottom:1px dashed #CBD5E1;font-size:.78rem}
+.calc-row:last-child{border:none;font-weight:700;padding-top:.4rem;margin-top:.25rem;border-top:2px solid #94A3B8}
+
+/* GAME */
+.game-area{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.biz-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+.biz-card{padding:1rem;border:2px solid #E2E8F0;border-radius:12px;cursor:pointer;transition:all .2s;text-align:center}
+.biz-card:hover{border-color:var(--pri);background:var(--pri-light);transform:translateY(-2px)}
+.biz-card.selected{border-color:var(--pri);background:var(--pri-light);box-shadow:0 0 0 3px rgba(217,119,6,.2)}
+.biz-card .biz-icon{font-size:2rem}.biz-card h4{font-size:.85rem;font-weight:700;margin-top:.25rem}.biz-card p{font-size:.7rem;color:var(--gray);margin-top:.15rem}
+
+.week-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.week-badge{font-size:.75rem;font-weight:700;color:var(--pri);background:var(--pri-light);padding:.25rem .75rem;border-radius:100px}
+.capital-display{font-size:.85rem;font-weight:700}
+.capital-display.positive{color:var(--green)}.capital-display.negative{color:var(--red)}
+
+.event-banner{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #FDE68A;border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.8rem;display:flex;align-items:flex-start;gap:.5rem}
+.event-banner .ev-icon{font-size:1.1rem;flex-shrink:0}.event-banner strong{color:#92400E}
+
+.prod-row{display:flex;align-items:center;gap:.5rem;padding:.5rem 0;border-bottom:1px solid #F1F0EC;flex-wrap:wrap}
+.prod-row:last-child{border-bottom:none}
+.prod-icon{font-size:1.1rem;width:28px;text-align:center;flex-shrink:0}
+.prod-name{font-size:.78rem;font-weight:600;flex:1;min-width:80px}
+.prod-cost{font-size:.7rem;color:var(--gray);width:70px;text-align:right}
+.prod-input{width:60px;padding:.3rem .4rem;border:2px solid #E2E8F0;border-radius:8px;font-size:.78rem;font-family:inherit;text-align:center}
+.prod-input:focus{outline:none;border-color:var(--pri)}
+.prod-total{font-size:.78rem;font-weight:700;width:80px;text-align:right}
+
+.summary-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin:1rem 0}
+.sum-box{padding:.5rem;border-radius:8px;text-align:center}
+.sum-box .sum-val{font-size:1rem;font-weight:800}.sum-box .sum-label{font-size:.65rem;color:var(--gray)}
+.sum-box.income{background:#ECFDF5}.sum-box.income .sum-val{color:var(--green)}
+.sum-box.expense{background:#FEF2F2}.sum-box.expense .sum-val{color:var(--red)}
+.sum-box.profit{background:var(--pri-light)}.sum-box.profit .sum-val{color:var(--pri)}
+
+.chart-area{margin:1rem 0}
+.chart-bar-h{display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem}
+.chart-label{font-size:.68rem;width:60px;text-align:right;flex-shrink:0}
+.chart-track{flex:1;height:18px;background:#F1F5F9;border-radius:4px;overflow:hidden}
+.chart-fill{height:100%;border-radius:4px;transition:width .4s;display:flex;align-items:center;padding-left:6px;font-size:.6rem;color:#fff;font-weight:600}
+
+.feedback-box{padding:.75rem 1rem;border-radius:10px;margin-top:.75rem;font-size:.78rem;line-height:1.5}
+.fb-ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
+.fb-no{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.fb-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E}
+
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+.score-big{font-size:2.5rem;font-weight:800}.score-stars{font-size:1.5rem;margin:.5rem 0}.score-label{font-size:.85rem;color:var(--gray)}
+
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}.quiz-dot.current{background:var(--pri)}.quiz-dot.correct{background:var(--green)}.quiz-dot.wrong{background:var(--red)}
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}
+.option:hover{border-color:var(--pri);background:var(--pri-light)}.option.correct-answer{border-color:var(--green);background:#ECFDF5}.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;font-size:.78rem;line-height:1.5;display:none}.explanation.show{display:block}
+.results-section{text-align:center;padding:1.5rem}.results-section .big{font-size:2.5rem;font-weight:800}.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}.nivel-superior{background:var(--green)}.nivel-alto{background:var(--blue)}.nivel-basico{background:var(--pri)}.nivel-bajo{background:var(--red)}
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}.send-status.success{display:block;background:#ECFDF5;color:#065F46}.send-status.error{display:block;background:#FEF2F2;color:#991B1B}.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+@media(max-width:600px){.phase{padding:1rem}.biz-grid{grid-template-columns:1fr 1fr}.summary-grid{grid-template-columns:1fr 1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Inicio</a><span class="title">8° · Período 3 — Mi Primer Emprendimiento</span></div>
+<div class="tabs"><div class="tab active" onclick="goPhase(0)">① Activación</div><div class="tab" onclick="goPhase(1)">② Exploración</div><div class="tab" onclick="goPhase(2)">③ Juego</div><div class="tab" onclick="goPhase(3)">④ Evaluación</div></div>
+
+<div class="phase active" id="phase0">
+  <div class="phase-header"><div class="phase-badge">FASE 1 · YO HAGO</div><h2>¿Y si montamos un negocio?</h2><p>Descubre cómo una idea puede convertirse en un emprendimiento rentable.</p></div>
+  <div class="cc"><h3>💡 Emprender es resolver problemas</h3><p>Todo negocio nace de una <strong>necesidad que no está siendo atendida</strong>. En tu colegio, ¿qué necesitan los estudiantes? ¿Snacks a buen precio? ¿Accesorios para el celular? ¿Bebidas frías? Cada necesidad es una oportunidad de negocio.</p></div>
+  <div class="cc"><h3>🔢 La ecuación del emprendedor</h3>
+    <div class="calc-box"><h4>Utilidad = Ingresos − Costos</h4>
+      <div class="calc-row"><span>Ingresos = Precio de venta × Unidades vendidas</span></div>
+      <div class="calc-row"><span>Costos = Costos fijos + Costos variables</span></div>
+      <div class="calc-row"><span>Costos fijos: no cambian (arriendo, transporte)</span></div>
+      <div class="calc-row"><span>Costos variables: dependen de cuánto produces (materiales)</span></div>
+      <div class="calc-row"><span>U = (PV × Q) − (CF + CV)</span></div>
+    </div>
+    <p><strong>Ejemplo:</strong> Vendes empanadas a $2.000 cada una. Vendes 50 a la semana. Tus costos son $60.000 (materiales) + $10.000 (transporte).</p>
+    <p>U = ($2.000 × 50) − ($60.000 + $10.000) = $100.000 − $70.000 = <strong>$30.000 de utilidad semanal</strong></p>
+  </div>
+  <div class="cc"><h3>🎯 Objetivo de aprendizaje</h3><p>Diseñarás una idea de negocio simple, calcularás costos fijos y variables, fijarás un precio de venta rentable y simularás la operación de tu negocio durante 4 semanas.</p></div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="goPhase(1)">Continuar →</button></div>
+</div>
+
+<div class="phase" id="phase1">
+  <div class="phase-header"><div class="phase-badge">FASE 2 · HACEMOS</div><h2>Anatomía de un negocio</h2><p>Antes de emprender, necesitas entender cada pieza del rompecabezas financiero.</p></div>
+  <div class="cc"><h3>📊 Costos fijos vs. variables</h3>
+    <div class="calc-box"><h4>Costos Fijos (no cambian)</h4><div class="calc-row"><span>Arriendo del puesto</span><span>$30.000/semana</span></div><div class="calc-row"><span>Transporte de mercancía</span><span>$10.000/semana</span></div><div class="calc-row"><span>Total fijos</span><span>$40.000/semana</span></div></div>
+    <div class="calc-box"><h4>Costos Variables (dependen de producción)</h4><div class="calc-row"><span>Harina (50 empanadas)</span><span>$15.000</span></div><div class="calc-row"><span>Carne molida</span><span>$20.000</span></div><div class="calc-row"><span>Aceite, condimentos</span><span>$8.000</span></div><div class="calc-row"><span>Empaque</span><span>$5.000</span></div><div class="calc-row"><span>Total variables (50 uds)</span><span>$48.000</span></div></div>
+    <p style="margin-top:.5rem"><strong>Costo unitario:</strong> ($40.000 + $48.000) ÷ 50 = $1.760 por empanada</p>
+    <p><strong>Si vendes a $2.500:</strong> Ganancia por unidad = $2.500 − $1.760 = <strong>$740</strong></p>
+  </div>
+  <div class="cc"><h3>📍 Punto de equilibrio</h3><p>Es la cantidad mínima que debes vender para <strong>no perder ni ganar</strong>.</p>
+    <div class="calc-box"><h4>PE = Costos Fijos ÷ (Precio − Costo variable unitario)</h4><div class="calc-row"><span>Costos fijos</span><span>$40.000</span></div><div class="calc-row"><span>Precio de venta</span><span>$2.500</span></div><div class="calc-row"><span>Costo variable unitario ($48.000÷50)</span><span>$960</span></div><div class="calc-row"><span>PE = $40.000 ÷ ($2.500 − $960)</span><span>26 empanadas</span></div></div>
+    <p>Debes vender <strong>mínimo 26 empanadas</strong> para cubrir tus costos. A partir de la #27, todo es ganancia.</p>
+  </div>
+  <div class="cc"><h3>📋 Actividad en equipos (15 min)</h3><p>Cada equipo elige un producto para vender en el colegio y calcula: costos fijos, costos variables, costo unitario, precio de venta y punto de equilibrio.</p></div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button><button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button></div>
+</div>
+
+<div class="phase" id="phase2">
+  <div class="phase-header"><div class="phase-badge">FASE 3 · TÚ HACES</div><h2>🎮 Tienda Express</h2><p>Monta tu negocio escolar con $200.000 de capital inicial. Opera durante 4 semanas y busca la mayor utilidad posible.</p></div>
+  <div id="gameContainer"></div>
+</div>
+
+<div class="phase" id="phase3">
+  <div class="phase-header"><div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div><h2>📝 Demuestra lo que aprendiste</h2><p>10 preguntas tipo Saber sobre emprendimiento.</p></div>
+  <div class="cc" id="studentInfoCard"><h3>📋 Datos del estudiante</h3><div class="form-row"><input type="text" id="studentName" placeholder="Tu nombre completo"><select id="studentGroup"><option value="">Grupo…</option><option>8.1</option><option>8.2</option><option>8.3</option><option>8.4</option></select></div><button class="btn btn-primary" onclick="startQuiz()">Comenzar evaluación</button></div>
+  <div id="quizContainer" style="display:none"></div><div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+const SHEETS_URL='';const FMT=n=>'$'+Math.round(n).toLocaleString('es-CO');
+let currentPhase=0;const done=new Set();
+function goPhase(n){done.add(currentPhase);currentPhase=n;document.querySelectorAll('.phase').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);t.classList.toggle('completed',done.has(i)&&i!==n)});window.scrollTo({top:0,behavior:'smooth'});if(n===2&&!gameOn)initGame()}
+
+/* ===== GAME ===== */
+let gameOn=false,gameStep=0,capital=200000,week=0,chosenBiz=null,weekResults=[];
+const businesses=[
+  {id:'empanadas',icon:'🥟',name:'Empanadas',desc:'Vende empanadas rellenas en el descanso',fixedCost:25000,products:[
+    {name:'Empanada de carne',icon:'🥟',cost:1200,price:2500,maxSell:40},
+    {name:'Empanada de pollo',icon:'🍗',cost:1100,price:2300,maxSell:35},
+    {name:'Empanada hawaiana',icon:'🍍',cost:1300,price:2800,maxSell:20}]},
+  {id:'jugos',icon:'🥤',name:'Jugos naturales',desc:'Jugos frescos de fruta para el recreo',fixedCost:20000,products:[
+    {name:'Jugo de naranja',icon:'🍊',cost:800,price:2000,maxSell:30},
+    {name:'Jugo de mango',icon:'🥭',cost:900,price:2200,maxSell:25},
+    {name:'Limonada de coco',icon:'🥥',cost:1000,price:2500,maxSell:20}]},
+  {id:'dulces',icon:'🍬',name:'Dulcería escolar',desc:'Dulces, galletas y snacks variados',fixedCost:15000,products:[
+    {name:'Paquete de galletas',icon:'🍪',cost:600,price:1500,maxSell:50},
+    {name:'Bombones (x5)',icon:'🍬',cost:500,price:1200,maxSell:40},
+    {name:'Brownies caseros',icon:'🍫',cost:1000,price:2500,maxSell:25}]},
+  {id:'accesorios',icon:'📱',name:'Accesorios tech',desc:'Forros, cargadores y audífonos',fixedCost:30000,products:[
+    {name:'Forro para celular',icon:'📱',cost:5000,price:12000,maxSell:8},
+    {name:'Audífonos básicos',icon:'🎧',cost:4000,price:10000,maxSell:6},
+    {name:'Cable cargador',icon:'🔌',cost:3000,price:8000,maxSell:10}]}
+];
+
+const weekEvents=[
+  {text:'Semana normal de clases. Buen flujo de estudiantes en el descanso.',icon:'📚',modifier:1},
+  {text:'¡Semana cultural! Más estudiantes en los pasillos. Ventas +30%.',icon:'🎉',modifier:1.3},
+  {text:'Semana de exámenes. Los estudiantes están estresados y compran más snacks, pero hay menos tiempo de descanso. Ventas −10%.',icon:'📝',modifier:0.9},
+  {text:'¡Día sin colegio el viernes! Solo 4 días de ventas esta semana. Ventas −20%.',icon:'🏖️',modifier:0.8}
+];
+
+function initGame(){gameOn=true;gameStep=0;capital=200000;week=0;chosenBiz=null;weekResults=[];renderChooseBiz()}
+
+function renderChooseBiz(){
+  document.getElementById('gameContainer').innerHTML=`
+    <div class="game-area">
+      <p style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">Capital inicial: ${FMT(capital)}</p>
+      <p style="font-size:.78rem;color:var(--gray);margin-bottom:1rem">Elige el tipo de negocio que vas a montar:</p>
+      <div class="biz-grid">${businesses.map((b,i)=>`<div class="biz-card" id="biz${i}" onclick="selectBiz(${i})"><div class="biz-icon">${b.icon}</div><h4>${b.name}</h4><p>${b.desc}</p><p style="font-size:.68rem;color:var(--pri);font-weight:600;margin-top:.25rem">Costo fijo: ${FMT(b.fixedCost)}/sem</p></div>`).join('')}</div>
+      <div class="btn-row"><button class="btn btn-primary" id="btnStartBiz" onclick="startBusiness()" disabled>Iniciar negocio →</button></div>
+    </div>`;
+}
+
+function selectBiz(i){
+  chosenBiz=i;
+  document.querySelectorAll('.biz-card').forEach((c,j)=>c.classList.toggle('selected',j===i));
+  document.getElementById('btnStartBiz').disabled=false;
+}
+
+function startBusiness(){if(chosenBiz===null)return;week=0;weekResults=[];renderWeek()}
+
+function renderWeek(){
+  if(week>=4){showGameResults();return}
+  const biz=businesses[chosenBiz];const ev=weekEvents[week];
+  const c=document.getElementById('gameContainer');
+  let html=`<div class="game-area">
+    <div class="week-header">
+      <span class="week-badge">${biz.icon} ${biz.name} — SEMANA ${week+1} DE 4</span>
+      <span class="capital-display ${capital>=0?'positive':'negative'}">Capital: ${FMT(capital)}</span>
+    </div>
+    <div class="event-banner"><span class="ev-icon">${ev.icon}</span><div><strong>Semana ${week+1}:</strong> ${ev.text}</div></div>
+    <p style="font-size:.78rem;color:var(--gray);margin-bottom:.5rem">Costo fijo semanal: <strong>${FMT(biz.fixedCost)}</strong> · Decide cuántas unidades producir de cada producto:</p>`;
+
+  biz.products.forEach((p,i)=>{
+    const maxAffordable=Math.floor((capital-biz.fixedCost)/p.cost);
+    const maxReal=Math.min(Math.max(maxAffordable,0),Math.round(p.maxSell*ev.modifier));
+    html+=`<div class="prod-row">
+      <span class="prod-icon">${p.icon}</span>
+      <span class="prod-name">${p.name}</span>
+      <span class="prod-cost">Costo: ${FMT(p.cost)} · PV: ${FMT(p.price)}</span>
+      <input type="number" class="prod-input" id="qty${i}" min="0" max="${p.maxSell}" value="0" oninput="updateWeekCalc()">
+      <span class="prod-total" id="ptotal${i}">$0</span>
+    </div>`;
+  });
+
+  html+=`<div id="weekSummary"></div>
+    <div class="btn-row"><button class="btn btn-primary" id="btnWeek" onclick="submitWeek()" disabled>Cerrar semana ${week+1} →</button></div>
+  </div>`;
+  c.innerHTML=html;
+  updateWeekCalc();
+}
+
+function updateWeekCalc(){
+  const biz=businesses[chosenBiz];const ev=weekEvents[week];
+  let totalCostVar=0,totalRevenue=0,totalUnits=0;
+  biz.products.forEach((p,i)=>{
+    const qty=parseInt(document.getElementById('qty'+i).value)||0;
+    const sold=Math.min(qty,Math.round(p.maxSell*ev.modifier));
+    const costV=qty*p.cost;
+    const rev=sold*p.price;
+    totalCostVar+=costV;totalRevenue+=rev;totalUnits+=qty;
+    document.getElementById('ptotal'+i).textContent=`Produce ${qty} → Vende ~${sold}`;
+  });
+  const totalCost=biz.fixedCost+totalCostVar;
+  const profit=totalRevenue-totalCost;
+  const canAfford=totalCost<=capital;
+
+  document.getElementById('weekSummary').innerHTML=`
+    <div class="summary-grid">
+      <div class="sum-box income"><div class="sum-val">${FMT(totalRevenue)}</div><div class="sum-label">Ingresos estimados</div></div>
+      <div class="sum-box expense"><div class="sum-val">${FMT(totalCost)}</div><div class="sum-label">Costos totales</div></div>
+      <div class="sum-box profit"><div class="sum-val" style="color:${profit>=0?'var(--green)':'var(--red)'}"> ${profit>=0?'+':''}${FMT(profit)}</div><div class="sum-label">${profit>=0?'Utilidad':'Pérdida'}</div></div>
+    </div>
+    ${!canAfford?'<div class="feedback-box fb-no">❌ No tienes suficiente capital para producir eso. Reduce las cantidades.</div>':''}`;
+  document.getElementById('btnWeek').disabled=!canAfford||totalUnits===0;
+}
+
+function submitWeek(){
+  const biz=businesses[chosenBiz];const ev=weekEvents[week];
+  let totalCostVar=0,totalRevenue=0;
+  biz.products.forEach((p,i)=>{
+    const qty=parseInt(document.getElementById('qty'+i).value)||0;
+    const sold=Math.min(qty,Math.round(p.maxSell*ev.modifier));
+    totalCostVar+=qty*p.cost;totalRevenue+=sold*p.price;
+  });
+  const totalCost=biz.fixedCost+totalCostVar;
+  const profit=totalRevenue-totalCost;
+  capital+=profit;
+  weekResults.push({week:week+1,revenue:totalRevenue,cost:totalCost,profit,capital});
+  week++;
+  renderWeek();
+}
+
+function showGameResults(){
+  const totalProfit=weekResults.reduce((s,w)=>s+w.profit,0);
+  const roi=((capital-200000)/200000*100).toFixed(1);
+  const stars=totalProfit>150000?'⭐⭐⭐':totalProfit>50000?'⭐⭐':totalProfit>0?'⭐':'💀';
+  const rank=totalProfit>150000?'Emprendedor Estrella':totalProfit>50000?'Buen Negociante':totalProfit>0?'Emprendedor Novato':'En bancarrota';
+
+  let chartHtml='<div class="chart-area">';
+  weekResults.forEach(w=>{
+    const maxVal=Math.max(...weekResults.map(x=>Math.max(x.revenue,x.cost)));
+    chartHtml+=`<div style="font-size:.72rem;font-weight:600;margin-top:.5rem;margin-bottom:.2rem">Semana ${w.week}</div>
+      <div class="chart-bar-h"><span class="chart-label">Ingreso</span><div class="chart-track"><div class="chart-fill" style="width:${w.revenue/maxVal*100}%;background:var(--green)">${FMT(w.revenue)}</div></div></div>
+      <div class="chart-bar-h"><span class="chart-label">Costo</span><div class="chart-track"><div class="chart-fill" style="width:${w.cost/maxVal*100}%;background:var(--red)">${FMT(w.cost)}</div></div></div>`;
+  });
+  chartHtml+='</div>';
+
+  document.getElementById('gameContainer').innerHTML=`<div class="score-card">
+    <div class="score-big">${FMT(capital)}</div><div class="score-label">Capital final (iniciaste con ${FMT(200000)})</div>
+    <div class="score-stars">${stars}</div>
+    <p style="font-size:.9rem;font-weight:700;color:${totalProfit>=0?'var(--green)':'var(--red)'}">Utilidad total: ${totalProfit>=0?'+':''}${FMT(totalProfit)} · ROI: ${roi}%</p>
+    <p style="font-size:.82rem;color:var(--gray);margin-top:.5rem;font-weight:600">${rank}</p>
+    ${chartHtml}
+    <div class="btn-row" style="justify-content:center;margin-top:1rem">
+      <button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button>
+      <button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button>
+    </div></div>`;
+}
+
+/* QUIZ */
+const questions=[
+  {q:'Si produces 100 empanadas con un costo variable total de $120.000, ¿cuál es el costo variable por unidad?',opts:['A. $12.000','B. $1.200','C. $120','D. $12'],ans:1,exp:'Costo variable unitario = $120.000 ÷ 100 = $1.200 por empanada.'},
+  {q:'¿Cuál es la diferencia entre costos fijos y costos variables?',opts:['A. Los fijos son más caros','B. Los fijos no cambian sin importar cuánto produzcas; los variables sí','C. Los variables se pagan una vez','D. No hay diferencia'],ans:1,exp:'Los costos fijos (arriendo, transporte) se pagan igual así vendas 1 o 100 unidades. Los variables (materias primas) aumentan con la producción.'},
+  {q:'Si tu negocio tiene costos fijos de $40.000, costo variable unitario de $1.000 y precio de venta de $3.000, ¿cuántas unidades es el punto de equilibrio?',opts:['A. 10','B. 20','C. 40','D. 13'],ans:1,exp:'PE = CF ÷ (PV − CVu) = $40.000 ÷ ($3.000 − $1.000) = $40.000 ÷ $2.000 = 20 unidades.'},
+  {q:'¿Qué es la utilidad de un negocio?',opts:['A. El total de ventas','B. Lo que sobra después de pagar todos los costos','C. El precio de venta','D. Los costos fijos'],ans:1,exp:'Utilidad = Ingresos − Costos totales. Es la ganancia real del negocio después de pagar todo.'},
+  {q:'Vendes 30 jugos a $2.500 cada uno. Tu costo total fue $45.000. ¿Cuál es tu utilidad?',opts:['A. $75.000','B. $30.000','C. $45.000','D. $25.000'],ans:1,exp:'Ingresos = 30 × $2.500 = $75.000. Utilidad = $75.000 − $45.000 = $30.000.'},
+  {q:'Si el costo de producir un brownie es $1.000 y lo vendes a $2.500, ¿cuál es tu margen de ganancia porcentual?',opts:['A. 40%','B. 60%','C. 150%','D. 25%'],ans:1,exp:'Margen = (Precio − Costo) ÷ Precio × 100 = ($2.500 − $1.000) ÷ $2.500 × 100 = 60%.'},
+  {q:'¿Por qué es importante calcular el punto de equilibrio ANTES de empezar un negocio?',opts:['A. Para saber cuánto dinero pedir prestado','B. Para saber el mínimo que debes vender para no perder dinero','C. Para fijar el precio más alto posible','D. No es importante'],ans:1,exp:'El punto de equilibrio te dice cuántas unidades mínimas debes vender para cubrir todos tus costos. Si no alcanzas ese número, pierdes dinero.'},
+  {q:'Tu negocio de dulces tuvo ingresos de $200.000 y costos de $180.000 en una semana. ¿Cuál fue tu ROI si invertiste $200.000?',opts:['A. 10%','B. 20%','C. 90%','D. −10%'],ans:0,exp:'Utilidad = $200.000 − $180.000 = $20.000. ROI = Utilidad ÷ Inversión × 100 = $20.000 ÷ $200.000 × 100 = 10%.'},
+  {q:'¿Cuál de estos es un ejemplo de costo VARIABLE?',opts:['A. El arriendo del puesto','B. La materia prima para producir','C. El celular del dueño','D. El nombre del negocio'],ans:1,exp:'La materia prima varía según cuánto produces: más unidades = más materia prima = más costo. El arriendo es fijo.'},
+  {q:'Tu negocio ganó $30.000 la primera semana y perdió $10.000 la segunda. ¿Cuál es tu resultado acumulado?',opts:['A. $30.000','B. $20.000','C. −$10.000','D. $40.000'],ans:1,exp:'Resultado acumulado = $30.000 + (−$10.000) = $20.000. Aún estás en positivo, pero la tendencia preocupa.'}
+];
+let cQ=0,qAns=[];
+function startQuiz(){const n=document.getElementById('studentName').value.trim();const g=document.getElementById('studentGroup').value;if(!n||!g){alert('Escribe tu nombre y selecciona tu grupo.');return}document.getElementById('studentInfoCard').style.display='none';document.getElementById('quizContainer').style.display='block';cQ=0;qAns=[];renderQQ()}
+function renderQQ(){const q=questions[cQ];let dots='<div class="quiz-progress">';questions.forEach((_,i)=>{let c='quiz-dot';if(i===cQ)c+=' current';else if(i<qAns.length)c+=qAns[i].correct?' correct':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';let h=dots+`<div class="question-card"><div class="q-num">Pregunta ${cQ+1} de ${questions.length}</div><div class="q-text">${q.q}</div>`;q.opts.forEach((o,i)=>h+=`<button class="option" onclick="selQ(${i})" id="qq${i}">${o}</button>`);h+=`<div class="explanation" id="qexp">💡 ${q.exp}</div><div class="btn-row" id="qnext" style="display:none"><button class="btn btn-primary" onclick="${cQ<questions.length-1?'cQ++;renderQQ()':'finishQ()'}"> ${cQ<questions.length-1?'Siguiente →':'Ver resultados'}</button></div></div>`;document.getElementById('quizContainer').innerHTML=h}
+function selQ(i){if(qAns.length>cQ)return;const q=questions[cQ];qAns.push({selected:i,correct:i===q.ans,question:cQ+1});document.querySelectorAll('.option').forEach((b,j)=>{b.style.pointerEvents='none';if(j===q.ans)b.classList.add('correct-answer');if(j===i&&i!==q.ans)b.classList.add('wrong-answer')});document.getElementById('qexp').classList.add('show');document.getElementById('qnext').style.display='flex'}
+function finishQ(){const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';document.getElementById('quizContainer').style.display='none';const r=document.getElementById('quizResults');r.style.display='block';r.innerHTML=`<div class="results-section"><div class="big">${correct}/${questions.length}</div><div class="nota">Nota: ${nota}</div><div class="nivel nivel-${nivel.toLowerCase()}">${nivel}</div><p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">${correct>=8?'¡Tienes madera de emprendedor!':correct>=6?'Buen trabajo. Refuerza costos y punto de equilibrio.':correct>=4?'Vas avanzando. Practica más cálculos.':'Necesitas repasar los conceptos. Vuelve a las fases anteriores.'}</p><div id="sendStatus" class="send-status"></div><div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar</button><button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir</button></div></div>`;if(SHEETS_URL)sendResults()}
+async function sendResults(){const name=document.getElementById('studentName').value.trim();const group=document.getElementById('studentGroup').value;const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';const st=document.getElementById('sendStatus');if(!SHEETS_URL){st.className='send-status error';st.textContent='⚠️ URL no configurada.';return}st.className='send-status loading';st.textContent='⏳ Enviando…';document.getElementById('btnSend').disabled=true;try{await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({timestamp:new Date().toISOString(),nombre:name,grupo:group,grado:'8°',periodo:'P3',tema:'Mi Primer Emprendimiento',respuestas:qAns.map(a=>questions[a.question-1].opts[a.selected].charAt(0)).join(','),aciertos:correct,total:questions.length,nota:parseFloat(nota),nivel})});st.className='send-status success';st.textContent='✅ Enviado.'}catch(e){st.className='send-status error';st.textContent='❌ Error.';document.getElementById('btnSend').disabled=false}}
+</script>
+</body>
+</html>
