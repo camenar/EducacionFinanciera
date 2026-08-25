@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6° P3 — El Poder del Ahorro | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#059669;--pri-light:#ECFDF5;--pri-dark:#047857;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--amber:#D97706;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}.topbar a{color:#fff;text-decoration:none;opacity:.7}.topbar a:hover{opacity:1}.topbar .title{font-weight:700;flex:1}
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}.tab.completed{color:var(--green)}.tab.completed::before{content:'✓ '}
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}.phase.active{display:block}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header{margin-bottom:1.5rem}.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.cc{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}.cc h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}.cc p,.cc li{font-size:.82rem;line-height:1.6;color:#475569}.cc ul{padding-left:1.25rem;margin-top:.5rem}.cc li{margin-bottom:.25rem}
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}.btn-primary{background:var(--pri);color:#fff}.btn-primary:hover{background:var(--pri-dark)}.btn-primary:disabled{opacity:.4;cursor:default}.btn-secondary{background:#F1F5F9;color:var(--text)}.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+.calc-box{background:#F1F5F9;border-radius:10px;padding:1rem;margin:.75rem 0;font-size:.8rem}.calc-box h4{font-size:.82rem;font-weight:700;margin-bottom:.5rem;color:var(--pri)}
+.calc-row{display:flex;justify-content:space-between;padding:.2rem 0;border-bottom:1px dashed #CBD5E1;font-size:.78rem}.calc-row:last-child{border:none;font-weight:700;padding-top:.4rem;margin-top:.25rem;border-top:2px solid #94A3B8}
+.game-area{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+
+/* ALCANCIA */
+.goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+.goal-card{padding:1rem;border:2px solid #E2E8F0;border-radius:12px;cursor:pointer;transition:all .2s;text-align:center}
+.goal-card:hover{border-color:var(--pri);background:var(--pri-light);transform:translateY(-2px)}
+.goal-card.selected{border-color:var(--pri);background:var(--pri-light);box-shadow:0 0 0 3px rgba(5,150,105,.2)}
+.goal-card .g-icon{font-size:2rem}.goal-card h4{font-size:.82rem;font-weight:700;margin-top:.25rem}.goal-card p{font-size:.7rem;color:var(--gray)}
+.goal-card .g-price{font-size:.85rem;font-weight:800;color:var(--pri);margin-top:.25rem}
+
+.alcancia{text-align:center;padding:1.5rem;background:linear-gradient(135deg,#ECFDF5,#D1FAE5);border-radius:12px;margin:1rem 0}
+.alcancia .pig{font-size:4rem;margin-bottom:.5rem}.alcancia .saved{font-size:1.8rem;font-weight:800;color:var(--green)}.alcancia .goal-name{font-size:.78rem;color:var(--gray);margin-top:.15rem}
+.progress-track{height:20px;background:#E2E8F0;border-radius:10px;overflow:hidden;margin:1rem 0;position:relative}
+.progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#059669,#10B981);transition:width .5s;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:.65rem;color:#fff;font-weight:700}
+.progress-label{display:flex;justify-content:space-between;font-size:.7rem;color:var(--gray);margin-top:.25rem}
+
+.week-panel{background:#F8FAFC;border-radius:10px;padding:1rem;margin:1rem 0}
+.week-title{font-size:.8rem;font-weight:700;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.deposit-options{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+.dep-btn{padding:.5rem;border:2px solid #E2E8F0;border-radius:8px;background:#fff;font-family:inherit;font-size:.75rem;font-weight:700;cursor:pointer;transition:all .15s;text-align:center}
+.dep-btn:hover{border-color:var(--pri);background:var(--pri-light)}
+.dep-btn.chosen{border-color:var(--pri);background:var(--pri-light);pointer-events:none}
+.event-banner{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);border:1px solid #FDE68A;border-radius:10px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.8rem;display:flex;align-items:flex-start;gap:.5rem}.event-banner strong{color:#92400E}
+.interest-box{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:1px solid #93C5FD;border-radius:10px;padding:.75rem;margin:.75rem 0;font-size:.78rem;color:#1E40AF;text-align:center}
+.feedback-box{padding:.75rem 1rem;border-radius:10px;margin-top:.75rem;font-size:.78rem;line-height:1.5}.fb-ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}.fb-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E}
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}.score-big{font-size:2.5rem;font-weight:800}.score-stars{font-size:1.5rem;margin:.5rem 0}.score-label{font-size:.85rem;color:var(--gray)}
+
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}.quiz-dot.current{background:var(--pri)}.quiz-dot.correct{background:var(--green)}.quiz-dot.wrong{background:var(--red)}
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}.option:hover{border-color:var(--pri);background:var(--pri-light)}.option.correct-answer{border-color:var(--green);background:#ECFDF5}.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;font-size:.78rem;line-height:1.5;display:none}.explanation.show{display:block}
+.results-section{text-align:center;padding:1.5rem}.results-section .big{font-size:2.5rem;font-weight:800}.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}.nivel-superior{background:var(--green)}.nivel-alto{background:#2563EB}.nivel-basico{background:var(--amber)}.nivel-bajo{background:var(--red)}
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}.send-status.success{display:block;background:#ECFDF5;color:#065F46}.send-status.error{display:block;background:#FEF2F2;color:#991B1B}.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+@media(max-width:600px){.phase{padding:1rem}.goal-grid{grid-template-columns:1fr 1fr}.deposit-options{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Inicio</a><span class="title">6° · Período 3 — El Poder del Ahorro</span></div>
+<div class="tabs"><div class="tab active" onclick="goPhase(0)">① Activación</div><div class="tab" onclick="goPhase(1)">② Exploración</div><div class="tab" onclick="goPhase(2)">③ Juego</div><div class="tab" onclick="goPhase(3)">④ Evaluación</div></div>
+
+<div class="phase active" id="phase0">
+  <div class="phase-header"><div class="phase-badge">FASE 1 · YO HAGO</div><h2>¿Cuánto tiempo necesitas para comprar lo que quieres?</h2><p>El ahorro es como un superpoder: convierte moneditas de hoy en cosas grandes de mañana.</p></div>
+  <div class="cc"><h3>🤯 El reto imposible</h3><p>Quieres unos audífonos Bluetooth que cuestan <strong>$80.000</strong>. Tu mesada es $20.000 semanales y tus gastos fijos son $15.000. Te sobran $5.000 por semana.</p>
+    <p style="margin-top:.5rem">Si ahorras $5.000 cada semana: <strong>$80.000 ÷ $5.000 = 16 semanas</strong> (4 meses).</p>
+    <p>¿Parece mucho? ¡Pero sin ahorro NUNCA los tendrías! El ahorro hace posible lo que parece imposible.</p></div>
+  <div class="cc"><h3>💡 ¿Qué es el ahorro?</h3><p>Ahorrar es <strong>guardar una parte del dinero que recibes</strong> para usarlo después en algo que quieres o necesitas. No es "dejar de vivir", es <strong>planear para vivir mejor</strong>.</p>
+    <ul><li><strong>Ahorro para metas:</strong> Algo que quieres comprar (celular, tenis, viaje)</li><li><strong>Fondo de emergencia:</strong> Dinero guardado para imprevistos</li><li><strong>Ahorro con interés:</strong> Si lo guardas en un banco, ¡el banco te paga por dejarlo ahí!</li></ul></div>
+  <div class="cc"><h3>📐 Conexión matemática: Interés simple</h3>
+    <div class="calc-box"><h4>I = C × r × t</h4>
+      <div class="calc-row"><span>C = Capital (lo que ahorras)</span></div>
+      <div class="calc-row"><span>r = Tasa de interés (% mensual)</span></div>
+      <div class="calc-row"><span>t = Tiempo (meses)</span></div>
+    </div>
+    <p><strong>Ejemplo:</strong> Ahorras $50.000 en el banco al 0,5% mensual por 6 meses:</p>
+    <p>I = $50.000 × 0,005 × 6 = <strong>$1.500 de interés</strong>. ¡El banco te regala $1.500 solo por dejar tu dinero ahí!</p></div>
+  <div class="cc"><h3>🎯 Objetivo</h3><p>Calcularás metas de ahorro a corto plazo, comprenderás el interés simple y simularás un plan de ahorro semanal.</p></div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="goPhase(1)">Continuar →</button></div>
+</div>
+
+<div class="phase" id="phase1">
+  <div class="phase-header"><div class="phase-badge">FASE 2 · HACEMOS</div><h2>Estrategias para ahorrar</h2><p>Trucos probados para guardar más dinero cada semana.</p></div>
+  <div class="cc"><h3>🎯 El método de las 3 alcancías</h3>
+    <p>Divide tu dinero disponible (lo que te sobra después de gastos fijos) en 3 partes:</p>
+    <div class="goal-grid">
+      <div class="goal-card" style="border-color:#A7F3D0;background:#F0FDF4"><div class="g-icon">🐷</div><h4>Alcancía 1: Ahorro</h4><p>40% — Para tu meta</p></div>
+      <div class="goal-card" style="border-color:#FDE68A;background:#FFFBEB"><div class="g-icon">🎮</div><h4>Alcancía 2: Diversión</h4><p>40% — Para disfrutar</p></div>
+      <div class="goal-card" style="border-color:#BFDBFE;background:#EFF6FF;grid-column:1/-1"><div class="g-icon">🛡️</div><h4>Alcancía 3: Emergencias</h4><p>20% — Por si algo se daña o necesitas algo urgente</p></div>
+    </div>
+    <p style="margin-top:.5rem">Si te sobran $5.000: Ahorro $2.000 + Diversión $2.000 + Emergencias $1.000</p></div>
+  <div class="cc"><h3>📊 ¿Cuántas semanas para mi meta?</h3>
+    <div class="calc-box"><h4>Semanas = Precio del producto ÷ Ahorro semanal</h4>
+      <div class="calc-row"><span>🎧 Audífonos $80.000 ÷ $2.000/sem</span><span>40 semanas</span></div>
+      <div class="calc-row"><span>⚽ Balón $45.000 ÷ $2.000/sem</span><span>23 semanas</span></div>
+      <div class="calc-row"><span>📖 Libro $25.000 ÷ $2.000/sem</span><span>13 semanas</span></div>
+      <div class="calc-row"><span>🎮 Control PS $150.000 ÷ $2.000/sem</span><span>75 semanas 😅</span></div>
+    </div>
+    <p style="margin-top:.5rem;font-size:.75rem;color:var(--amber)"><strong>💡 Tip:</strong> Si la meta es muy lejana, busca formas de ganar dinero extra (ayudar en casa, vender algo) o elige una meta más alcanzable primero.</p></div>
+  <div class="cc"><h3>📋 Actividad (15 min)</h3><p>Elige algo que quieras comprar. Calcula: ¿cuánto cuesta? ¿cuánto puedes ahorrar por semana? ¿cuántas semanas necesitas? Escríbelo en tu cuaderno como un "Plan de Ahorro".</p></div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button><button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button></div>
+</div>
+
+<div class="phase" id="phase2">
+  <div class="phase-header"><div class="phase-badge">FASE 3 · TÚ HACES</div><h2>🎮 La Alcancía Mágica</h2><p>Elige una meta de ahorro y deposita semana a semana. ¡Tu alcancía gana intereses mágicos! Pero cuidado: habrá tentaciones…</p></div>
+  <div id="gameContainer"></div>
+</div>
+
+<div class="phase" id="phase3">
+  <div class="phase-header"><div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div><h2>📝 Demuestra lo que aprendiste</h2><p>10 preguntas sobre ahorro e interés simple.</p></div>
+  <div class="cc" id="studentInfoCard"><h3>📋 Datos del estudiante</h3><div class="form-row"><input type="text" id="studentName" placeholder="Tu nombre completo"><select id="studentGroup"><option value="">Grupo…</option><option>6.1</option><option>6.2</option><option>6.3</option><option>6.4</option></select></div><button class="btn btn-primary" onclick="startQuiz()">Comenzar evaluación</button></div>
+  <div id="quizContainer" style="display:none"></div><div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+const SHEETS_URL='';const FMT=n=>'$'+Math.round(n).toLocaleString('es-CO');
+let currentPhase=0;const done=new Set();
+function goPhase(n){done.add(currentPhase);currentPhase=n;document.querySelectorAll('.phase').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);t.classList.toggle('completed',done.has(i)&&i!==n)});window.scrollTo({top:0,behavior:'smooth'});if(n===2&&!gameOn)initGame()}
+
+let gameOn=false,goalIdx=null,saved=0,week=0,totalWeeks=12,interestRate=0.005,score=0;
+const goals=[
+  {icon:'⚽',name:'Balón de fútbol',price:45000},
+  {icon:'🎧',name:'Audífonos Bluetooth',price:80000},
+  {icon:'📖',name:'Libro + cuaderno premium',price:30000},
+  {icon:'🎮',name:'Control de videojuegos',price:120000}
+];
+const weekEvents=[
+  {text:'Semana normal. ¿Cuánto ahorras?',icon:'📅',type:'normal'},
+  {text:'¡Tu tía te regaló $10.000 por tus notas! Puedes ahorrarlo o gastarlo.',icon:'🎁',type:'bonus',amount:10000},
+  {text:'Semana normal. La alcancía gana intereses.',icon:'📅',type:'normal'},
+  {text:'Tus amigos van a cine y te invitan. La boleta cuesta $8.000. ¿Sacas de tu ahorro?',icon:'🎬',type:'temptation',amount:8000},
+  {text:'Semana normal.',icon:'📅',type:'normal'},
+  {text:'¡Encontraste $5.000 en un bolsillo viejo!',icon:'🍀',type:'bonus',amount:5000},
+  {text:'Se dañaron tus audífonos viejos. Reparación: $6.000. ¿Usas tu fondo de emergencia o tu ahorro?',icon:'🔧',type:'emergency',amount:6000},
+  {text:'Semana normal. Tu ahorro sigue creciendo.',icon:'📅',type:'normal'},
+  {text:'Hay una oferta de dulces: $3.000 por un paquete gigante. ¿Te lo compras?',icon:'🍬',type:'temptation',amount:3000},
+  {text:'Semana normal.',icon:'📅',type:'normal'},
+  {text:'Tu mamá te da $5.000 extra por ayudar en casa.',icon:'🏠',type:'bonus',amount:5000},
+  {text:'¡Última semana! Revisemos cuánto ahorraste.',icon:'🎉',type:'final'}
+];
+const depositOptions=[0,1000,2000,3000,5000];
+
+function initGame(){gameOn=true;goalIdx=null;saved=0;week=0;score=0;renderGoalSelect()}
+function renderGoalSelect(){
+  document.getElementById('gameContainer').innerHTML=`<div class="game-area">
+    <p style="font-size:.85rem;font-weight:700;margin-bottom:.5rem">🎯 Elige tu meta de ahorro:</p>
+    <p style="font-size:.78rem;color:var(--gray);margin-bottom:1rem">Tienes 12 semanas. Cada semana puedes ahorrar entre $0 y $5.000 de tu mesada.</p>
+    <div class="goal-grid">${goals.map((g,i)=>`<div class="goal-card" id="gl${i}" onclick="selGoal(${i})"><div class="g-icon">${g.icon}</div><h4>${g.name}</h4><div class="g-price">${FMT(g.price)}</div></div>`).join('')}</div>
+    <div class="btn-row"><button class="btn btn-primary" id="btnGoal" onclick="startSaving()" disabled>Comenzar a ahorrar →</button></div></div>`;
+}
+function selGoal(i){goalIdx=i;document.querySelectorAll('.goal-card').forEach((c,j)=>c.classList.toggle('selected',j===i));document.getElementById('btnGoal').disabled=false}
+function startSaving(){if(goalIdx===null)return;saved=0;week=0;score=0;renderWeek()}
+
+function renderWeek(){
+  if(week>=totalWeeks){showResults();return}
+  const ev=weekEvents[week];const goal=goals[goalIdx];const pct=Math.min(100,saved/goal.price*100);
+  const c=document.getElementById('gameContainer');
+  let html=`<div class="game-area">
+    <div class="alcancia"><div class="pig">🐷</div><div class="saved">${FMT(saved)}</div><div class="goal-name">${goal.icon} Meta: ${goal.name} (${FMT(goal.price)})</div></div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%">${pct>=10?Math.round(pct)+'%':''}</div></div>
+    <div class="progress-label"><span>$0</span><span>${FMT(goal.price)}</span></div>
+    <div class="event-banner"><span>${ev.icon}</span><div><strong>Semana ${week+1}/${totalWeeks}:</strong> ${ev.text}</div></div>`;
+
+  if(ev.type==='normal'||ev.type==='final'){
+    html+=`<div class="week-panel"><div class="week-title">💰 ¿Cuánto depositas esta semana?</div>
+      <div class="deposit-options">${depositOptions.map(d=>`<button class="dep-btn" onclick="deposit(${d})">${d===0?'$0 😬':FMT(d)}</button>`).join('')}</div></div>`;
+  }else if(ev.type==='bonus'){
+    html+=`<div class="week-panel"><div class="week-title">🎁 ¡Dinero extra! ¿Qué haces con los ${FMT(ev.amount)}?</div>
+      <div class="deposit-options"><button class="dep-btn" onclick="bonusChoice('save')">🐷 Todo al ahorro</button><button class="dep-btn" onclick="bonusChoice('half')">✌️ Mitad y mitad</button><button class="dep-btn" onclick="bonusChoice('spend')">🎮 Gastarlo todo</button><button class="dep-btn" onclick="bonusChoice('save_plus')">🐷+ Ahorro + depósito extra</button></div></div>`;
+  }else if(ev.type==='temptation'){
+    html+=`<div class="week-panel"><div class="week-title">😈 Tentación: ¿sacas ${FMT(ev.amount)} de tu ahorro?</div>
+      <div class="deposit-options"><button class="dep-btn" onclick="temptChoice(false)">🚫 No, sigo ahorrando</button><button class="dep-btn" onclick="temptChoice(true)">😋 Sí, me lo merezco</button></div></div>`;
+  }else if(ev.type==='emergency'){
+    html+=`<div class="week-panel"><div class="week-title">🔧 ¿De dónde sacas los ${FMT(ev.amount)}?</div>
+      <div class="deposit-options"><button class="dep-btn" onclick="emergChoice('saving')">🐷 Del ahorro</button><button class="dep-btn" onclick="emergChoice('parent')">👨‍👩‍👦 Pido a mis papás</button><button class="dep-btn" onclick="emergChoice('wait')">⏳ Espero, no es urgente</button></div></div>`;
+  }
+  html+=`<div id="weekFb"></div><div class="btn-row" id="weekNext" style="display:none"><button class="btn btn-primary" onclick="week++;renderWeek()">Siguiente semana →</button></div></div>`;
+  c.innerHTML=html;
+}
+
+function deposit(amount){
+  if(document.querySelector('.dep-btn.chosen'))return;
+  saved+=amount;
+  if(amount>0){saved+=Math.round(saved*interestRate);score+=amount>=3000?10:amount>=1000?5:2}else{score+=0}
+  document.querySelectorAll('.dep-btn').forEach(b=>b.classList.add('chosen'));
+  let fb=amount>=3000?'fb-ok':amount>0?'fb-warn':'fb-warn';
+  let msg=amount>=3000?'¡Excelente depósito! Tu alcancía crece rápido.':amount>0?'Buen depósito. Cada peso cuenta.':'No ahorraste esta semana. Intenta la próxima.';
+  if(saved>0){const interest=Math.round(saved*interestRate);msg+=` 💫 Tu alcancía ganó ${FMT(interest)} de interés.`}
+  document.getElementById('weekFb').innerHTML=`<div class="feedback-box ${fb}">${msg}</div>`;
+  document.getElementById('weekNext').style.display='flex';
+}
+
+function bonusChoice(choice){
+  if(document.querySelector('.dep-btn.chosen'))return;
+  const ev=weekEvents[week];
+  let add=0,msg='';
+  if(choice==='save'){add=ev.amount;score+=15;msg='¡Todo al ahorro! Decisión de campeón.'}
+  else if(choice==='half'){add=Math.round(ev.amount/2);score+=8;msg='Mitad y mitad. Disfrutas y ahorras.'}
+  else if(choice==='spend'){add=0;score+=0;msg='Lo gastaste todo. Diversión ahora, pero tu meta se aleja.'}
+  else{add=ev.amount+2000;score+=15;msg='¡Increíble! Ahorraste el bonus Y un extra de tu mesada.'}
+  saved+=add;
+  document.querySelectorAll('.dep-btn').forEach(b=>b.classList.add('chosen'));
+  document.getElementById('weekFb').innerHTML=`<div class="feedback-box ${add>0?'fb-ok':'fb-warn'}">${msg}</div>`;
+  document.getElementById('weekNext').style.display='flex';
+}
+
+function temptChoice(yes){
+  if(document.querySelector('.dep-btn.chosen'))return;
+  const ev=weekEvents[week];
+  if(yes){saved=Math.max(0,saved-ev.amount);score+=0}else{score+=10}
+  document.querySelectorAll('.dep-btn').forEach(b=>b.classList.add('chosen'));
+  document.getElementById('weekFb').innerHTML=`<div class="feedback-box ${yes?'fb-warn':'fb-ok'}">${yes?'Sacaste dinero de tu ahorro. Tu meta se aleja un poco. 😔':'¡Resististe la tentación! Tu meta sigue en camino. 💪'}</div>`;
+  document.getElementById('weekNext').style.display='flex';
+}
+
+function emergChoice(choice){
+  if(document.querySelector('.dep-btn.chosen'))return;
+  const ev=weekEvents[week];let msg='';
+  if(choice==='saving'){saved=Math.max(0,saved-ev.amount);score+=3;msg='Usaste tu ahorro. Por eso es importante tener un fondo de emergencia separado.'}
+  else if(choice==='parent'){score+=8;msg='Buena idea. Para emergencias reales, los papás pueden ayudar. Tu ahorro sigue intacto.'}
+  else{score+=5;msg='Si no es urgente, esperar es válido. Pero no ignores las reparaciones necesarias.'}
+  document.querySelectorAll('.dep-btn').forEach(b=>b.classList.add('chosen'));
+  document.getElementById('weekFb').innerHTML=`<div class="feedback-box fb-ok">${msg}</div>`;
+  document.getElementById('weekNext').style.display='flex';
+}
+
+function showResults(){
+  const goal=goals[goalIdx];const pct=Math.round(saved/goal.price*100);const reached=saved>=goal.price;
+  document.getElementById('gameContainer').innerHTML=`<div class="score-card">
+    <div class="alcancia" style="margin-bottom:1rem"><div class="pig">${reached?'🎉':'🐷'}</div><div class="saved">${FMT(saved)}</div><div class="goal-name">de ${FMT(goal.price)} para ${goal.icon} ${goal.name}</div></div>
+    <div class="progress-track"><div class="progress-fill" style="width:${Math.min(pct,100)}%">${Math.min(pct,100)}%</div></div>
+    <p style="margin-top:1rem;font-size:.9rem;font-weight:700;color:${reached?'var(--green)':'var(--amber)'}">
+      ${reached?'🎉 ¡LOGRASTE TU META! Puedes comprar tu '+goal.name:'Alcanzaste el '+pct+'% de tu meta. ¡Sigue ahorrando!'}</p>
+    <p style="font-size:.78rem;color:var(--gray);margin-top:.5rem">${!reached?'Necesitas '+(Math.ceil((goal.price-saved)/3000))+' semanas más ahorrando $3.000/semana.':''}</p>
+    <div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button><button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button></div></div>`;
+}
+
+const questions=[
+  {q:'Si ahorras $3.000 cada semana, ¿cuánto tendrás en 8 semanas?',opts:['A. $3.000','B. $24.000','C. $8.000','D. $30.000'],ans:1,exp:'$3.000 × 8 semanas = $24.000. El ahorro constante se acumula semana a semana.'},
+  {q:'¿Qué es el interés simple?',opts:['A. Un impuesto que pagas al banco','B. Dinero que el banco te paga por dejar tu ahorro con ellos','C. El precio de una cuenta bancaria','D. Un descuento en compras'],ans:1,exp:'El interés simple es lo que el banco te paga por guardar tu dinero. Es como un "premio" por ahorrar.'},
+  {q:'Si ahorras $10.000 al 1% mensual por 5 meses, ¿cuánto ganas de interés? (I = C × r × t)',opts:['A. $100','B. $500','C. $1.000','D. $5.000'],ans:1,exp:'I = $10.000 × 0,01 × 5 = $500. Ganas $500 de interés sin hacer nada, solo por dejar tu dinero ahorrado.'},
+  {q:'Quieres un balón de $45.000. Puedes ahorrar $5.000 por semana. ¿Cuántas semanas necesitas?',opts:['A. 5 semanas','B. 9 semanas','C. 45 semanas','D. 15 semanas'],ans:1,exp:'$45.000 ÷ $5.000 = 9 semanas. En poco más de 2 meses tendrías tu balón.'},
+  {q:'Tus amigos te presionan para gastar tu ahorro en el cine. ¿Qué es lo más inteligente?',opts:['A. Gastar todo, YOLO','B. Evaluar si puedes ir sin tocar tu ahorro de meta','C. Nunca salir con amigos','D. Pedir prestado'],ans:1,exp:'Puedes disfrutar usando tu "alcancía de diversión" sin tocar tu ahorro de meta. Se trata de planificar, no de privarte.'},
+  {q:'¿Para qué sirve un fondo de emergencia?',opts:['A. Para comprar dulces','B. Para cubrir gastos inesperados sin tocar tu ahorro de meta','C. Para regalos de cumpleaños','D. No sirve para nada'],ans:1,exp:'El fondo de emergencia cubre imprevistos (algo se daña, una urgencia médica) sin que tengas que sacrificar tu meta de ahorro.'},
+  {q:'¿Cuál de estos es el MEJOR lugar para guardar tus ahorros?',opts:['A. Debajo del colchón','B. En una cuenta de ahorro del banco','C. En el bolsillo','D. Prestarlo a un amigo'],ans:1,exp:'En una cuenta de ahorro tu dinero está seguro, protegido por Fogafín, y gana intereses. Debajo del colchón pierde valor por la inflación.'},
+  {q:'Según el método de las 3 alcancías, si te sobran $10.000 ¿cuánto va a ahorro?',opts:['A. $10.000','B. $4.000','C. $2.000','D. $1.000'],ans:1,exp:'El método dice 40% a ahorro: $10.000 × 0,40 = $4.000 para tu meta.'},
+  {q:'¿Qué pasa con tu dinero ahorrado si NO lo metes al banco y la inflación es del 6%?',opts:['A. Gana valor','B. Se mantiene igual','C. Pierde poder de compra: lo que hoy cuesta $10.000 mañana costará más','D. Se multiplica solo'],ans:2,exp:'La inflación hace que los precios suban. Si tu dinero no gana al menos lo mismo que la inflación, puedes comprar menos cosas con él.'},
+  {q:'Ana ahorra $2.000/semana y Julián $4.000/semana. Ambos quieren algo de $40.000. ¿Quién lo logra primero?',opts:['A. Ana, porque empezó antes','B. Los dos al mismo tiempo','C. Julián, porque ahorra el doble cada semana','D. Ninguno lo logra'],ans:2,exp:'Ana: $40.000÷$2.000 = 20 semanas. Julián: $40.000÷$4.000 = 10 semanas. Julián llega en la mitad del tiempo.'}
+];
+let cQ=0,qAns=[];
+function startQuiz(){const n=document.getElementById('studentName').value.trim();const g=document.getElementById('studentGroup').value;if(!n||!g){alert('Nombre y grupo.');return}document.getElementById('studentInfoCard').style.display='none';document.getElementById('quizContainer').style.display='block';cQ=0;qAns=[];renderQQ()}
+function renderQQ(){const q=questions[cQ];let dots='<div class="quiz-progress">';questions.forEach((_,i)=>{let c='quiz-dot';if(i===cQ)c+=' current';else if(i<qAns.length)c+=qAns[i].correct?' correct':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';let h=dots+`<div class="question-card"><div class="q-num">Pregunta ${cQ+1} de ${questions.length}</div><div class="q-text">${q.q}</div>`;q.opts.forEach((o,i)=>h+=`<button class="option" onclick="selQ(${i})" id="qq${i}">${o}</button>`);h+=`<div class="explanation" id="qexp">💡 ${q.exp}</div><div class="btn-row" id="qnext" style="display:none"><button class="btn btn-primary" onclick="${cQ<questions.length-1?'cQ++;renderQQ()':'finishQ()'}"> ${cQ<questions.length-1?'Siguiente →':'Ver resultados'}</button></div></div>`;document.getElementById('quizContainer').innerHTML=h}
+function selQ(i){if(qAns.length>cQ)return;const q=questions[cQ];qAns.push({selected:i,correct:i===q.ans,question:cQ+1});document.querySelectorAll('.option').forEach((b,j)=>{b.style.pointerEvents='none';if(j===q.ans)b.classList.add('correct-answer');if(j===i&&i!==q.ans)b.classList.add('wrong-answer')});document.getElementById('qexp').classList.add('show');document.getElementById('qnext').style.display='flex'}
+function finishQ(){const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';document.getElementById('quizContainer').style.display='none';const r=document.getElementById('quizResults');r.style.display='block';r.innerHTML=`<div class="results-section"><div class="big">${correct}/${questions.length}</div><div class="nota">Nota: ${nota}</div><div class="nivel nivel-${nivel.toLowerCase()}">${nivel}</div><p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">${correct>=8?'¡Eres un ahorrador experto!':correct>=6?'Buen trabajo. Practica cálculos de interés.':correct>=4?'Vas avanzando. Repasa el método de las 3 alcancías.':'Vuelve a las fases 1 y 2.'}</p><div id="sendStatus" class="send-status"></div><div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar</button><button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir</button></div></div>`;if(SHEETS_URL)sendResults()}
+async function sendResults(){const name=document.getElementById('studentName').value.trim();const group=document.getElementById('studentGroup').value;const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';const st=document.getElementById('sendStatus');if(!SHEETS_URL){st.className='send-status error';st.textContent='⚠️ URL no configurada.';return}st.className='send-status loading';st.textContent='⏳ Enviando…';document.getElementById('btnSend').disabled=true;try{await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({timestamp:new Date().toISOString(),nombre:name,grupo:group,grado:'6°',periodo:'P3',tema:'El Poder del Ahorro',respuestas:qAns.map(a=>questions[a.question-1].opts[a.selected].charAt(0)).join(','),aciertos:correct,total:questions.length,nota:parseFloat(nota),nivel})});st.className='send-status success';st.textContent='✅ Enviado.'}catch(e){st.className='send-status error';st.textContent='❌ Error.';document.getElementById('btnSend').disabled=false}}
+</script>
+</body>
+</html>
