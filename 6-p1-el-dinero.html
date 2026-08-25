@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6° P1 — El Dinero: Historia y Funciones | Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--pri:#059669;--pri-light:#ECFDF5;--pri-dark:#047857;--bg:#F8F6F0;--card:#FFF;--text:#1B2A4A;--gray:#64748B;--green:#059669;--red:#DC2626;--amber:#D97706;--shadow:0 4px 24px rgba(27,42,74,.08)}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.topbar{background:var(--pri);color:#fff;padding:.75rem 1.25rem;display:flex;align-items:center;gap:.75rem;font-size:.8rem;position:sticky;top:0;z-index:100}
+.topbar a{color:#fff;text-decoration:none;opacity:.7}.topbar a:hover{opacity:1}.topbar .title{font-weight:700;flex:1}
+.tabs{display:flex;background:var(--card);border-bottom:2px solid #E8E5DD;position:sticky;top:44px;z-index:99;overflow-x:auto}
+.tab{flex:1;min-width:0;padding:.7rem .5rem;text-align:center;font-size:.7rem;font-weight:600;cursor:pointer;border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;color:var(--gray)}
+.tab.active{color:var(--pri);border-bottom-color:var(--pri);background:var(--pri-light)}.tab.completed{color:var(--green)}.tab.completed::before{content:'✓ '}
+.phase{display:none;max-width:800px;margin:0 auto;padding:1.5rem}.phase.active{display:block}
+.phase-badge{display:inline-block;padding:.25rem .75rem;border-radius:100px;font-size:.65rem;font-weight:700;background:var(--pri);color:#fff;margin-bottom:.5rem}
+.phase-header{margin-bottom:1.5rem}.phase-header h2{font-size:1.3rem;font-weight:800;line-height:1.3}.phase-header p{font-size:.85rem;color:var(--gray);margin-top:.25rem}
+.cc{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.cc h3{font-size:.95rem;font-weight:700;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.cc p,.cc li{font-size:.82rem;line-height:1.6;color:#475569}.cc ul{padding-left:1.25rem;margin-top:.5rem}.cc li{margin-bottom:.25rem}
+.btn{padding:.6rem 1.5rem;border:none;border-radius:10px;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .2s}
+.btn-primary{background:var(--pri);color:#fff}.btn-primary:hover{background:var(--pri-dark)}.btn-primary:disabled{opacity:.4;cursor:default}
+.btn-secondary{background:#F1F5F9;color:var(--text)}.btn-row{display:flex;gap:.75rem;margin-top:1.25rem;flex-wrap:wrap}
+
+.timeline{margin:1rem 0}.tl-item{display:flex;gap:.75rem;padding:.5rem 0;border-left:3px solid var(--pri);padding-left:1rem;margin-left:.5rem;margin-bottom:.5rem}
+.tl-item .tl-year{font-size:.7rem;font-weight:700;color:var(--pri);min-width:70px}.tl-item .tl-text{font-size:.75rem;color:#475569}
+
+.nw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:1rem 0}
+.nw-card{padding:.75rem;border-radius:10px;text-align:center}
+.nw-card.need{background:#F0FDF4;border:2px solid #A7F3D0}.nw-card.want{background:#FFFBEB;border:2px solid #FDE68A}
+.nw-card .nw-icon{font-size:1.5rem}.nw-card h4{font-size:.78rem;font-weight:700;margin-top:.25rem}.nw-card p{font-size:.68rem;color:var(--gray)}
+
+/* GAME */
+.game-area{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;margin-bottom:1rem}
+.progress-bar{display:flex;gap:4px;margin-bottom:1rem}.prog-dot{flex:1;height:6px;border-radius:3px;background:#E2E8F0}.prog-dot.done{background:var(--green)}.prog-dot.wrong{background:var(--red)}.prog-dot.current{background:var(--pri)}
+
+.market-scene{background:linear-gradient(135deg,#FEF3C7,#FFFBEB);border-radius:12px;padding:1.25rem;margin-bottom:1rem;border:2px solid #FDE68A}
+.market-title{font-size:.82rem;font-weight:700;color:#92400E;margin-bottom:.75rem;text-align:center}
+.your-inventory{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:.75rem}
+.inv-item{background:#fff;border:2px solid #E2E8F0;border-radius:10px;padding:.5rem .75rem;text-align:center;font-size:.7rem;min-width:80px}
+.inv-item .inv-icon{font-size:1.5rem}.inv-item .inv-name{font-weight:600;margin-top:.15rem}
+.inv-item.needed{border-color:var(--pri);background:var(--pri-light)}
+
+.trader-card{background:#fff;border:2px solid #E2E8F0;border-radius:10px;padding:1rem;margin-bottom:.5rem;cursor:pointer;transition:all .2s}
+.trader-card:hover{border-color:var(--pri);background:var(--pri-light);transform:translateY(-2px)}
+.trader-card.selected{border-color:var(--pri);background:var(--pri-light)}
+.trader-card.success{border-color:var(--green);background:#F0FDF4}
+.trader-card.fail{border-color:var(--red);background:#FEF2F2}
+.trader-top{display:flex;align-items:center;gap:.75rem}.trader-avatar{font-size:1.8rem}
+.trader-info h4{font-size:.82rem;font-weight:700}.trader-info p{font-size:.7rem;color:var(--gray)}
+.trade-offer{margin-top:.5rem;padding:.4rem .75rem;background:#F8FAFC;border-radius:8px;font-size:.72rem;display:flex;align-items:center;gap:.5rem}
+.trade-arrow{font-weight:800;color:var(--pri)}
+
+.feedback-box{padding:.75rem 1rem;border-radius:10px;margin-top:.75rem;font-size:.78rem;line-height:1.5}
+.fb-ok{background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46}
+.fb-no{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.fb-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E}
+
+.score-card{text-align:center;padding:2rem;background:var(--card);border-radius:12px;box-shadow:var(--shadow)}
+.score-big{font-size:3rem;font-weight:800}.score-stars{font-size:1.5rem;margin:.5rem 0}.score-label{font-size:.85rem;color:var(--gray)}
+
+.quiz-progress{display:flex;gap:4px;margin-bottom:1rem}.quiz-dot{width:100%;height:6px;border-radius:3px;background:#E2E8F0}.quiz-dot.current{background:var(--pri)}.quiz-dot.correct{background:var(--green)}.quiz-dot.wrong{background:var(--red)}
+.question-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.5rem}.q-num{font-size:.7rem;font-weight:700;color:var(--pri);margin-bottom:.5rem}.q-text{font-size:.9rem;font-weight:600;line-height:1.5;margin-bottom:1rem}
+.option{display:block;width:100%;text-align:left;padding:.65rem 1rem;margin-bottom:.5rem;border:2px solid #E2E8F0;border-radius:10px;background:#FAFAF8;font-family:inherit;font-size:.8rem;cursor:pointer;transition:all .15s}
+.option:hover{border-color:var(--pri);background:var(--pri-light)}.option.correct-answer{border-color:var(--green);background:#ECFDF5}.option.wrong-answer{border-color:var(--red);background:#FEF2F2}
+.explanation{margin-top:.75rem;padding:.75rem;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;font-size:.78rem;line-height:1.5;display:none}.explanation.show{display:block}
+.results-section{text-align:center;padding:1.5rem}.results-section .big{font-size:2.5rem;font-weight:800}.results-section .nota{font-size:1.2rem;font-weight:700;margin:.5rem 0}
+.nivel{display:inline-block;padding:.25rem 1rem;border-radius:100px;font-size:.8rem;font-weight:700;color:#fff}.nivel-superior{background:var(--green)}.nivel-alto{background:#2563EB}.nivel-basico{background:var(--amber)}.nivel-bajo{background:var(--red)}
+.form-row{display:flex;gap:.75rem;margin-bottom:.75rem;flex-wrap:wrap}.form-row input,.form-row select{flex:1;min-width:0;padding:.5rem .75rem;border:2px solid #E2E8F0;border-radius:8px;font-family:inherit;font-size:.82rem}
+.send-status{margin-top:.75rem;padding:.5rem;border-radius:8px;font-size:.78rem;text-align:center;display:none}.send-status.success{display:block;background:#ECFDF5;color:#065F46}.send-status.error{display:block;background:#FEF2F2;color:#991B1B}.send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
+@media(max-width:600px){.phase{padding:1rem}.nw-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar"><a href="index.html">← Inicio</a><span class="title">6° · Período 1 — El Dinero: Historia y Funciones</span></div>
+<div class="tabs"><div class="tab active" onclick="goPhase(0)">① Activación</div><div class="tab" onclick="goPhase(1)">② Exploración</div><div class="tab" onclick="goPhase(2)">③ Juego</div><div class="tab" onclick="goPhase(3)">④ Evaluación</div></div>
+
+<div class="phase active" id="phase0">
+  <div class="phase-header"><div class="phase-badge">FASE 1 · YO HAGO</div><h2>¿Qué harías si no existiera el dinero?</h2><p>Imagina un mundo sin billetes, sin monedas, sin Nequi… ¿cómo comprarías tus cosas?</p></div>
+  <div class="cc"><h3>🤔 Un día sin dinero</h3><p>Imagina que mañana despiertas y el dinero <strong>no existe</strong>. Tienes hambre y quieres un desayuno. Tienes huevos en casa pero no pan. Tu vecino tiene pan pero necesita huevos. ¡Perfecto, pueden intercambiar! Pero… ¿qué pasa si tu vecino NO quiere huevos? 😱</p>
+    <p style="margin-top:.5rem">Ese es el problema del <strong>trueque</strong>: solo funciona si las dos personas quieren lo que la otra tiene. A esto se le llama la <strong>"doble coincidencia de deseos"</strong>.</p></div>
+  <div class="cc"><h3>📜 Breve historia del dinero</h3>
+    <div class="timeline">
+      <div class="tl-item"><span class="tl-year">🦴 9000 a.C.</span><span class="tl-text"><strong>Trueque:</strong> Las personas intercambian productos directamente (sal, ganado, pieles).</span></div>
+      <div class="tl-item"><span class="tl-year">🐚 3000 a.C.</span><span class="tl-text"><strong>Dinero mercancía:</strong> Se usan conchas, sal y granos de cacao como "dinero".</span></div>
+      <div class="tl-item"><span class="tl-year">🪙 600 a.C.</span><span class="tl-text"><strong>Monedas:</strong> Se crean las primeras monedas de metal en Lidia (actual Turquía).</span></div>
+      <div class="tl-item"><span class="tl-year">📜 1000 d.C.</span><span class="tl-text"><strong>Billetes:</strong> China inventa el papel moneda. Más liviano que cargar monedas.</span></div>
+      <div class="tl-item"><span class="tl-year">💳 1950</span><span class="tl-text"><strong>Tarjetas:</strong> Se crea la primera tarjeta de crédito (Diners Club).</span></div>
+      <div class="tl-item"><span class="tl-year">📱 2020+</span><span class="tl-text"><strong>Digital:</strong> Nequi, Daviplata, criptomonedas. El dinero ya no necesita ser físico.</span></div>
+    </div></div>
+  <div class="cc"><h3>🎯 Objetivo de aprendizaje</h3><p>Comprenderás qué es el dinero, sus tres funciones principales y la diferencia entre necesidades y deseos.</p></div>
+  <div class="btn-row"><button class="btn btn-primary" onclick="goPhase(1)">Continuar →</button></div>
+</div>
+
+<div class="phase" id="phase1">
+  <div class="phase-header"><div class="phase-badge">FASE 2 · HACEMOS</div><h2>Las 3 funciones del dinero</h2><p>El dinero no es solo para comprar cosas. Tiene tres "superpoderes".</p></div>
+  <div class="cc"><h3>💰 Las 3 funciones del dinero</h3>
+    <div class="nw-grid">
+      <div class="nw-card need" style="grid-column:1/-1"><div class="nw-icon">🔄</div><h4>1. Medio de cambio</h4><p>Sirve para comprar y vender cosas sin necesitar el trueque.</p></div>
+      <div class="nw-card need"><div class="nw-icon">📏</div><h4>2. Unidad de medida</h4><p>Permite comparar el valor de cosas diferentes. ¿Cuánto vale una pizza vs. un cuaderno?</p></div>
+      <div class="nw-card need"><div class="nw-icon">🏦</div><h4>3. Depósito de valor</h4><p>Puedes guardarlo y usarlo después. Una manzana se pudre, pero $5.000 siguen valiendo.</p></div>
+    </div></div>
+  <div class="cc"><h3>⚡ Necesidades vs. Deseos</h3>
+    <div class="nw-grid">
+      <div class="nw-card need"><div class="nw-icon">🍽️</div><h4>NECESIDAD</h4><p>Alimentación</p></div>
+      <div class="nw-card want"><div class="nw-icon">🍕</div><h4>DESEO</h4><p>Pizza los viernes</p></div>
+      <div class="nw-card need"><div class="nw-icon">👕</div><h4>NECESIDAD</h4><p>Ropa para vestirte</p></div>
+      <div class="nw-card want"><div class="nw-icon">👟</div><h4>DESEO</h4><p>Tenis de marca</p></div>
+      <div class="nw-card need"><div class="nw-icon">🏠</div><h4>NECESIDAD</h4><p>Un techo donde vivir</p></div>
+      <div class="nw-card want"><div class="nw-icon">🎮</div><h4>DESEO</h4><p>Un videojuego nuevo</p></div>
+    </div>
+    <p style="margin-top:.5rem;font-size:.78rem"><strong>Las necesidades</strong> son indispensables para vivir. <strong>Los deseos</strong> son cosas que nos gustan pero podemos vivir sin ellas. ¡Aprender a distinguirlos es el primer paso para manejar bien el dinero!</p></div>
+  <div class="cc"><h3>📋 Actividad en equipos (15 min)</h3><p>Hagan una lista de 10 cosas que compraron la última semana. Clasifiquen cada una como NECESIDAD o DESEO. ¿Cuántas fueron necesidades? ¿Cuántas deseos?</p></div>
+  <div class="btn-row"><button class="btn btn-secondary" onclick="goPhase(0)">← Volver</button><button class="btn btn-primary" onclick="goPhase(2)">Continuar al Juego →</button></div>
+</div>
+
+<div class="phase" id="phase2">
+  <div class="phase-header"><div class="phase-badge">FASE 3 · TÚ HACES</div><h2>🎮 El Mercado del Trueque</h2><p>Tienes productos pero necesitas otros. Intenta hacer trueques con los vendedores del mercado. ¡Descubrirás por qué se inventó el dinero!</p></div>
+  <div id="gameContainer"></div>
+</div>
+
+<div class="phase" id="phase3">
+  <div class="phase-header"><div class="phase-badge">FASE 4 · EVALUACIÓN FORMATIVA</div><h2>📝 Demuestra lo que aprendiste</h2><p>10 preguntas sobre el dinero, sus funciones y necesidades vs. deseos.</p></div>
+  <div class="cc" id="studentInfoCard"><h3>📋 Datos del estudiante</h3><div class="form-row"><input type="text" id="studentName" placeholder="Tu nombre completo"><select id="studentGroup"><option value="">Grupo…</option><option>6.1</option><option>6.2</option><option>6.3</option><option>6.4</option></select></div><button class="btn btn-primary" onclick="startQuiz()">Comenzar evaluación</button></div>
+  <div id="quizContainer" style="display:none"></div><div id="quizResults" style="display:none"></div>
+</div>
+
+<script>
+const SHEETS_URL='';
+let currentPhase=0;const done=new Set();
+function goPhase(n){done.add(currentPhase);currentPhase=n;document.querySelectorAll('.phase').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);t.classList.toggle('completed',done.has(i)&&i!==n)});window.scrollTo({top:0,behavior:'smooth'});if(n===2&&!gameOn)initGame()}
+
+let gameOn=false,rIdx=0,score=0,results=[];
+const rounds=[
+  {you:{icon:'🥚',name:'Huevos'},need:{icon:'🍞',name:'Pan'},traders:[
+    {avatar:'👩‍🌾',name:'María',has:'🍞 Pan',wants:'🥛 Leche',match:false,exp:'María tiene pan pero quiere leche, no huevos. ¡No hay trato!'},
+    {avatar:'👨‍🍳',name:'Don Pedro',has:'🍞 Pan',wants:'🥚 Huevos',match:true,exp:'¡Don Pedro tiene pan y quiere huevos! El trueque funciona.'},
+    {avatar:'👧',name:'Lucía',has:'🧀 Queso',wants:'🍎 Manzanas',match:false,exp:'Lucía no tiene pan y no quiere huevos. No puedes comerciar.'}]},
+  {you:{icon:'🐟',name:'Pescado'},need:{icon:'👕',name:'Ropa'},traders:[
+    {avatar:'👨',name:'Carlos',has:'👕 Ropa',wants:'🪵 Madera',match:false,exp:'Carlos tiene ropa pero quiere madera. Tus pescados no le sirven.'},
+    {avatar:'👩',name:'Ana',has:'🍌 Bananos',wants:'🐟 Pescado',match:false,exp:'Ana quiere tu pescado pero solo tiene bananos. Tú necesitas ropa, no bananos.'},
+    {avatar:'👴',name:'Don José',has:'👕 Ropa',wants:'🐟 Pescado',match:true,exp:'¡Don José tiene ropa y quiere pescado! Intercambio exitoso.'}]},
+  {you:{icon:'🌽',name:'Maíz'},need:{icon:'🔨',name:'Herramientas'},traders:[
+    {avatar:'👩‍🔧',name:'Laura',has:'🔨 Herramientas',wants:'🪨 Piedra',match:false,exp:'Laura tiene herramientas pero quiere piedra. Tu maíz no le interesa.'},
+    {avatar:'👨‍🌾',name:'Tomás',has:'🪨 Piedra',wants:'🌽 Maíz',match:false,exp:'Tomás quiere maíz y tiene piedra. Pero tú necesitas herramientas, no piedra... ¿o podrías hacer un trueque encadenado? 🤔'},
+    {avatar:'👩‍🔧',name:'Laura',has:'🔨 Herramientas',wants:'🪨 Piedra (de Tomás)',match:true,exp:'¡Trueque encadenado! Le das maíz a Tomás, Tomás le da piedra a Laura, y Laura te da herramientas. Esto es muy complicado... ¡por eso se inventó el dinero!'}]},
+  {you:{icon:'🪙',name:'5 monedas de oro'},need:{icon:'🍖',name:'Carne'},traders:[
+    {avatar:'👨‍🍳',name:'El carnicero',has:'🍖 Carne',wants:'🪙 Monedas',match:true,exp:'¡Con dinero, el carnicero acepta de inmediato! No importa si él necesita huevos, ropa o madera: las monedas le sirven para comprar lo que quiera después.'},
+    {avatar:'👩‍🌾',name:'La granjera',has:'🥬 Verduras',wants:'🪙 Monedas',match:false,exp:'La granjera también acepta monedas, pero tú necesitas carne, no verduras.'},
+    {avatar:'👨‍🎨',name:'El artesano',has:'🏺 Cerámica',wants:'🪙 Monedas',match:false,exp:'El artesano acepta monedas. ¡Todos aceptan dinero! Pero tú buscas carne.'}]},
+  {you:{icon:'📱',name:'$50.000 en Nequi'},need:{icon:'📚',name:'Útiles escolares'},traders:[
+    {avatar:'👩‍💼',name:'Papelería Digital',has:'📚 Útiles',wants:'💳 Pago digital',match:true,exp:'¡Pagas desde tu celular y recibes los útiles! El dinero digital funciona igual que el físico: todos lo aceptan porque confían en su valor.'},
+    {avatar:'👨',name:'Vendedor ambulante',has:'📚 Útiles usados',wants:'💵 Solo efectivo',match:false,exp:'Este vendedor solo acepta efectivo. Aunque el dinero digital es igual de válido, no todos lo aceptan todavía.'},
+    {avatar:'👩',name:'Tienda cerrada',has:'🚫 Nada',wants:'—',match:false,exp:'La tienda está cerrada. El dinero sirve para comprar, pero necesitas un vendedor disponible.'}]}
+];
+
+function initGame(){gameOn=true;rIdx=0;score=0;results=[];renderRound()}
+function renderRound(){
+  if(rIdx>=rounds.length){showGameResults();return}
+  const r=rounds[rIdx];
+  let dots='<div class="progress-bar">';rounds.forEach((_,i)=>{let c='prog-dot';if(i===rIdx)c+=' current';else if(i<results.length)c+=results[i]?' done':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';
+  let html=dots+`<div class="game-area">
+    <p style="font-size:.78rem;font-weight:700;color:var(--pri);margin-bottom:.75rem">RONDA ${rIdx+1} DE ${rounds.length}</p>
+    <div class="market-scene">
+      <div class="market-title">🏪 El Mercado</div>
+      <div class="your-inventory">
+        <div class="inv-item"><div class="inv-icon">${r.you.icon}</div><div class="inv-name">Tienes: ${r.you.name}</div></div>
+        <div class="inv-item needed"><div class="inv-icon">${r.need.icon}</div><div class="inv-name">Necesitas: ${r.need.name}</div></div>
+      </div>
+    </div>
+    <p style="font-size:.82rem;font-weight:600;margin-bottom:.5rem">¿Con quién puedes hacer un intercambio exitoso?</p>`;
+  r.traders.forEach((t,i)=>{
+    html+=`<div class="trader-card" id="tr${i}" onclick="pickTrader(${i})">
+      <div class="trader-top"><div class="trader-avatar">${t.avatar}</div><div class="trader-info"><h4>${t.name}</h4><p>Tiene: ${t.has}</p></div></div>
+      <div class="trade-offer">Quiere: <strong>${t.wants}</strong></div>
+    </div>`;
+  });
+  html+=`<div id="tradeFb"></div><div class="btn-row" id="trNext" style="display:none"><button class="btn btn-primary" onclick="rIdx++;renderRound()">${rIdx<rounds.length-1?'Siguiente ronda →':'Ver resultados →'}</button></div></div>`;
+  document.getElementById('gameContainer').innerHTML=html;
+}
+function pickTrader(i){
+  if(document.querySelector('.trader-card.success'))return;
+  const r=rounds[rIdx];const t=r.traders[i];const ok=t.match;if(ok)score+=10;results.push(ok);
+  r.traders.forEach((_,j)=>{const el=document.getElementById('tr'+j);el.style.pointerEvents='none';if(r.traders[j].match)el.classList.add('success');if(j===i&&!ok)el.classList.add('fail')});
+  document.getElementById('tradeFb').innerHTML=`<div class="feedback-box ${ok?'fb-ok':'fb-no'}">${ok?'✅ ¡Intercambio exitoso!':'❌ No se pudo.'} ${t.exp}</div>`;
+  document.getElementById('trNext').style.display='flex';
+}
+function showGameResults(){
+  const pct=Math.round(score/(rounds.length*10)*100);
+  const msg=pct>=80?'¡Eres un maestro del comercio! Entiendes perfectamente por qué se inventó el dinero.':pct>=50?'¡Buen trabajo! Descubriste que el trueque es difícil.':'El trueque es muy complicado, ¿verdad? ¡Por eso inventamos el dinero!';
+  document.getElementById('gameContainer').innerHTML=`<div class="score-card"><div class="score-big">${score}/${rounds.length*10}</div><div class="score-label">Trueques exitosos</div><div class="score-stars">${pct>=80?'⭐⭐⭐':pct>=50?'⭐⭐':'⭐'}</div>
+    <p style="font-size:.82rem;color:var(--gray);margin-top:.5rem;max-width:500px;margin:0 auto">${msg}</p>
+    <div class="feedback-box fb-warn" style="text-align:left;margin-top:1rem">💡 <strong>¿Notaste algo?</strong> En las rondas 4 y 5 usaste dinero (monedas y Nequi) y fue MUCHO más fácil. No necesitaste buscar a alguien que quisiera exactamente lo que tú tenías. ¡Esa es la magia del dinero!</div>
+    <div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-secondary" onclick="initGame()">🔄 Jugar de nuevo</button><button class="btn btn-primary" onclick="goPhase(3)">Ir a Evaluación →</button></div></div>`;
+}
+
+const questions=[
+  {q:'Antes del dinero, las personas intercambiaban productos directamente. ¿Cómo se llama ese sistema?',opts:['A. Comercio electrónico','B. Trueque','C. Préstamo','D. Ahorro'],ans:1,exp:'El trueque es el intercambio directo de productos sin usar dinero. Fue el primer sistema de comercio de la humanidad.'},
+  {q:'¿Cuál es el principal problema del trueque?',opts:['A. Es ilegal','B. Solo funciona con dinero','C. Las dos personas deben querer lo que la otra tiene','D. Solo funciona los lunes'],ans:2,exp:'El trueque requiere una "doble coincidencia de deseos": yo quiero lo que tú tienes Y tú quieres lo que yo tengo. Si no se da, no hay trato.'},
+  {q:'¿Cuál de las tres funciones del dinero permite que puedas guardarlo para usarlo después?',opts:['A. Medio de cambio','B. Unidad de medida','C. Depósito de valor','D. Medio de transporte'],ans:2,exp:'El dinero como "depósito de valor" significa que puedes guardarlo y sigue valiendo. A diferencia de una manzana, que se pudre, el dinero mantiene su valor.'},
+  {q:'¿Cuál de estas cosas es una NECESIDAD?',opts:['A. Un videojuego nuevo','B. Alimentación diaria','C. Tenis de marca','D. Un viaje a Disneyland'],ans:1,exp:'La alimentación es indispensable para vivir. Las otras opciones son deseos: cosas que nos gustan pero podemos vivir sin ellas.'},
+  {q:'¿Cuál de estas cosas es un DESEO?',opts:['A. Vivienda','B. Agua potable','C. Un celular último modelo','D. Educación'],ans:2,exp:'Un celular último modelo es un deseo. Puedes comunicarte con un celular más económico. La vivienda, el agua y la educación son necesidades básicas.'},
+  {q:'Las primeras monedas de metal se crearon hace unos 2.600 años. ¿En qué región del mundo?',opts:['A. Colombia','B. China','C. Lidia (actual Turquía)','D. Estados Unidos'],ans:2,exp:'Las primeras monedas de metal se acuñaron en Lidia (hoy parte de Turquía) alrededor del 600 a.C. Estaban hechas de una mezcla de oro y plata.'},
+  {q:'Cuando dices que una pizza cuesta $15.000 y un cuaderno $5.000, ¿qué función del dinero estás usando?',opts:['A. Medio de cambio','B. Depósito de valor','C. Unidad de medida','D. Medio de ahorro'],ans:2,exp:'Usas el dinero como "unidad de medida" para comparar el valor de cosas diferentes. Sabes que la pizza vale 3 cuadernos porque puedes medir ambos en pesos.'},
+  {q:'¿Qué tipo de dinero usas cuando pagas con Nequi o Daviplata?',opts:['A. Dinero de mentiras','B. Dinero digital o electrónico','C. Trueque moderno','D. Monedas de oro'],ans:1,exp:'Nequi y Daviplata usan dinero digital: es dinero real, pero no necesita ser físico (billete o moneda). Funciona con transferencias electrónicas.'},
+  {q:'Si un amigo te ofrece cambiar 2 galletas por 1 jugo en el recreo, ¿qué tipo de intercambio es?',opts:['A. Compraventa','B. Trueque','C. Préstamo','D. Ahorro'],ans:1,exp:'Es un trueque porque intercambian productos directamente sin usar dinero. Funciona porque los dos quieren lo que el otro tiene.'},
+  {q:'¿Por qué TODO el mundo acepta dinero como pago?',opts:['A. Porque es bonito','B. Porque es obligatorio y confían en que podrán usarlo después para comprar otras cosas','C. Porque pesa poco','D. Porque es gratis'],ans:1,exp:'El dinero funciona por la CONFIANZA. Todos lo aceptan porque saben que otros también lo aceptarán. El gobierno lo respalda y regula para que mantenga su valor.'}
+];
+let cQ=0,qAns=[];
+function startQuiz(){const n=document.getElementById('studentName').value.trim();const g=document.getElementById('studentGroup').value;if(!n||!g){alert('Escribe tu nombre y selecciona tu grupo.');return}document.getElementById('studentInfoCard').style.display='none';document.getElementById('quizContainer').style.display='block';cQ=0;qAns=[];renderQQ()}
+function renderQQ(){const q=questions[cQ];let dots='<div class="quiz-progress">';questions.forEach((_,i)=>{let c='quiz-dot';if(i===cQ)c+=' current';else if(i<qAns.length)c+=qAns[i].correct?' correct':' wrong';dots+=`<div class="${c}"></div>`});dots+='</div>';let h=dots+`<div class="question-card"><div class="q-num">Pregunta ${cQ+1} de ${questions.length}</div><div class="q-text">${q.q}</div>`;q.opts.forEach((o,i)=>h+=`<button class="option" onclick="selQ(${i})" id="qq${i}">${o}</button>`);h+=`<div class="explanation" id="qexp">💡 ${q.exp}</div><div class="btn-row" id="qnext" style="display:none"><button class="btn btn-primary" onclick="${cQ<questions.length-1?'cQ++;renderQQ()':'finishQ()'}"> ${cQ<questions.length-1?'Siguiente →':'Ver resultados'}</button></div></div>`;document.getElementById('quizContainer').innerHTML=h}
+function selQ(i){if(qAns.length>cQ)return;const q=questions[cQ];qAns.push({selected:i,correct:i===q.ans,question:cQ+1});document.querySelectorAll('.option').forEach((b,j)=>{b.style.pointerEvents='none';if(j===q.ans)b.classList.add('correct-answer');if(j===i&&i!==q.ans)b.classList.add('wrong-answer')});document.getElementById('qexp').classList.add('show');document.getElementById('qnext').style.display='flex'}
+function finishQ(){const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';document.getElementById('quizContainer').style.display='none';const r=document.getElementById('quizResults');r.style.display='block';r.innerHTML=`<div class="results-section"><div class="big">${correct}/${questions.length}</div><div class="nota">Nota: ${nota}</div><div class="nivel nivel-${nivel.toLowerCase()}">${nivel}</div><p style="margin-top:1rem;font-size:.82rem;color:var(--gray)">${correct>=8?'¡Excelente! Entiendes perfecto para qué sirve el dinero.':correct>=6?'¡Bien! Repasa las funciones del dinero.':correct>=4?'Vas avanzando. Revisa necesidades vs deseos.':'Vuelve a leer las fases 1 y 2 con calma.'}</p><div id="sendStatus" class="send-status"></div><div class="btn-row" style="justify-content:center;margin-top:1rem"><button class="btn btn-primary" onclick="sendResults()" id="btnSend">📤 Enviar</button><button class="btn btn-secondary" onclick="goPhase(0)">🔄 Repetir</button></div></div>`;if(SHEETS_URL)sendResults()}
+async function sendResults(){const name=document.getElementById('studentName').value.trim();const group=document.getElementById('studentGroup').value;const correct=qAns.filter(a=>a.correct).length;const nota=(correct/questions.length*4+1).toFixed(1);const nivel=nota>=4.6?'Superior':nota>=3.8?'Alto':nota>=3.0?'Básico':'Bajo';const st=document.getElementById('sendStatus');if(!SHEETS_URL){st.className='send-status error';st.textContent='⚠️ URL no configurada.';return}st.className='send-status loading';st.textContent='⏳ Enviando…';document.getElementById('btnSend').disabled=true;try{await fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({timestamp:new Date().toISOString(),nombre:name,grupo:group,grado:'6°',periodo:'P1',tema:'El Dinero Historia y Funciones',respuestas:qAns.map(a=>questions[a.question-1].opts[a.selected].charAt(0)).join(','),aciertos:correct,total:questions.length,nota:parseFloat(nota),nivel})});st.className='send-status success';st.textContent='✅ Enviado.'}catch(e){st.className='send-status error';st.textContent='❌ Error.';document.getElementById('btnSend').disabled=false}}
+</script>
+</body>
+</html>
