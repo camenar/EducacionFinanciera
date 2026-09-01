@@ -222,38 +222,30 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(-
     <h3>📋 Actividad en equipos (15 min)</h3>
     <p>Juan necesita $3.000.000 para comprar herramientas de trabajo. Tiene tres opciones:</p>
 
-    <button class="reveal-btn" onclick="reveal(this,'opA')"><span class="arrow">▶</span> Opción A: Banco</button>
-    <div class="reveal-wrap" id="opA">
-      <div class="calc-box" style="margin-top:.5rem">
-        <h4>Opción A: Banco</h4>
-        <div class="calc-row"><span>Tasa mensual</span><span>1,5%</span></div>
-        <div class="calc-row"><span>Plazo</span><span>12 meses</span></div>
-        <div class="calc-row"><span>I = 3.000.000 × 0,015 × 12</span><span>$540.000</span></div>
-        <div class="calc-row"><span>Total a pagar</span><span>$3.540.000</span></div>
-      </div>
+    <div class="calc-box">
+      <h4>Opción A: Banco</h4>
+      <div class="calc-row"><span>Tasa mensual</span><span>1,5%</span></div>
+      <div class="calc-row"><span>Plazo</span><span>12 meses</span></div>
     </div>
+    <button class="reveal-btn" onclick="reveal(this,'opA')"><span class="arrow">▶</span> ¿Cuánto termina pagando?</button>
+    <div class="reveal-wrap" id="opA"><div style="padding:.5rem 0 .5rem"><p style="font-size:.82rem">I = 3.000.000 × 0,015 × 12 = <strong>$540.000 de interés</strong></p><p style="font-size:.82rem">Total a pagar: <strong>$3.540.000</strong> · Cuota mensual: <strong>$295.000</strong></p></div></div>
 
-    <button class="reveal-btn" onclick="reveal(this,'opB')"><span class="arrow">▶</span> Opción B: Almacén</button>
-    <div class="reveal-wrap" id="opB">
-      <div class="calc-box" style="margin-top:.5rem">
-        <h4>Opción B: Almacén (crédito directo)</h4>
-        <div class="calc-row"><span>Tasa mensual</span><span>2,5%</span></div>
-        <div class="calc-row"><span>Plazo</span><span>6 meses</span></div>
-        <div class="calc-row"><span>I = 3.000.000 × 0,025 × 6</span><span>$450.000</span></div>
-        <div class="calc-row"><span>Total a pagar</span><span>$3.450.000</span></div>
-      </div>
+    <div class="calc-box">
+      <h4>Opción B: Almacén (crédito directo)</h4>
+      <div class="calc-row"><span>Tasa mensual</span><span>2,5%</span></div>
+      <div class="calc-row"><span>Plazo</span><span>6 meses</span></div>
     </div>
+    <button class="reveal-btn" onclick="reveal(this,'opB')"><span class="arrow">▶</span> ¿Cuánto termina pagando?</button>
+    <div class="reveal-wrap" id="opB"><div style="padding:.5rem 0 .5rem"><p style="font-size:.82rem">I = 3.000.000 × 0,025 × 6 = <strong>$450.000 de interés</strong></p><p style="font-size:.82rem">Total a pagar: <strong>$3.450.000</strong> · Cuota mensual: <strong>$575.000</strong></p></div></div>
 
-    <button class="reveal-btn" onclick="reveal(this,'opC')"><span class="arrow">▶</span> Opción C: Gota a gota ⚠️</button>
-    <div class="reveal-wrap" id="opC">
-      <div class="calc-box" style="margin-top:.5rem;border-left:3px solid var(--red)">
-        <h4 style="color:var(--red)">Opción C: Gota a gota ⚠️</h4>
-        <div class="calc-row"><span>Tasa mensual</span><span>10%</span></div>
-        <div class="calc-row"><span>Plazo</span><span>3 meses</span></div>
-        <div class="calc-row"><span>I = 3.000.000 × 0,10 × 3</span><span>$900.000</span></div>
-        <div class="calc-row"><span>Total a pagar</span><span>$3.900.000</span></div>
-      </div>
+    <div class="calc-box" style="border-left:3px solid var(--red)">
+      <h4 style="color:var(--red)">Opción C: Gota a gota ⚠️</h4>
+      <div class="calc-row"><span>Tasa mensual</span><span>10%</span></div>
+      <div class="calc-row"><span>Plazo</span><span>3 meses</span></div>
     </div>
+    <button class="reveal-btn" onclick="reveal(this,'opC')"><span class="arrow">▶</span> ¿Cuánto termina pagando?</button>
+    <div class="reveal-wrap" id="opC"><div style="padding:.5rem 0 .5rem"><p style="font-size:.82rem">I = 3.000.000 × 0,10 × 3 = <strong>$900.000 de interés</strong></p><p style="font-size:.82rem">Total a pagar: <strong>$3.900.000</strong> · Cuota mensual: <strong>$1.300.000</strong></p></div></div>
+
     <p style="margin-top:.75rem"><strong>Discusión:</strong> ¿Cuál opción es más barata en total? ¿Cuál tiene la cuota mensual más baja? ¿Por qué alguien escogería el gota a gota si es la más cara?</p>
   </div>
 
