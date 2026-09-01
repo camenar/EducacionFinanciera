@@ -128,7 +128,7 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(-
 </div>
 
 <script>
-const SHEETS_URL='';
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbxiPDJPrumw-eEKkiVbPRI87RVQyQRqHRBUk4DwId8p6isaXqdEvE8X4yCVugDM_5p3Qg/exec';
 let currentPhase=0;const done=new Set();
 function goPhase(n){done.add(currentPhase);currentPhase=n;document.querySelectorAll('.phase').forEach((p,i)=>p.classList.toggle('active',i===n));document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',i===n);t.classList.toggle('completed',done.has(i)&&i!==n)});window.scrollTo({top:0,behavior:'smooth'});if(n===2&&!gameOn)initGame()}
 
