@@ -123,6 +123,15 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(-
 .send-status.error{display:block;background:#FEF2F2;color:#991B1B}
 .send-status.loading{display:block;background:var(--pri-light);color:var(--pri)}
 
+/* REVEAL ON CLICK */
+.reveal-wrap{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s;opacity:0}
+.reveal-wrap.open{max-height:2000px;opacity:1}
+.reveal-btn{display:inline-flex;align-items:center;gap:8px;margin-top:.75rem;padding:.5rem 1.2rem;border:2px dashed var(--pri);border-radius:10px;background:var(--pri-light);color:var(--pri);font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .2s}
+.reveal-btn:hover{background:var(--pri);color:#fff;border-style:solid}
+.reveal-btn .arrow{transition:transform .3s;display:inline-block}
+.reveal-btn.opened .arrow{transform:rotate(90deg)}
+.reveal-btn.opened{border-style:solid;opacity:.6}
+
 @media(max-width:600px){
   .phase{padding:1rem}
   .stat-grid{grid-template-columns:1fr 1fr}
@@ -181,9 +190,14 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(-
       <div class="calc-row"><span>r = Tasa de interés (mensual o anual)</span></div>
       <div class="calc-row"><span>t = Tiempo (meses o años)</span></div>
     </div>
-    <p style="margin-top:.5rem"><strong>Ejemplo:</strong> Pides $1.000.000 al 2% mensual por 12 meses:</p>
-    <p>I = $1.000.000 × 0,02 × 12 = <strong>$240.000 de interés</strong></p>
-    <p>Total a pagar: $1.000.000 + $240.000 = <strong>$1.240.000</strong></p>
+    <p style="margin-top:.5rem"><strong>Ejemplo:</strong> Pides $1.000.000 al 2% mensual por 12 meses…</p>
+    <button class="reveal-btn" onclick="reveal(this,'ej1')"><span class="arrow">▶</span> Mostrar el cálculo</button>
+    <div class="reveal-wrap" id="ej1">
+      <div style="padding-top:.75rem">
+        <p>I = $1.000.000 × 0,02 × 12 = <strong>$240.000 de interés</strong></p>
+        <p>Total a pagar: $1.000.000 + $240.000 = <strong>$1.240.000</strong></p>
+      </div>
+    </div>
   </div>
 
   <div class="content-card">
@@ -207,26 +221,38 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(-
   <div class="content-card">
     <h3>📋 Actividad en equipos (15 min)</h3>
     <p>Juan necesita $3.000.000 para comprar herramientas de trabajo. Tiene tres opciones:</p>
-    <div class="calc-box">
-      <h4>Opción A: Banco</h4>
-      <div class="calc-row"><span>Tasa mensual</span><span>1,5%</span></div>
-      <div class="calc-row"><span>Plazo</span><span>12 meses</span></div>
-      <div class="calc-row"><span>I = 3.000.000 × 0,015 × 12</span><span>$540.000</span></div>
-      <div class="calc-row"><span>Total a pagar</span><span>$3.540.000</span></div>
+
+    <button class="reveal-btn" onclick="reveal(this,'opA')"><span class="arrow">▶</span> Opción A: Banco</button>
+    <div class="reveal-wrap" id="opA">
+      <div class="calc-box" style="margin-top:.5rem">
+        <h4>Opción A: Banco</h4>
+        <div class="calc-row"><span>Tasa mensual</span><span>1,5%</span></div>
+        <div class="calc-row"><span>Plazo</span><span>12 meses</span></div>
+        <div class="calc-row"><span>I = 3.000.000 × 0,015 × 12</span><span>$540.000</span></div>
+        <div class="calc-row"><span>Total a pagar</span><span>$3.540.000</span></div>
+      </div>
     </div>
-    <div class="calc-box">
-      <h4>Opción B: Almacén (crédito directo)</h4>
-      <div class="calc-row"><span>Tasa mensual</span><span>2,5%</span></div>
-      <div class="calc-row"><span>Plazo</span><span>6 meses</span></div>
-      <div class="calc-row"><span>I = 3.000.000 × 0,025 × 6</span><span>$450.000</span></div>
-      <div class="calc-row"><span>Total a pagar</span><span>$3.450.000</span></div>
+
+    <button class="reveal-btn" onclick="reveal(this,'opB')"><span class="arrow">▶</span> Opción B: Almacén</button>
+    <div class="reveal-wrap" id="opB">
+      <div class="calc-box" style="margin-top:.5rem">
+        <h4>Opción B: Almacén (crédito directo)</h4>
+        <div class="calc-row"><span>Tasa mensual</span><span>2,5%</span></div>
+        <div class="calc-row"><span>Plazo</span><span>6 meses</span></div>
+        <div class="calc-row"><span>I = 3.000.000 × 0,025 × 6</span><span>$450.000</span></div>
+        <div class="calc-row"><span>Total a pagar</span><span>$3.450.000</span></div>
+      </div>
     </div>
-    <div class="calc-box" style="border-left:3px solid var(--red)">
-      <h4 style="color:var(--red)">Opción C: Gota a gota ⚠️</h4>
-      <div class="calc-row"><span>Tasa mensual</span><span>10%</span></div>
-      <div class="calc-row"><span>Plazo</span><span>3 meses</span></div>
-      <div class="calc-row"><span>I = 3.000.000 × 0,10 × 3</span><span>$900.000</span></div>
-      <div class="calc-row"><span>Total a pagar</span><span>$3.900.000</span></div>
+
+    <button class="reveal-btn" onclick="reveal(this,'opC')"><span class="arrow">▶</span> Opción C: Gota a gota ⚠️</button>
+    <div class="reveal-wrap" id="opC">
+      <div class="calc-box" style="margin-top:.5rem;border-left:3px solid var(--red)">
+        <h4 style="color:var(--red)">Opción C: Gota a gota ⚠️</h4>
+        <div class="calc-row"><span>Tasa mensual</span><span>10%</span></div>
+        <div class="calc-row"><span>Plazo</span><span>3 meses</span></div>
+        <div class="calc-row"><span>I = 3.000.000 × 0,10 × 3</span><span>$900.000</span></div>
+        <div class="calc-row"><span>Total a pagar</span><span>$3.900.000</span></div>
+      </div>
     </div>
     <p style="margin-top:.75rem"><strong>Discusión:</strong> ¿Cuál opción es más barata en total? ¿Cuál tiene la cuota mensual más baja? ¿Por qué alguien escogería el gota a gota si es la más cara?</p>
   </div>
@@ -302,7 +328,15 @@ body{font-family:'Poppins',system-ui,sans-serif;background:var(--bg);color:var(-
 </div>
 
 <script>
-const SHEETS_URL = '';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbxiPDJPrumw-eEKkiVbPRI87RVQyQRqHRBUk4DwId8p6isaXqdEvE8X4yCVugDM_5p3Qg/exec';
+
+/* REVEAL ON CLICK */
+function reveal(btn, id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  btn.classList.toggle('opened');
+  btn.querySelector('.arrow').textContent = el.classList.contains('open') ? '▼' : '▶';
+}
 const FMT = n => '$' + Math.round(n).toLocaleString('es-CO');
 
 /* NAV */
